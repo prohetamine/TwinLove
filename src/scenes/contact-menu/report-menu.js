@@ -1,3 +1,4 @@
+import replyWithHelp from '../../modules/reply-with-help.js'
 import { nanoid } from 'nanoid'
 import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
 import { users } from '../../helpers/db.js'
@@ -5,7 +6,7 @@ import { users } from '../../helpers/db.js'
 const reportMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_main_menu_btn) {
+  if (text === TEXTS.back_to_main_menu_btn || text === 'Назад в главное меню ⏪') {
     await ctx.reply(TEXTS.home, BUTTONS.main_menu)
     await ctx.enterScene('main-menu')
     return
@@ -19,7 +20,7 @@ const reportMenu = async ctx => {
     return
   }
   
-  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
+  await replyWithHelp(ctx)
 }
 
 export default reportMenu

@@ -1,3 +1,4 @@
+import replyWithHelp from '../../modules/reply-with-help.js'
 import sleep from 'sleep-promise'
 import { users } from '../../helpers/db.js'
 import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
@@ -9,7 +10,7 @@ const locationMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
       , location = ctx.update?.message?.location || ''
 
-  if (text === TEXTS.back_to_menu_btn) {
+  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
     await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
     await ctx.enterScene('edit-menu')
     return
@@ -65,7 +66,7 @@ const locationMenu = async ctx => {
     }
   }
 
-  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
+  await replyWithHelp(ctx)
 }
 
 export default locationMenu

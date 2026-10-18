@@ -22,7 +22,7 @@ const adminMenu = async ctx => {
     poll 
   } = ctx.update?.message || {}
 
-  if (text === TEXTS.back_to_main_menu_btn) {
+  if (text === TEXTS.back_to_main_menu_btn || text === 'Назад в главное меню ⏪') {
     ctx.user.system_adminSelectId = 0
     await users.set(ctx.user.id, ctx.user)
     await ctx.reply(TEXTS.home, BUTTONS.main_menu)

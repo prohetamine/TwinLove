@@ -1,22 +1,23 @@
+import replyWithHelp from '../modules/reply-with-help.js'
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 
 const editMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_menu_btn) {
+  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
     await ctx.reply(TEXTS.profile(ctx), BUTTONS.profile_menu)
     await ctx.enterScene('profile-menu')
     return
   }
 
-  if (text === TEXTS.edit_profile_text_btn) {
+  if (text === TEXTS.edit_profile_text_btn || text === 'Текст анкеты 📝') {
     await ctx.reply(TEXTS.edit_profile_text, BUTTONS.edit_profile_text_menu)
     await ctx.reply(TEXTS.edit_profile_text_tmp)
     await ctx.enterScene('edit-text-menu')
     return
   }
 
-  if (text === TEXTS.edit_profile_location_btn) {
+  if (text === TEXTS.edit_profile_location_btn || text === 'Страна и город 📍') {
     await ctx.reply(TEXTS.edit_profile_location, {
       ...BUTTONS.edit_profile_location_menu,
       disable_web_page_preview: true
@@ -63,7 +64,7 @@ const editMenu = async ctx => {
     return
   }
   
-  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
+  await replyWithHelp(ctx)
 }
 
 export default editMenu

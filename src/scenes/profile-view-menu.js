@@ -1,3 +1,4 @@
+import replyWithHelp from '../modules/reply-with-help.js'
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 import getUserMedia from '../modules/get-user-media.js'
 import sendProfileCard from '../modules/send-profile-card.js'
@@ -5,7 +6,7 @@ import sendProfileCard from '../modules/send-profile-card.js'
 const profileViewMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_menu_btn) {
+  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
     await ctx.reply(TEXTS.profile(ctx), BUTTONS.profile_menu)
     await ctx.enterScene('profile-menu')
     return
@@ -58,7 +59,7 @@ const profileViewMenu = async ctx => {
     return
   }
 
-  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
+  await replyWithHelp(ctx)
 }
 
 export default profileViewMenu

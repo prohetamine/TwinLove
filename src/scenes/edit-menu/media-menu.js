@@ -1,3 +1,4 @@
+import replyWithHelp from '../../modules/reply-with-help.js'
 import { users } from '../../helpers/db.js'
 import sleep from 'sleep-promise'
 import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
@@ -26,7 +27,7 @@ const mediaMenu = async ctx => {
     poll 
   } = ctx.update?.message || {}
       
-  if (text === TEXTS.back_to_menu_btn) {
+  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
     await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
     await ctx.enterScene('edit-menu')
     return
@@ -111,7 +112,7 @@ const mediaMenu = async ctx => {
     return
   }
 
-  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
+  await replyWithHelp(ctx)
 }
 
 export default mediaMenu

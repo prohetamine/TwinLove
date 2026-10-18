@@ -4,7 +4,7 @@ import sleep from 'sleep-promise'
 const age18confirmMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_main_menu_btn) {
+  if (text === TEXTS.back_to_main_menu_btn || text === 'Назад в главное меню ⏪') {
     await ctx.enterScene('main-menu')
     await ctx.reply(TEXTS.home, BUTTONS.main_menu)
     return

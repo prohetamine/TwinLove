@@ -10,9 +10,14 @@ The former «Дополнительно 💼» menu has been removed. Its «Пр
 
 Referral codes are four-character `/start` payloads. Referral registration checks existing records and the current inviter's list to avoid repeat counts, and ignores a user's own link. The public invitation view shows the link, the number of people who opened it, and how many of them have a published profile.
 
+The 48-hour publication cooldown applies in production. In `mode=dev`, manual and automatic publication skip only this time limit; profile validation, moderation, and other publication checks still apply.
+
+Profile cards show three inline buttons in one row: ✍️, 👋, and ⚠️. These buttons use ordinary emoji without text labels, both in private previews and channel posts. Telegram does not display the custom ⚠️ button icon in channel posts under the bot's current eligibility.
+
 The MongoDB database name is `twinlove`. Changing the connection target does not migrate data from the legacy `openoni` database; plan any data migration separately and never overwrite or delete legacy data without an explicit request.
 
-Use text-only messages for decorative bot UI, including rules, menus, and help. The user explicitly approved one exception: send the saved file ID of the first sticker from the `TwinLove` sticker set before the welcome text on `/start`. Do not fetch the sticker set for every `/start`. Keep user-uploaded profile media and support attachments working; those are content, not decoration.
+Use text-only messages for decorative bot UI, including rules and menus, except for two user-approved cases: send the saved file ID of the first sticker from the `TwinLove` sticker set before the welcome text on `/start`, and show `src/assets/buttons.png` with the unknown-command help text that points to `/start`. Do not fetch the sticker set for every `/start`. Keep user-uploaded profile media and support attachments working; those are content, not decoration.
+For the unknown-command help image, upload `buttons.png` once, save the largest returned photo `file_id` in `src/assets/cache.json`, and reuse it after restarts. The cache separates dev and prod bot IDs and includes an image hash so a changed image is uploaded again. Retry the local file if the cached ID fails, and fall back to text if sending the image fails. `cache.json` is runtime state and is ignored by Git.
 
 ## Scope of the current phase
 
@@ -38,8 +43,18 @@ Use text-only messages for decorative bot UI, including rules, menus, and help. 
 - Deep-link payloads (`/start ...`), callback data, and scene names connect separate handlers. Do not rename them for copy style alone.
 - The user chose to keep the compact «(?)» link beside the 18+ rule; it opens the age explanation through `/start dating18`.
 - The four rules bullets use the ⏺️ custom emoji from the `TwinLoveEmoji` set through MarkdownV2. Keep the fallback emoji text aligned with the sticker's emoji value.
+- Location messages and keyboard buttons use the 📍 custom emoji from `TwinLoveEmoji`. Published channel cards use an ordinary 📍 because this bot cannot use custom emoji in channel posts under Telegram's current eligibility. Keep location request buttons functional and continue accepting old button text where needed.
+- Publication buttons use the ⬆️ custom emoji from `TwinLoveEmoji`. Accept their older text labels with an ordinary ⬆️ so saved keyboards still work.
+- Both return buttons use the ⏪ custom emoji from `TwinLoveEmoji`, and scenes accept the older button text with an ordinary ⏪. The pencil ✏️ in the profile guidance uses the matching custom emoji. When a sticker is replaced in the set, update its ID in the UI.
+- «Редактировать» and «Текст анкеты» use the ✏️ custom emoji as a button icon, replacing the old ordinary 📝. Keep old button labels working for saved keyboards.
+- «Показать» uses the 👁 custom emoji as a button icon; keep the older «Показать 👁» label working. The «Как опубликовать анкету?» tip uses the custom ⬆️ in its heading and action path. Update existing custom emoji IDs when Telegram assigns replacements in the set, including 👤.
+- All private URL buttons that display 🔗, including opening the chat, channel, and channel post, use the custom 🔗 icon from `TwinLoveEmoji`. Inline text references use a MarkdownV2 custom emoji entity.
 - Profile cards and automated notifications are user-facing copy too. Check them when removing a term from the interface.
 - Tips stay text-only. Use a short bold heading with one emoji, a concise explanation, and a separate action path with the current button labels. Escape tip text for Telegram MarkdownV2.
+- The «Пригласи знакомых» tip, referral statistics heading, and «Пригласить друзей» button use 🤝 from `TwinLoveEmoji`.
+- The ❌ icon from `TwinLoveEmoji` is used on rejection, hide, and notification opt-out buttons. Keep old keyboard labels with ordinary ❌ working. Telegram callback answer popups remain plain text because they do not support custom emoji entities.
+- The «Все анкеты TwinLove» heading uses the custom ❤️ from `TwinLoveEmoji`, matching the main menu button.
+- The edit menu prompt uses the custom ⚙️ from `TwinLoveEmoji`. When checking the pack, update changed IDs too; 📍 was replaced and now has ID `5379990525912853171`.
 
 ## Repository map and verification
 

@@ -6,17 +6,33 @@ import getCityById from '../../lib/get-city-by-id.js'
 import hashtag from '../hash-tag.js'
 
 const formatTip = (icon, title, description, action) =>
-  `${icon} *${textScreening(title)}*\n${textScreening(description)}\n\n${textScreening(action)}`
+  `${icon} *${textScreening(title)}*\n${textScreening(description)}\n\n${textScreening(action).replaceAll('Редактировать', `${EDIT_EMOJI} Редактировать`).replaceAll('Показать 👁', `${VIEW_EMOJI} Показать`).replaceAll('Открыть канал', `${LINK_EMOJI} Открыть канал`).replaceAll('Опубликовать', `${PUBLISH_EMOJI} Опубликовать`)}`
 
 const escapeMarkdownCode = text => text.replace(/[\\`]/g, '\\$&')
 const CHAT_ICON_CUSTOM_EMOJI_ID = '5377303280839862219'
-const PROFILE_CUSTOM_EMOJI_ID = '5379594706021824627'
+const PROFILE_CUSTOM_EMOJI_ID = '5379693958421067381'
+const VIEW_CUSTOM_EMOJI_ID = '5379988790746066188'
+const VIEW_EMOJI = `![👁](tg://emoji?id=${VIEW_CUSTOM_EMOJI_ID})`
 const WARNING_CUSTOM_EMOJI_ID = '5377304212847766937'
 const WARNING_EMOJI = `![⚠️](tg://emoji?id=${WARNING_CUSTOM_EMOJI_ID})`
+const CROSS_CUSTOM_EMOJI_ID = '5379709467547969472'
+const CROSS_EMOJI = `![❌](tg://emoji?id=${CROSS_CUSTOM_EMOJI_ID})`
+const LOCATION_CUSTOM_EMOJI_ID = '5379990525912853171'
+const LOCATION_EMOJI = `![📍](tg://emoji?id=${LOCATION_CUSTOM_EMOJI_ID})`
 const ALL_PROFILES_CUSTOM_EMOJI_ID = '5379552576687613329'
+const ALL_PROFILES_EMOJI = `![❤️](tg://emoji?id=${ALL_PROFILES_CUSTOM_EMOJI_ID})`
 const CHAT_EMOJI = `![💬](tg://emoji?id=${CHAT_ICON_CUSTOM_EMOJI_ID})`
 const RULE_FLAG_CUSTOM_EMOJI_ID = '5379664975981753147'
 const INVITE_CUSTOM_EMOJI_ID = '5379672612433601461'
+const INVITE_EMOJI = `![🤝](tg://emoji?id=${INVITE_CUSTOM_EMOJI_ID})`
+const PUBLISH_CUSTOM_EMOJI_ID = '5379847898638890226'
+const PUBLISH_EMOJI = `![⬆️](tg://emoji?id=${PUBLISH_CUSTOM_EMOJI_ID})`
+const BACK_CUSTOM_EMOJI_ID = '5379787743326941514'
+const EDIT_CUSTOM_EMOJI_ID = '5380098716139038805'
+const EDIT_EMOJI = `![✏️](tg://emoji?id=${EDIT_CUSTOM_EMOJI_ID})`
+const SETTINGS_EMOJI = '![⚙️](tg://emoji?id=5379653882081225294)'
+const LINK_CUSTOM_EMOJI_ID = '5379878307007343872'
+const LINK_EMOJI = `![🔗](tg://emoji?id=${LINK_CUSTOM_EMOJI_ID})`
 const RULE_FLAG = `![🚩](tg://emoji?id=${RULE_FLAG_CUSTOM_EMOJI_ID})`
 const RULE_BULLET = '![⏺️](tg://emoji?id=5379634348569962770)'
 const REFERRAL_VISITS_EMOJI = '![👞](tg://emoji?id=5380052815823547901)'
@@ -40,31 +56,23 @@ const TEXTS = {
   rules_dating18: `TwinLove предназначен для людей от 18 лет\\. Если тебе ещё нет 18, не используй бот\\. Заметил анкету несовершеннолетнего? Сообщи в [поддержку](${textScreening(BOT_LINK)}?start\\=support)\\.`,
   rules_vsj: `❗️ ВСЖ — в какой стране живешь.`,
   chat: `Заходи в общий чат, чтобы познакомиться и пообщаться ${CHAT_EMOJI}`,
-  referal_link: (id, referals, referalsPost) => `🔗 *Пригласи друзей в TwinLove*\nОтправь ссылку человеку, которому тоже интересны знакомства:\n\n\`${escapeMarkdownCode(`${BOT_LINK}?start=${id}`)}\`\n\n${REFERRAL_VISITS_EMOJI} Перешли по ссылке: ${referals}\n${REFERRAL_PROFILES_EMOJI} Опубликовали анкету: ${referalsPost}`,
-  channel: '*Все анкеты TwinLove 👥*\n\nВ канале публикуются анкеты\\.\n\nЧтобы посмотреть контакты другого человека, тебе нужна опубликованная анкета\\.',
+  referal_link: (id, referals, referalsPost) => `${INVITE_EMOJI} *Пригласи друзей в TwinLove*\nОтправь ссылку человеку, которому тоже интересны знакомства:\n\n\`${escapeMarkdownCode(`${BOT_LINK}?start=${id}`)}\`\n\n${REFERRAL_VISITS_EMOJI} Перешли по ссылке: ${referals}\n${REFERRAL_PROFILES_EMOJI} Опубликовали анкету: ${referalsPost}`,
+  channel: `*Все анкеты TwinLove* ${ALL_PROFILES_EMOJI}\n\nВ канале публикуются анкеты\\.\n\nЧтобы посмотреть контакты другого человека, тебе нужна опубликованная анкета\\.`,
   help: 'Такой команды нет, в этом меню нужно использовать кнопки, нажми ⌘ чтобы открыть меню\\.\n\nЕсли бот завис нажмите: /start',
-  edit: `Выбери пункт который хочешь изменить ⚙️`,
+  edit: `Выбери пункт который хочешь изменить ${SETTINGS_EMOJI}`,
   support: `*Поддержка ${WARNING_EMOJI}*\n\nРасскажи, что случилось\\. Если нужно, приложи скриншот или запись экрана — так будет проще разобраться в проблеме\\.`,
   admin: '❗️ Помогите решить проблему или зафиксировать баг, прикрепите необходимые скриншоты или запись экрана если это необходимо для помощи пользователю',
   support_response: 'Тикет выбран',
   profile: ctx => {
     let text = `У тебя __*не заполненны*__ разделы:\n`
-    text += !(ctx.user?.text > 20 && ctx.user?.text < 800) ? `• *__Текст анкеты__* 📝\n` : ``
-    text += ctx.user?.location === '0|0' ? `• *__Страна и город 📍__*\n` : ``
+    text += !(ctx.user?.text > 20 && ctx.user?.text < 800) ? `• *__Текст анкеты__* ${EDIT_EMOJI}\n` : ``
+    text += ctx.user?.location === '0|0' ? `• *__Страна и город__* ${LOCATION_EMOJI}\n` : ``
     text += !ctx.user?.system_username ? `• *__Контакты ☎️__*\n` : ``
-    text += `\nПерейди в раздел: «Редактировать 📝» чтобы заполнить пробелы ✏️`
+    text += `\nПерейди в раздел: «${EDIT_EMOJI} Редактировать» чтобы заполнить пробелы`
     
-    return checkValid(ctx) 
-              ? (
-                Math.random() > 0.5 
-                  ?  Math.random() > 0.5 
-                      ? `😉 Что дальше?` 
-                      : Math.random() > 0.5 
-                          ? `📊 Пройдем тест?`
-                          : `📝 Не хочешь еще что\\-нибудь добавить?`
-                  : `Ну давай публикуй ⬆️`
-              ) 
-              : text
+    return checkValid(ctx)
+      ? `Анкета готова к публикации ${PUBLISH_EMOJI}`
+      : text
   },
   view: 'Смотри\\! ',
   view_wait_load_media: 'У тебя загружены медиа файлы, я пока не успел их обработить, дай мне немного времени, я скажу как все будет готово ⏳👌',
@@ -72,20 +80,20 @@ const TEXTS = {
   support_message_delivery: 'Сообщение доставленно, дополните или ожидайте ответа поддержки в этом меню 📬',
   content_error: '*\\=Я ПОКА НЕ МОГУ ОБРАБАТЫВАТЬ ТАКИЕ ФАЙЛЫ\\=* \\(автоматический ответ\\)', 
   tips: [
-    formatTip('👀', 'Покажи свою анкету', 'Заполненная анкета ещё не видна другим людям, пока ты её не опубликуешь.', 'Анкета → Опубликовать ⬆️'),
-    formatTip('📣', 'Следи за новыми анкетами', 'В канале появляются опубликованные анкеты. Подпишись, если хочешь видеть новые.', 'Все анкеты → Открыть канал 🔗'),
-    formatTip('🔒', 'Кто видит твои контакты', 'Ты можешь настроить доступ к контактам.', 'Анкета → Редактировать 📝 → Контакты ☎️ → Настроить приватность 🔒'),
-    formatTip('🖼', 'Кто видит твои фото и видео', 'Ты можешь настроить доступ к загруженным файлам.', 'Анкета → Редактировать 📝 → Фото/видео 📹📸 → Настроить приватность 🔒'),
+    formatTip(PUBLISH_EMOJI, 'Как опубликовать анкету?', 'Заполненная анкета ещё не видна другим людям, пока ты её не опубликуешь.', 'Анкета → Опубликовать'),
+    formatTip('📣', 'Следи за новыми анкетами', 'В канале появляются опубликованные анкеты. Подпишись, если хочешь видеть новые.', 'Все анкеты → Открыть канал'),
+    formatTip('🔒', 'Кто видит твои контакты', 'Ты можешь настроить доступ к контактам.', 'Анкета → Редактировать → Контакты ☎️ → Настроить приватность 🔒'),
+    formatTip('🖼', 'Кто видит твои фото и видео', 'Ты можешь настроить доступ к загруженным файлам.', 'Анкета → Редактировать → Фото/видео 📹📸 → Настроить приватность 🔒'),
     formatTip('🔍', 'Проверь свои фото и видео', 'Посмотри, как выглядят загруженные файлы. Некоторые могут быть размыты до модерации.', 'Анкета → Показать 👁 → Мои фото/видео 📹📸'),
-    formatTip('👻', 'Скрой анкету на время', 'Когда анкета скрыта, другие не увидят её контакты и медиа. Уже опубликованный пост останется в канале.', 'Анкета → Редактировать 📝 → Видимость 👻'),
-    formatTip('📎', 'Сколько файлов можно добавить', 'В анкете может быть до пяти фото или видео. Размер каждого файла — до 15 МБ.', 'Анкета → Редактировать 📝 → Фото/видео 📹📸'),
-    formatTip('🗑', 'Управляй старыми постами', 'Можно автоматически удалять прежние посты при публикации нового.', 'Анкета → Редактировать 📝 → Автоудаление 🤖🗑'),
-    formatTip('📸', 'Добавь фото или видео', 'Так людям будет проще узнать тебя по анкете.', 'Анкета → Редактировать 📝 → Фото/видео 📹📸'),
+    formatTip('👻', 'Скрой анкету на время', 'Когда анкета скрыта, другие не увидят её контакты и медиа. Уже опубликованный пост останется в канале.', 'Анкета → Редактировать → Видимость 👻'),
+    formatTip('📎', 'Сколько файлов можно добавить', 'В анкете может быть до пяти фото или видео. Размер каждого файла — до 15 МБ.', 'Анкета → Редактировать → Фото/видео 📹📸'),
+    formatTip('🗑', 'Управляй старыми постами', 'Можно автоматически удалять прежние посты при публикации нового.', 'Анкета → Редактировать → Автоудаление 🤖🗑'),
+    formatTip('📸', 'Добавь фото или видео', 'Так людям будет проще узнать тебя по анкете.', 'Анкета → Редактировать → Фото/видео 📹📸'),
     formatTip('⏳', 'Если фото пока не видно', 'Фото может ждать модерации. Если оно не появилось позже, загрузи его снова или напиши в поддержку.', 'Анкета → Показать 👁 → Мои фото/видео 📹📸'),
-    formatTip('📲', 'Настрой уведомления', 'Выбирай, из каких городов получать сообщения о новых анкетах, или отключи их.', 'Анкета → Редактировать 📝 → Уведомления 📲'),
+    formatTip('📲', 'Настрой уведомления', 'Выбирай, из каких городов получать сообщения о новых анкетах, или отключи их.', 'Анкета → Редактировать → Уведомления 📲'),
     formatTip('👋', 'Начни знакомство', 'Помаши человеку или поставь лайк. Бот отправит ему ссылку на твою анкету, если она опубликована.', 'Открой чужую анкету → 👋 → Помахать 👋 или Ты мне нравишься ❤️'),
-    formatTip('👁', 'Посмотри анкету перед публикацией', 'Когда анкета заполнена, проверь, как выглядят её текст и фотографии.', 'Анкета → Показать 👁'),
-    formatTip('🔗', 'Пригласи знакомых', 'По личной ссылке можно пригласить друзей и посмотреть, сколько из них опубликовали анкеты.', 'Пригласить друзей'),
+    formatTip(VIEW_EMOJI, 'Посмотри анкету перед публикацией', 'Когда анкета заполнена, проверь, как выглядят её текст и фотографии.', 'Анкета → Показать 👁'),
+    formatTip(INVITE_EMOJI, 'Пригласи знакомых', 'По личной ссылке можно пригласить друзей и посмотреть, сколько из них опубликовали анкеты.', 'Пригласить друзей'),
   ],
   age18Confirm: `❗️ Вам 18 лет или больше?`,
   blocked: ({ system_block_message, system_block_auto }) => `❗️ Вы заблокированны${system_block_message ? ` по причине: «${system_block_message}»` : ''}${system_block_auto ? ' это автоматическая блокировка' : ''}, если вы не согласны с блокировкой свяжитесь с поддержкой /support`,
@@ -93,12 +101,13 @@ const TEXTS = {
   unban: 'Разблокирован(а)',
   delete: 'Все посты этого пользователя удалены',
   error_delete: id => `Не удалось удалить сообщение автоматически, удалите его в ручную ${CHANNEL_LINK}/${id}`,
-  profile_generate: user => {
+  profile_generate: (user, useCustomEmoji = true) => {
     let text = ''
+    const locationEmoji = useCustomEmoji ? LOCATION_EMOJI : '📍'
 
     text += `${textScreening(user?.text)}\n\n`
     text += user?.location !== '999|666' ?  user?.privacyCity === 0 ? '' : user?.privacyCity === 1 ? `Мой и ближайшие города 🌇  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : `Только мой город 🏡  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : ''
-    text += user?.location !== '999|666' ? `*${textScreening(getCityById(user?.location).title)} ${getCityById(user?.location).flag} 📍*\n` : `*Анонимный 🏴‍☠️ 📍*  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=anon)\n`
+    text += user?.location !== '999|666' ? `*${textScreening(getCityById(user?.location).title)} ${getCityById(user?.location).flag}* ${locationEmoji}\n` : `*Анонимный 🏴‍☠️* ${locationEmoji}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=anon)\n`
     text += `\n`
     text += `[бот](${BOT_LINK}?start=from-channel)  •  [все анкеты](${BOT_LINK}?start=channel)  •  [общий чат](${BOT_LINK}?start=chat)${user?.location !== '999|666' ? `  •  \\#${textScreening(getCityById(user?.location).hash)}` : ''}`
     text += `\n||Теги: ${[...hashtag].sort(() => Math.random() - Math.random()).slice(0, user?.location === '999|666' ? 3 : 2).map(tag => textScreening(`#${tag}`)).join(' ')}||`
@@ -159,36 +168,36 @@ const TEXTS = {
   // BUTTONS //
   profile_btn: 'Анкета',
   channel_btn: 'Все анкеты',
-  view_profile_btn: 'Показать 👁',
+  view_profile_btn: 'Показать',
   chat_btn: 'Общий чат',
   rules_btn: 'Правила',
   support_btn: 'Поддержка',
   referal_link_btn: 'Пригласить друзей',
-  edit_profile_btn: 'Редактировать 📝',
-  pubish_profile_btn: 'Опубликовать ⬆️',
-  back_to_menu_btn: 'Назад в меню ⏪',
-  back_to_main_menu_btn: 'Назад в главное меню ⏪',
-  open_link_in_channel_btn: 'Открыть канал 🔗',
-  open_link_in_start_channel_btn: 'Все анкеты 🔗',
-  open_link_in_chat_btn: 'Открыть чат 🔗',
+  edit_profile_btn: 'Редактировать',
+  pubish_profile_btn: 'Опубликовать',
+  back_to_menu_btn: 'Назад в меню',
+  back_to_main_menu_btn: 'Назад в главное меню',
+  open_link_in_channel_btn: 'Открыть канал',
+  open_link_in_start_channel_btn: 'Все анкеты',
+  open_link_in_chat_btn: 'Открыть чат',
   tip_inline_refresh_btn: 'Еще 🔄',
-  tip_inline_hidden_btn: 'Скрыть ❌',
+  tip_inline_hidden_btn: 'Скрыть',
   support_inline_btn: 'Ответить',
   age18Confirm_btn_1: 'Нет, мне меньше 18 лет 🔞',
   age18Confirm_btn_2: 'Да, мне 18 или больше лет ✅',
   rules_confirm_btn: 'Согласен(a) ✅',
-  rules_no_confirm_btn: 'Не согласен(а) ❌',
+  rules_no_confirm_btn: 'Не согласен(а)',
   write_inline_btn: '✍️',
   hello_hand_inline_btn: '👋',
-  report_inline_btn: 'Жалоба',
+  report_inline_btn: '⚠️',
   write_btn: 'Здесь можно просмотреть контакты, фото или видео человека которому хотите написать ✍️',
   hello_btn: `Не знаешь с чего начать? Поздоровайся или поставь лайк\\! 👋❤️ [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=hello)`,
   report_btn: 'Пожаловаться на анкету',
   my_media_btn: 'Мои фото/видео 📹📸',
   my_profile_btn: 'Моя анкета',
-  profile_publish_confirm_request_btn: 'Все равно опубликовать ⬆️',
-  profile_publish_auto_btn: 'Опубликовать автоматически ⏳⬆️',
-  open_link_btn: 'Открыть 🔗',
+  profile_publish_confirm_request_btn: 'Все равно опубликовать',
+  profile_publish_auto_btn: 'Опубликовать автоматически ⏳',
+  open_link_btn: 'Открыть',
   contact_btn: 'Контакты ☎️',
   media_btn: 'Фото/видео 📹📸',
   long_hello_btn: 'Помахать 👋',
@@ -199,22 +208,22 @@ const TEXTS = {
   // EDIT MENU //
   edit_profile_update: 'Сохранил 💾',
   edit_profile_privacy_btn: 'Настроить приватность 🔒', 
-  edit_profile_text_btn: 'Текст анкеты 📝',
+  edit_profile_text_btn: 'Текст анкеты',
   edit_profile_text: 'Расскажи о себе в вольной форме или по шаблону, ниже в следующем сообщении будет будет шаблон по которому лучше всего написать о себе ✍️',
   edit_profile_text_tmp: '1. Сколько тебе лет и из какого ты города?\n2. Чем ты увлекаешься и как любишь проводить свободное время?\n3. С кем хочешь познакомиться?\n4. Что для тебя важно в общении или отношениях?\n5. Что ещё стоит о тебе узнать?',
   edit_profile_text_error_length: 'Слишком коротко, попробуй еще раз\\.\\.\\. 📏', 
   edit_profile_text_error_length_long: '«Краткость — сестра таланта» текст должен быть не длиннее чем 800 символов 📏',
 
-  edit_profile_location_btn: 'Страна и город 📍',
-  edit_profile_location: `Отправьте геолокацию кнопкой «Поделиться геопозицией 📍» чтоб мы могли определить ближайщие к тебе города 🌆 [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=geo)`,
-  edit_profile_location_help: `❗️ Мы не храним и не передаем твое точное местоположение которое получаем от Телеграм\\.\n\n📍 Геоданные используются только один раз для установления ближайших городов это происходит локально без обращения к сторонним сервисам 🔐`,
+  edit_profile_location_btn: 'Страна и город',
+  edit_profile_location: `Отправьте геолокацию кнопкой «Поделиться геопозицией» ${LOCATION_EMOJI} чтоб мы могли определить ближайщие к тебе города 🌆 [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=geo)`,
+  edit_profile_location_help: `❗️ Мы не храним и не передаем твое точное местоположение которое получаем от Телеграм\\.\n\n${LOCATION_EMOJI} Геоданные используются только один раз для установления ближайших городов это происходит локально без обращения к сторонним сервисам 🔐`,
   edit_profile_location_anon: `Ты точно хочешь остаться анониным? Никто не будет видеть твой город и твое местоположение, но также:\n\n• Мы не разошлем анкету нашим пользователям как уведомление в бота 🤖\n\n• Анкета отобразится в __*[канале](${CHANNEL_LINK})*__ без хештега города 🌇\n\n• Посмотреть контакты возможно будет только у пользователей с настройкой приватности «Всем 👥»\n\n• Анкета будет опубликованна только после модерации 🔎`,
   edit_profile_location_anon_help: 'В этой анкете нет настоящего города, владелец анкеты пожелал остаться анонимным, будь осторожен\\(а\\) береги себя ❤️',
   edit_profile_location_city: 'Выберите ближайший к вам город из списка меню 📶',
-  edit_profile_location_btn_1: 'Поделиться геопозицией 📍',
+  edit_profile_location_btn_1: 'Поделиться геопозицией',
   edit_profile_location_btn_2: 'Хочу остаться анонимный 🏴‍☠️',
   edit_profile_location_btn_3: 'Да 🏴‍☠️',
-  edit_profile_location_btn_4: 'Нет 📍',
+  edit_profile_location_btn_4: 'Нет',
 
   edit_profile_media_btn: 'Фото/видео 📹📸',
   edit_profile_media: allowCount => allowCount !== 0 ? `Хочешь добавить фото/видео к профилю? Можно загрузить еще ${allowCount} фото/видео 📹📸` : `Упс, кончилось место для фото/видео 📹📸, может стоит удалить? 🗑`,
@@ -224,7 +233,7 @@ const TEXTS = {
   edit_profile_media_remove: allowCount => `Медиа удалены теперь можно добавить ${allowCount} фото/видео 📹📸`,
   edit_profile_media_error: 'Что\\-то тут не так\\.\\.\\. я не могу это загрузить или обработать, я принимаю только фото и видео \\(до 15мб\\) 😢',
   edit_profile_media_resolve_inline_btn: '✅',
-  edit_profile_media_reject_inline_btn: '❌',
+  edit_profile_media_reject_inline_btn: 'Отклонить',
   edit_profile_media_people_inline_btn: '👤',
   edit_profile_media_no_people_inline_btn: '🧸',
   edit_profile_media_not_found: 'Не существует ❌',
@@ -240,26 +249,26 @@ const TEXTS = {
   edit_profile_media_privacy_error_select: 'Этот вариант уже ✅',
 
   edit_profile_contact_btn: 'Контакты ☎️',
-  edit_profile_contact: isUsername => isUsername ? 'У вас установлен username 👍 это нужно чтоб тебе могли написать 🔗' : 'У вас не установлен username 👎 установи его чтобы продолжить, это нужно чтоб тебе могли написать 🔗\n\n__*[Как установить username в Телеграм](https://dzen.ru/a/ZLZzSY55_nT7X7Lz)*__',
+  edit_profile_contact: isUsername => isUsername ? `У вас установлен username 👍 это нужно чтоб тебе могли написать ${LINK_EMOJI}` : `У вас не установлен username 👎 установи его чтобы продолжить, это нужно чтоб тебе могли написать ${LINK_EMOJI}\n\n__*[Как установить username в Телеграм](https://dzen.ru/a/ZLZzSY55_nT7X7Lz)*__`,
   edit_profile_contact_confirm_btn: 'Установил(а) ✅',
   edit_profile_contact_error: 'Username все еще не установлен\\.\\. @',
   edit_profile_contact_privacy: 'Кому видны твои контакты? ☎️',
-  edit_profile_contact_privacy_help: 'Некоторые пользователи ограничивают доступ к своим контактам по гео позиции\\. Настроить эту функцию можно в разделе «Анкета → Редактировать 📝 → Контакты ☎️ → Настроить приватность 🔒»',
+  edit_profile_contact_privacy_help: `Некоторые пользователи ограничивают доступ к своим контактам по гео позиции\\. Настроить эту функцию можно в разделе «Анкета → ${EDIT_EMOJI} Редактировать → Контакты ☎️ → Настроить приватность 🔒»`,
   edit_profile_contact_privacy_btn_1: select => `Всем 👥${select === 0 ? ` — ✅` : ''}`,
   edit_profile_contact_privacy_btn_2: select => `Из моего и ближайших городов 🌇${select === 1 ? ` — ✅` : ''}`,
   edit_profile_contact_privacy_btn_3: select => `Только из моего города 🏡${select === 2 ? ` — ✅` : ''}`,
 
   edit_profile_notification_btn: 'Уведомления 📲',
   edit_profile_notification: `Хочешь получать уведомление в бота если кто\\-то публикует анкету? 📲 [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=nonotify)`,
-  edit_profile_notification_help: `❗️ Мы дорожим тобой ❤️ мы никогда не беспокоим наших пользователей почем зря, не нужно блокировать или удалять бота, если ты не хочешь получать увадомления отключить их можно просто кнопкой «Не присылать уведомления ❌»`,
-  edit_profile_notification_btn_1: select => `Не присылать уведомления ❌${select === 0 ? ` — ✅` : ''}`,
+  edit_profile_notification_help: `❗️ Мы дорожим тобой ❤️ мы никогда не беспокоим наших пользователей почем зря, не нужно блокировать или удалять бота, если ты не хочешь получать увадомления отключить их можно просто кнопкой «Не присылать уведомления» ${CROSS_EMOJI}`,
+  edit_profile_notification_btn_1: select => `Не присылать уведомления${select === 0 ? ` — ✅` : ''}`,
   edit_profile_notification_btn_2: select => `Только из моего города 🏡${select === 1 ? ` — ✅` : ''}`,
   edit_profile_notification_btn_3: select => `Из моего города и рядом 🌇${select === 2 ? ` — ✅` : ''}`,
   edit_profile_notification_btn_4: select => `Из любого города мира 🌏${select === 3 ? ` — ✅` : ''}`,
 
   edit_profile_visibility_btn: 'Видимость 👻',
   edit_profile_visibility: 'Если ваша анкета будет скрыта, ваши контакты нельзя будет посмотереть также как: фото/видео, «помахать вам» и вы не сможете смотреть чужие контакты ☎️',
-  edit_profile_visibility_stop: '❗️ Анкета не может быть опубликована если она скрыта 🤔\n\nПерейдите раздел «Анкета → Редактировать 📝 → Видимость 👻» измените «Отображать анкету»',
+  edit_profile_visibility_stop: `❗️ Анкета не может быть опубликована если она скрыта 🤔\n\nПерейдите раздел «Анкета → ${EDIT_EMOJI} Редактировать → Видимость 👻» измените «Отображать анкету»`,
   edit_profile_visibility_btn_1: isHidden => `Отображать анкету${!isHidden ? ` — ✅` : ''}`,
   edit_profile_visibility_btn_2: isHidden => `Скрыть анкету${isHidden ? ` — ✅` : ''}`,
 
@@ -277,6 +286,9 @@ const MEDIA = {
   support_bg: IS_DEV ? 'AgACAgQAAxkBAAKN5mZJj45Ls8vSLjZaTp04JcDd0xzvAAJxwjEbFRBIUsSRp5CS896WAQADAgADeQADNQQ' : 'AgACAgQAAxkBAAECSp1mRF3nT85iJIOEf_soOiUp0jIg3gACxMIxG09ZIFLOpuV9cTOLFwEAAwIAA3kAAzUE',
   rules_bg: IS_DEV ? 'AgACAgQAAxkBAAKN6GZJj6EUHZk1KSIdSipt6BsYmGCxAAJywjEbFRBIUmN7_FTN2rhXAQADAgADeQADNQQ' : 'AgACAgQAAxkBAAECSs9mRGZ2zcgWBz9YuuAgZMzd8QlpfAACz8IxG09ZIFLo9sMl42QVzAEAAwIAA3kAAzUE',
 }
+
+const BACK_TO_MENU_BUTTON = { text: TEXTS.back_to_menu_btn, icon_custom_emoji_id: BACK_CUSTOM_EMOJI_ID }
+const BACK_TO_MAIN_MENU_BUTTON = { text: TEXTS.back_to_main_menu_btn, icon_custom_emoji_id: BACK_CUSTOM_EMOJI_ID }
 
 const main_menu = {
   parse_mode: 'MarkdownV2',
@@ -299,30 +311,30 @@ const main_menu = {
 const profile_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
-    [TEXTS.pubish_profile_btn, TEXTS.view_profile_btn],
-    [TEXTS.edit_profile_btn],
-    [TEXTS.back_to_main_menu_btn]
+    [{ text: TEXTS.pubish_profile_btn, icon_custom_emoji_id: PUBLISH_CUSTOM_EMOJI_ID }, { text: TEXTS.view_profile_btn, icon_custom_emoji_id: VIEW_CUSTOM_EMOJI_ID }],
+    [{ text: TEXTS.edit_profile_btn, icon_custom_emoji_id: EDIT_CUSTOM_EMOJI_ID }],
+    [BACK_TO_MAIN_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
 const edit_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
-    [TEXTS.edit_profile_text_btn], 
-    [TEXTS.edit_profile_location_btn],
+    [{ text: TEXTS.edit_profile_text_btn, icon_custom_emoji_id: EDIT_CUSTOM_EMOJI_ID }],
+    [{ text: TEXTS.edit_profile_location_btn, icon_custom_emoji_id: LOCATION_CUSTOM_EMOJI_ID }],
     [TEXTS.edit_profile_media_btn],
     [TEXTS.edit_profile_contact_btn],
     [TEXTS.edit_profile_notification_btn],
     [TEXTS.edit_profile_visibility_btn],
     [TEXTS.edit_profile_autodelete_btn],
-    [TEXTS.back_to_menu_btn]
+    [BACK_TO_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
 const edit_profile_text_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
-    [TEXTS.back_to_menu_btn]
+    [BACK_TO_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
@@ -330,9 +342,9 @@ const edit_profile_location_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard(
     [
-      [Markup.button.locationRequest(TEXTS.edit_profile_location_btn_1)],
+      [{ ...Markup.button.locationRequest(TEXTS.edit_profile_location_btn_1), icon_custom_emoji_id: LOCATION_CUSTOM_EMOJI_ID }],
       [TEXTS.edit_profile_location_btn_2],
-      [TEXTS.back_to_menu_btn]
+      [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
 }
@@ -342,8 +354,8 @@ const edit_profile_location_anon_menu = {
   reply_markup: Markup.keyboard(
     [
       [TEXTS.edit_profile_location_btn_3],
-      [Markup.button.locationRequest(TEXTS.edit_profile_location_btn_4)],
-      [TEXTS.back_to_menu_btn]
+      [{ ...Markup.button.locationRequest(TEXTS.edit_profile_location_btn_4), icon_custom_emoji_id: LOCATION_CUSTOM_EMOJI_ID }],
+      [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
 }
@@ -351,8 +363,8 @@ const edit_profile_location_anon_menu = {
 const edit_profile_location_city_menu = citys => ({
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
-    ...citys.map(city => [`${city} 📍`]),
-    [TEXTS.back_to_menu_btn]
+    ...citys.map(city => [{ text: city, icon_custom_emoji_id: LOCATION_CUSTOM_EMOJI_ID }]),
+    [BACK_TO_MENU_BUTTON]
   ]).resize().reply_markup
 })
 
@@ -362,7 +374,7 @@ const edit_profile_media_menu = {
     [
       [TEXTS.edit_profile_privacy_btn],
       [TEXTS.edit_profile_media_btn_2],
-      [TEXTS.back_to_menu_btn]
+      [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
 }
@@ -376,7 +388,7 @@ const edit_profile_contact_menu = isUsername => ({
           ? TEXTS.edit_profile_privacy_btn
           : TEXTS.edit_profile_contact_confirm_btn
       ],
-      [TEXTS.back_to_menu_btn]
+      [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
 })
@@ -388,7 +400,7 @@ const edit_profile_contact_privacy_menu = select => ({
       [TEXTS.edit_profile_contact_privacy_btn_1(select)],
       [TEXTS.edit_profile_contact_privacy_btn_2(select)],
       [TEXTS.edit_profile_contact_privacy_btn_3(select)],
-      [TEXTS.back_to_menu_btn]
+      [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
 })
@@ -400,8 +412,8 @@ const edit_profile_notification_menu = select => ({
       [TEXTS.edit_profile_notification_btn_4(select)],
       [TEXTS.edit_profile_notification_btn_3(select)],
       [TEXTS.edit_profile_notification_btn_2(select)],
-      [TEXTS.edit_profile_notification_btn_1(select)],
-      [TEXTS.back_to_menu_btn]
+      [{ text: TEXTS.edit_profile_notification_btn_1(select), icon_custom_emoji_id: CROSS_CUSTOM_EMOJI_ID }],
+      [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
 })
@@ -412,7 +424,7 @@ const edit_profile_visibility_menu = isHidden => ({
     [
       [TEXTS.edit_profile_visibility_btn_1(isHidden)],
       [TEXTS.edit_profile_visibility_btn_2(isHidden)],
-      [TEXTS.back_to_menu_btn]
+      [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
 })
@@ -423,7 +435,7 @@ const edit_profile_autodelete_menu = isRemove => ({
     [
       [TEXTS.edit_profile_autodelete_btn_1(isRemove)],
       [TEXTS.edit_profile_autodelete_btn_2(isRemove)],
-      [TEXTS.back_to_menu_btn]
+      [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
 })
@@ -433,7 +445,7 @@ const view_menu = {
   reply_markup: Markup.keyboard([
     [{ text: TEXTS.my_profile_btn, icon_custom_emoji_id: PROFILE_CUSTOM_EMOJI_ID }],
     [TEXTS.my_media_btn],
-    [TEXTS.back_to_menu_btn]
+    [BACK_TO_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
@@ -442,7 +454,7 @@ const age18Confirm_menu = {
   reply_markup: Markup.keyboard([
     [TEXTS.age18Confirm_btn_1],
     [TEXTS.age18Confirm_btn_2],
-    [TEXTS.back_to_main_menu_btn]
+    [BACK_TO_MAIN_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
@@ -450,17 +462,17 @@ const rules_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
     [TEXTS.rules_confirm_btn],
-    [TEXTS.rules_no_confirm_btn],
-    [TEXTS.back_to_main_menu_btn]
+    [{ text: TEXTS.rules_no_confirm_btn, icon_custom_emoji_id: CROSS_CUSTOM_EMOJI_ID }],
+    [BACK_TO_MAIN_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
 const profile_publish_confirm_request_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
-    [TEXTS.profile_publish_confirm_request_btn], 
-    [TEXTS.profile_publish_auto_btn], 
-    [TEXTS.back_to_menu_btn]
+    [{ text: TEXTS.profile_publish_confirm_request_btn, icon_custom_emoji_id: PUBLISH_CUSTOM_EMOJI_ID }],
+    [{ text: TEXTS.profile_publish_auto_btn, icon_custom_emoji_id: PUBLISH_CUSTOM_EMOJI_ID }],
+    [BACK_TO_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
@@ -469,7 +481,7 @@ const contact_write_menu = {
   reply_markup: Markup.keyboard([
     [TEXTS.contact_btn], 
     [TEXTS.media_btn],
-    [TEXTS.back_to_main_menu_btn]
+    [BACK_TO_MAIN_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
@@ -478,7 +490,7 @@ const contact_report_menu = {
   reply_markup: Markup.keyboard([
     [{ text: TEXTS.report_profile_btn, icon_custom_emoji_id: WARNING_CUSTOM_EMOJI_ID }],
     [{ text: TEXTS.report_user_btn, icon_custom_emoji_id: WARNING_CUSTOM_EMOJI_ID }],
-    [TEXTS.back_to_main_menu_btn]
+    [BACK_TO_MAIN_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
@@ -488,7 +500,7 @@ const contact_hello_menu = {
   reply_markup: Markup.keyboard([
     [TEXTS.long_hello_btn],
     [TEXTS.like_btn],
-    [TEXTS.back_to_main_menu_btn]
+    [BACK_TO_MAIN_MENU_BUTTON]
   ]).resize().reply_markup
 }
 
@@ -496,7 +508,7 @@ const back_to_main_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard(
     [
-      [TEXTS.back_to_main_menu_btn]
+      [BACK_TO_MAIN_MENU_BUTTON]
     ]
   ).resize().reply_markup
 }
@@ -504,21 +516,21 @@ const back_to_main_menu = {
 const channel_start_inline = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.inlineKeyboard([
-    [{ text: TEXTS.open_link_in_start_channel_btn, url: CHANNEL_LINK }]
+    [{ text: TEXTS.open_link_in_start_channel_btn, icon_custom_emoji_id: LINK_CUSTOM_EMOJI_ID, url: CHANNEL_LINK }]
   ]).reply_markup
 }
 
 const channel_inline = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.inlineKeyboard([
-    [{ text: TEXTS.open_link_in_channel_btn, url: CHANNEL_LINK }]
+    [{ text: TEXTS.open_link_in_channel_btn, icon_custom_emoji_id: LINK_CUSTOM_EMOJI_ID, url: CHANNEL_LINK }]
   ]).reply_markup
 }
 
 const chat_inline = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.inlineKeyboard([
-    [{ text: TEXTS.open_link_in_chat_btn, url: CHAT_LINK }]
+    [{ text: TEXTS.open_link_in_chat_btn, icon_custom_emoji_id: LINK_CUSTOM_EMOJI_ID, url: CHAT_LINK }]
   ]).reply_markup
 }
 
@@ -529,7 +541,7 @@ const tips_inline_menu = {
     inline_keyboard: [
       [
         { text: TEXTS.tip_inline_refresh_btn, callback_data: `tip_refresh` },
-        { text: TEXTS.tip_inline_hidden_btn, callback_data: `tip_hidden` }
+        { text: TEXTS.tip_inline_hidden_btn, icon_custom_emoji_id: CROSS_CUSTOM_EMOJI_ID, callback_data: `tip_hidden` }
       ]
     ]
   }
@@ -552,7 +564,7 @@ const edit_profile_media_admin_approve_inline = (id, mediaId, isPeople) => ({
     inline_keyboard: [
         [
           { text: TEXTS.edit_profile_media_resolve_inline_btn, callback_data: `res_${id}_${mediaId}` },
-          { text: TEXTS.edit_profile_media_reject_inline_btn, callback_data: `rej_${id}_${mediaId}` },
+          { text: TEXTS.edit_profile_media_reject_inline_btn, icon_custom_emoji_id: CROSS_CUSTOM_EMOJI_ID, callback_data: `rej_${id}_${mediaId}` },
           { 
             text: isPeople 
                     ? TEXTS.edit_profile_media_people_inline_btn 
@@ -587,19 +599,19 @@ const profile_generate_inline = ({ isPreview = false, id }) => ({
   parse_mode: 'MarkdownV2',
   disable_web_page_preview: true,
   reply_markup: {
-    inline_keyboard: isPreview 
+    inline_keyboard: isPreview
       ? [
         [
           { text: TEXTS.write_inline_btn, callback_data: `w_${id}` },
           { text: TEXTS.hello_hand_inline_btn, callback_data: `h_${id}` },
-          { text: TEXTS.report_inline_btn, icon_custom_emoji_id: WARNING_CUSTOM_EMOJI_ID, callback_data: `r_${id}` }
+          { text: TEXTS.report_inline_btn, callback_data: `r_${id}` }
         ]
       ]
       : [
         [
           { text: TEXTS.write_inline_btn, url: `${BOT_LINK}?start=w_${id}` },
           { text: TEXTS.hello_hand_inline_btn, url: `${BOT_LINK}?start=h_${id}` },
-          { text: TEXTS.report_inline_btn, icon_custom_emoji_id: WARNING_CUSTOM_EMOJI_ID, url: `${BOT_LINK}?start=r_${id}` }
+          { text: TEXTS.report_inline_btn, url: `${BOT_LINK}?start=r_${id}` }
         ]
       ]
   }
@@ -612,7 +624,7 @@ const profile_generate_moderation_inline = id => ({
     inline_keyboard: [
         [
           { text: TEXTS.edit_profile_media_resolve_inline_btn, callback_data: `profileres_${id}` },
-          { text: TEXTS.edit_profile_media_reject_inline_btn, callback_data: `profilerej_${id}` },
+          { text: TEXTS.edit_profile_media_reject_inline_btn, icon_custom_emoji_id: CROSS_CUSTOM_EMOJI_ID, callback_data: `profilerej_${id}` },
         ]
       ]
   }
@@ -621,7 +633,7 @@ const profile_generate_moderation_inline = id => ({
 const show_in_channel = id => ({
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.inlineKeyboard([
-    [{ text: TEXTS.open_link_btn, url: `${CHANNEL_LINK}/${id}` }]
+    [{ text: TEXTS.open_link_btn, icon_custom_emoji_id: LINK_CUSTOM_EMOJI_ID, url: `${CHANNEL_LINK}/${id}` }]
   ]).reply_markup
 })
 

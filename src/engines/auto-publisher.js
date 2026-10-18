@@ -6,6 +6,7 @@ import sendProfileCard from '../modules/send-profile-card.js'
 import { CHANNEL_ID, CHANNEL_LOG_ID } from '../../configs/env.js'
 import getUserNotifys from '../modules/get-users-notify.js'
 import { TEXTS } from '../assets/ui/ru.js'
+import getPublicationCooldownRemaining from '../modules/get-publication-cooldown-remaining.js'
 
 const autoPublisher = async () => {
   for (;;) {
@@ -18,9 +19,7 @@ const autoPublisher = async () => {
       for (let x = 0; x < _users.length; x++) {
         const user = _users[x]
   
-        const _24hours = 1000 * 60 * 60 * 48
-  
-        if (parseInt(user.system_lastPostTime) > (Date.now() - _24hours)) {
+        if (getPublicationCooldownRemaining(user.system_lastPostTime) > 0) {
           continue
         }
   

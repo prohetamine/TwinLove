@@ -1,3 +1,4 @@
+import replyWithHelp from '../modules/reply-with-help.js'
 import { users, referals, posts } from '../helpers/db.js'
 import { TEXTS, BUTTONS } from './../assets/ui/ru.js'
 import { nanoid } from 'nanoid'
@@ -60,7 +61,7 @@ const mainMenu = async ctx => {
     return
   }
   
-  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
+  await replyWithHelp(ctx)
 }
 
 export default mainMenu

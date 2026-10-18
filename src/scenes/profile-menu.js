@@ -1,5 +1,6 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
+import replyWithHelp from '../modules/reply-with-help.js'
 import sleep from 'sleep-promise'
 import { CHANNEL_ID } from '../../configs/env.js'
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
@@ -9,29 +10,33 @@ import getUserMedia from '../modules/get-user-media.js'
 import getUserNotifys from '../modules/get-users-notify.js'
 import sendProfileCard from '../modules/send-profile-card.js'
 import moment from 'moment'
+import getPublicationCooldownRemaining, { PUBLICATION_COOLDOWN_MS } from '../modules/get-publication-cooldown-remaining.js'
 
 const profileMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
+  const isPublishButton = text === TEXTS.pubish_profile_btn || text === 'Опубликовать ⬆️'
+  const isPublishConfirmButton = text === TEXTS.profile_publish_confirm_request_btn || text === 'Все равно опубликовать ⬆️'
+  const isAutoPublishButton = text === TEXTS.profile_publish_auto_btn || text === 'Опубликовать автоматически ⏳⬆️'
 
-  if (text === TEXTS.back_to_main_menu_btn) {
+  if (text === TEXTS.back_to_main_menu_btn || text === 'Назад в главное меню ⏪') {
     await ctx.reply(TEXTS.home, BUTTONS.main_menu)
     await ctx.enterScene('main-menu')
     return
   }
 
-  if (text === TEXTS.back_to_menu_btn) {
+  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
     await ctx.reply(TEXTS.profile(ctx), BUTTONS.profile_menu)
     await ctx.enterScene('profile-menu')
     return
   }
 
-  if (text === TEXTS.edit_profile_btn) {
+  if (text === TEXTS.edit_profile_btn || text === 'Редактировать 📝') {
     await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
     await ctx.enterScene('edit-menu')
     return
   }
 
-  if (text === TEXTS.view_profile_btn) {
+  if (text === TEXTS.view_profile_btn || text === 'Показать 👁') {
     const isValid = checkValid(ctx)
 
     if (isValid) {   
@@ -52,7 +57,7 @@ const profileMenu = async ctx => {
     return
   }
 
-  if (text === TEXTS.profile_publish_auto_btn) {
+  if (isAutoPublishButton) {
     ctx.user.system_publishModerationRequest = true
     await users.set(ctx.user.id, ctx.user)
     await ctx.reply(TEXTS.publish_profile_moderation_request, BUTTONS.profile_menu)
@@ -60,16 +65,15 @@ const profileMenu = async ctx => {
     return
   }
 
-  if (text === TEXTS.pubish_profile_btn || text === TEXTS.profile_publish_confirm_request_btn) {
+  if (isPublishButton || isPublishConfirmButton) {
     const isValid = checkValid(ctx)
 
     if (isValid) {
-      const _24hours = 1000 * 60 * 60 * 48
+      const timeout = getPublicationCooldownRemaining(ctx.user.system_lastPostTime)
 
-      if (parseInt(ctx.user.system_lastPostTime) > (Date.now() - _24hours)) {
-        const timeout = parseInt(ctx.user.system_lastPostTime) - (Date.now() - _24hours)
+      if (timeout > 0) {
         const minutes = moment.duration(parseInt(timeout / (60 * 1000)), 'minute').locale('ru').humanize()
-            , textTime = moment.duration(_24hours / 60000, 'minute').locale('ru').humanize()
+            , textTime = moment.duration(PUBLICATION_COOLDOWN_MS / 60000, 'minute').locale('ru').humanize()
 
         await ctx.reply(TEXTS.publish_profile_timeout(minutes, textTime), BUTTONS.profile_menu)
         return
@@ -103,7 +107,7 @@ const profileMenu = async ctx => {
       
       const isNotApprove = !!media.find(({ isApprove }) => !isApprove)
 
-      if (isNotApprove && text === TEXTS.pubish_profile_btn) {
+      if (isNotApprove && isPublishButton) {
         await ctx.reply(TEXTS.publish_profile_request, BUTTONS.profile_publish_confirm_request_menu)
         return 
       }
@@ -142,7 +146,7 @@ const profileMenu = async ctx => {
     return
   }
 
-  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
+  await replyWithHelp(ctx)
 }
 
 export default profileMenu

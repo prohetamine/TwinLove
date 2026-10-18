@@ -4,7 +4,7 @@ import sleep from 'sleep-promise'
 const rulesMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_main_menu_btn) {
+  if (text === TEXTS.back_to_main_menu_btn || text === 'Назад в главное меню ⏪') {
     await ctx.enterScene('main-menu')
     await ctx.reply(TEXTS.home, BUTTONS.main_menu)
     return
@@ -17,7 +17,7 @@ const rulesMenu = async ctx => {
     return
   }
 
-  if (text === TEXTS.rules_no_confirm_btn) {
+  if (text === TEXTS.rules_no_confirm_btn || text === 'Не согласен(а) ❌') {
     const { message_id } = await ctx.reply(TEXTS.edit_profile_update, BUTTONS.remove_menu)
 
     await sleep(1000)
