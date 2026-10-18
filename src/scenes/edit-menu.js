@@ -4,20 +4,20 @@ import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 const editMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
+  if (text === TEXTS.back_to_menu_btn) {
     await ctx.reply(TEXTS.profile(ctx), BUTTONS.profile_menu)
     await ctx.enterScene('profile-menu')
     return
   }
 
-  if (text === TEXTS.edit_profile_text_btn || text === 'Текст анкеты 📝') {
+  if (text === TEXTS.edit_profile_text_btn) {
     await ctx.reply(TEXTS.edit_profile_text, BUTTONS.edit_profile_text_menu)
     await ctx.reply(TEXTS.edit_profile_text_tmp)
     await ctx.enterScene('edit-text-menu')
     return
   }
 
-  if (text === TEXTS.edit_profile_location_btn || text === 'Страна и город 📍') {
+  if (text === TEXTS.edit_profile_location_btn) {
     await ctx.reply(TEXTS.edit_profile_location, {
       ...BUTTONS.edit_profile_location_menu,
       disable_web_page_preview: true

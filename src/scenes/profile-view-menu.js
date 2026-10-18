@@ -6,15 +6,15 @@ import sendProfileCard from '../modules/send-profile-card.js'
 const profileViewMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
+  if (text === TEXTS.back_to_menu_btn) {
     await ctx.reply(TEXTS.profile(ctx), BUTTONS.profile_menu)
     await ctx.enterScene('profile-menu')
     return
   }
 
-  if (text === TEXTS.my_profile_btn || text === 'Моя анкета 👤') {
+  if (text === TEXTS.my_profile_btn) {
     if (ctx.user.media.filter(m => !m.isReject).length > 0) {
-      const { message_id } = await ctx.reply(TEXTS.view_wait_load_media, BUTTONS.remove_menu)
+      const { message_id } = await ctx.reply(TEXTS.view_wait_load_media, { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
       await sendProfileCard(ctx.user)
       await ctx.deleteMessage(message_id)
     } else {

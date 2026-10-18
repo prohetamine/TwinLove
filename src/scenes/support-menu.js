@@ -25,7 +25,7 @@ const supportMenu = async ctx => {
     poll 
   } = ctx.update?.message || {}
 
-  if (text === TEXTS.back_to_main_menu_btn || text === 'Назад в главное меню ⏪') {
+  if (text === TEXTS.back_to_main_menu_btn) {
     await ctx.reply(TEXTS.home, BUTTONS.main_menu)
     await ctx.enterScene('main-menu')
     return

@@ -6,23 +6,18 @@ import { nanoid } from 'nanoid'
 const mainMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.profile_btn || text === 'Анкета 👤') {
+  if (text === TEXTS.profile_btn) {
     await ctx.reply(TEXTS.profile(ctx), BUTTONS.profile_menu)
     await ctx.enterScene('profile-menu')
     return
   }
 
-  if (text === 'Дополнительно 💼') {
-    await ctx.reply(TEXTS.home, BUTTONS.main_menu)
-    return
-  }
-
-  if (text === TEXTS.chat_btn || text === 'Общий чат 💬' || text === 'Общий чат 📝' || text === 'Ламповый чат 📝') {
+  if (text === TEXTS.chat_btn) {
     await ctx.reply(TEXTS.chat, BUTTONS.chat_inline)
     return
   }
 
-  if (text === TEXTS.referal_link_btn || text === 'Пригласить друзей 🤝' || text === 'Пригласить друзей 🔗' || text === 'Реферальная ссылка 🔗') {
+  if (text === TEXTS.referal_link_btn) {
     const referalHashId = ctx.user.system_referalHashId
     const _referals = (await referals.get(ctx.user.id)).ids
     const referalUsers = await users.all({ id: { $in: _referals } })
@@ -34,7 +29,7 @@ const mainMenu = async ctx => {
     return
   }
 
-  if (text === TEXTS.rules_btn || text === 'Правила 🚩') {
+  if (text === TEXTS.rules_btn) {
     await ctx.reply(TEXTS.rules, {
       ...BUTTONS.main_menu,
       disable_web_page_preview: true
@@ -42,14 +37,14 @@ const mainMenu = async ctx => {
     return
   }
 
-  if (text === TEXTS.channel_btn || text === 'Все анкеты 👥') {
+  if (text === TEXTS.channel_btn) {
     await ctx.reply(TEXTS.channel, {
       ...BUTTONS.channel_inline
     })
     return
   }
 
-  if (text === TEXTS.support_btn || text === 'Поддержка ⚠️') {
+  if (text === TEXTS.support_btn) {
     ctx.user.system_supportHashId = nanoid(6).replace(/(_|-)/gi, 'Z')
     ctx.user.system_selectCallAction = ''
     ctx.user.system_selectCallHashId = ''

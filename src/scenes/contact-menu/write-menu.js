@@ -4,14 +4,16 @@ import { users, posts } from '../../helpers/db.js'
 
 const writeMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
+  const isContactButton = text === TEXTS.contact_btn
+  const isMediaButton = text === TEXTS.media_btn
 
-  if (text === TEXTS.back_to_main_menu_btn || text === 'Назад в главное меню ⏪') {
+  if (text === TEXTS.back_to_main_menu_btn) {
     await ctx.reply(TEXTS.home, BUTTONS.main_menu)
     await ctx.enterScene('main-menu')
     return
   } 
 
-  if (text === TEXTS.contact_btn || text === TEXTS.media_btn) {
+  if (isContactButton || isMediaButton) {
     const [_user = false] = await users.all({ system_callHashId: ctx.user.system_selectCallHashId })
 
     let user = _user
@@ -26,16 +28,16 @@ const writeMenu = async ctx => {
     if (_posts.ids.length > 0) {
       if (user) {
         if (user.system_block_status) {
-          await ctx.reply(TEXTS[text === TEXTS.contact_btn ? 'contact_error' : 'media_error'], BUTTONS.contact_write_menu)        
+          await ctx.reply(TEXTS[isContactButton ? 'contact_error' : 'media_error'], BUTTONS.contact_write_menu)
           return
         } 
 
         if (user.hidden) {
-          await ctx.reply(TEXTS[text === TEXTS.contact_btn ? 'contact_hidden' : 'media_hidden'], BUTTONS.contact_write_menu)        
+          await ctx.reply(TEXTS[isContactButton ? 'contact_hidden' : 'media_hidden'], BUTTONS.contact_write_menu)
           return
         }
 
-        if (text === TEXTS.contact_btn) {
+        if (isContactButton) {
           if (
             user.privacyCity !== 0 &&
             (
@@ -51,7 +53,7 @@ const writeMenu = async ctx => {
           await ctx.reply(TEXTS.contact(user.id, user.system_username), BUTTONS.contact_write_menu)
         }
 
-        if (text === TEXTS.media_btn) {
+        if (isMediaButton) {
           if (user.privacyMedia[0] === 1) {
             if ((user.privacyMedia[1] && user.location !== '999|666') || user.privacyMedia[2]) {
               const isCity = user.location === ctx.user.location

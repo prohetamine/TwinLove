@@ -14,29 +14,29 @@ import getPublicationCooldownRemaining, { PUBLICATION_COOLDOWN_MS } from '../mod
 
 const profileMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
-  const isPublishButton = text === TEXTS.pubish_profile_btn || text === 'Опубликовать ⬆️'
-  const isPublishConfirmButton = text === TEXTS.profile_publish_confirm_request_btn || text === 'Все равно опубликовать ⬆️'
-  const isAutoPublishButton = text === TEXTS.profile_publish_auto_btn || text === 'Опубликовать автоматически ⏳⬆️'
+  const isPublishButton = text === TEXTS.pubish_profile_btn
+  const isPublishConfirmButton = text === TEXTS.profile_publish_confirm_request_btn
+  const isAutoPublishButton = text === TEXTS.profile_publish_auto_btn
 
-  if (text === TEXTS.back_to_main_menu_btn || text === 'Назад в главное меню ⏪') {
+  if (text === TEXTS.back_to_main_menu_btn) {
     await ctx.reply(TEXTS.home, BUTTONS.main_menu)
     await ctx.enterScene('main-menu')
     return
   }
 
-  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
+  if (text === TEXTS.back_to_menu_btn) {
     await ctx.reply(TEXTS.profile(ctx), BUTTONS.profile_menu)
     await ctx.enterScene('profile-menu')
     return
   }
 
-  if (text === TEXTS.edit_profile_btn || text === 'Редактировать 📝') {
+  if (text === TEXTS.edit_profile_btn) {
     await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
     await ctx.enterScene('edit-menu')
     return
   }
 
-  if (text === TEXTS.view_profile_btn || text === 'Показать 👁') {
+  if (text === TEXTS.view_profile_btn) {
     const isValid = checkValid(ctx)
 
     if (isValid) {   
@@ -97,11 +97,11 @@ const profileMenu = async ctx => {
       }
 
       if (ctx.user.hidden) {
-        await ctx.reply(TEXTS.edit_profile_visibility_stop)
+        await ctx.reply(TEXTS.edit_profile_visibility_stop, { parse_mode: 'MarkdownV2' })
         return
       }
 
-      const { message_id } = await ctx.reply(TEXTS.view_wait_load_media, BUTTONS.remove_menu)
+      const { message_id } = await ctx.reply(TEXTS.view_wait_load_media, { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
       const media = await getUserMedia(ctx.user)
       await ctx.deleteMessage(message_id)
       

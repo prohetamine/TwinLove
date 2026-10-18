@@ -6,7 +6,7 @@ import getCityById from '../../lib/get-city-by-id.js'
 import hashtag from '../hash-tag.js'
 
 const formatTip = (icon, title, description, action) =>
-  `${icon} *${textScreening(title)}*\n${textScreening(description)}\n\n${textScreening(action).replaceAll('Редактировать', `${EDIT_EMOJI} Редактировать`).replaceAll('Показать 👁', `${VIEW_EMOJI} Показать`).replaceAll('Открыть канал', `${LINK_EMOJI} Открыть канал`).replaceAll('Опубликовать', `${PUBLISH_EMOJI} Опубликовать`)}`
+  `${icon} *${textScreening(title)}*\n${textScreening(description)}\n\n${textScreening(action).replaceAll('Редактировать', `${EDIT_EMOJI} Редактировать`).replaceAll('Показать 👁', `${VIEW_EMOJI} Показать`).replaceAll('Открыть канал', `${LINK_EMOJI} Открыть канал`).replaceAll('Опубликовать', `${PUBLISH_EMOJI} Опубликовать`).replaceAll('📹📸', CAMERA_EMOJI).replaceAll('Контакты ☎️', `${PHONE_EMOJI} Контакты`).replaceAll('Видимость 👻', `${GHOST_EMOJI} Видимость`)}`
 
 const escapeMarkdownCode = text => text.replace(/[\\`]/g, '\\$&')
 const CHAT_ICON_CUSTOM_EMOJI_ID = '5377303280839862219'
@@ -31,6 +31,15 @@ const BACK_CUSTOM_EMOJI_ID = '5379787743326941514'
 const EDIT_CUSTOM_EMOJI_ID = '5380098716139038805'
 const EDIT_EMOJI = `![✏️](tg://emoji?id=${EDIT_CUSTOM_EMOJI_ID})`
 const SETTINGS_EMOJI = '![⚙️](tg://emoji?id=5379653882081225294)'
+const CAMERA_CUSTOM_EMOJI_ID = '5379857695459288789'
+const CAMERA_EMOJI = `![📸](tg://emoji?id=${CAMERA_CUSTOM_EMOJI_ID})`
+const WAIT_CUSTOM_EMOJI_ID = '5381937301444143625'
+const WAIT_EMOJI = `![⏳](tg://emoji?id=${WAIT_CUSTOM_EMOJI_ID})`
+const PHONE_CUSTOM_EMOJI_ID = '5379762218336301013'
+const PHONE_EMOJI = `![☎️](tg://emoji?id=${PHONE_CUSTOM_EMOJI_ID})`
+const THUMBS_UP_EMOJI = '![👍](tg://emoji?id=5381977545287707204)'
+const GHOST_CUSTOM_EMOJI_ID = '5382006102525259533'
+const GHOST_EMOJI = `![👻](tg://emoji?id=${GHOST_CUSTOM_EMOJI_ID})`
 const LINK_CUSTOM_EMOJI_ID = '5379878307007343872'
 const LINK_EMOJI = `![🔗](tg://emoji?id=${LINK_CUSTOM_EMOJI_ID})`
 const RULE_FLAG = `![🚩](tg://emoji?id=${RULE_FLAG_CUSTOM_EMOJI_ID})`
@@ -67,7 +76,7 @@ const TEXTS = {
     let text = `У тебя __*не заполненны*__ разделы:\n`
     text += !(ctx.user?.text > 20 && ctx.user?.text < 800) ? `• *__Текст анкеты__* ${EDIT_EMOJI}\n` : ``
     text += ctx.user?.location === '0|0' ? `• *__Страна и город__* ${LOCATION_EMOJI}\n` : ``
-    text += !ctx.user?.system_username ? `• *__Контакты ☎️__*\n` : ``
+    text += !ctx.user?.system_username ? `• *__Контакты__* ${PHONE_EMOJI}\n` : ``
     text += `\nПерейди в раздел: «${EDIT_EMOJI} Редактировать» чтобы заполнить пробелы`
     
     return checkValid(ctx)
@@ -75,7 +84,7 @@ const TEXTS = {
       : text
   },
   view: 'Смотри\\! ',
-  view_wait_load_media: 'У тебя загружены медиа файлы, я пока не успел их обработить, дай мне немного времени, я скажу как все будет готово ⏳👌',
+  view_wait_load_media: `У тебя загружены медиа файлы, я пока не успел их обработать, дай мне немного времени, я скажу, когда всё будет готово ${WAIT_EMOJI}`,
   banned_rule_age: 'нарушение правила: возраст',
   support_message_delivery: 'Сообщение доставленно, дополните или ожидайте ответа поддержки в этом меню 📬',
   content_error: '*\\=Я ПОКА НЕ МОГУ ОБРАБАТЫВАТЬ ТАКИЕ ФАЙЛЫ\\=* \\(автоматический ответ\\)', 
@@ -85,11 +94,11 @@ const TEXTS = {
     formatTip('🔒', 'Кто видит твои контакты', 'Ты можешь настроить доступ к контактам.', 'Анкета → Редактировать → Контакты ☎️ → Настроить приватность 🔒'),
     formatTip('🖼', 'Кто видит твои фото и видео', 'Ты можешь настроить доступ к загруженным файлам.', 'Анкета → Редактировать → Фото/видео 📹📸 → Настроить приватность 🔒'),
     formatTip('🔍', 'Проверь свои фото и видео', 'Посмотри, как выглядят загруженные файлы. Некоторые могут быть размыты до модерации.', 'Анкета → Показать 👁 → Мои фото/видео 📹📸'),
-    formatTip('👻', 'Скрой анкету на время', 'Когда анкета скрыта, другие не увидят её контакты и медиа. Уже опубликованный пост останется в канале.', 'Анкета → Редактировать → Видимость 👻'),
+    formatTip(GHOST_EMOJI, 'Скрой анкету на время', 'Когда анкета скрыта, другие не увидят её контакты и медиа. Уже опубликованный пост останется в канале.', 'Анкета → Редактировать → Видимость 👻'),
     formatTip('📎', 'Сколько файлов можно добавить', 'В анкете может быть до пяти фото или видео. Размер каждого файла — до 15 МБ.', 'Анкета → Редактировать → Фото/видео 📹📸'),
     formatTip('🗑', 'Управляй старыми постами', 'Можно автоматически удалять прежние посты при публикации нового.', 'Анкета → Редактировать → Автоудаление 🤖🗑'),
-    formatTip('📸', 'Добавь фото или видео', 'Так людям будет проще узнать тебя по анкете.', 'Анкета → Редактировать → Фото/видео 📹📸'),
-    formatTip('⏳', 'Если фото пока не видно', 'Фото может ждать модерации. Если оно не появилось позже, загрузи его снова или напиши в поддержку.', 'Анкета → Показать 👁 → Мои фото/видео 📹📸'),
+    formatTip(CAMERA_EMOJI, 'Добавь фото или видео', 'Так людям будет проще узнать тебя по анкете.', 'Анкета → Редактировать → Фото/видео 📹📸'),
+    formatTip(WAIT_EMOJI, 'Если фото пока не видно', 'Фото может ждать модерации. Если оно не появилось позже, загрузи его снова или напиши в поддержку.', 'Анкета → Показать 👁 → Мои фото/видео 📹📸'),
     formatTip('📲', 'Настрой уведомления', 'Выбирай, из каких городов получать сообщения о новых анкетах, или отключи их.', 'Анкета → Редактировать → Уведомления 📲'),
     formatTip('👋', 'Начни знакомство', 'Помаши человеку или поставь лайк. Бот отправит ему ссылку на твою анкету, если она опубликована.', 'Открой чужую анкету → 👋 → Помахать 👋 или Ты мне нравишься ❤️'),
     formatTip(VIEW_EMOJI, 'Посмотри анкету перед публикацией', 'Когда анкета заполнена, проверь, как выглядят её текст и фотографии.', 'Анкета → Показать 👁'),
@@ -119,7 +128,7 @@ const TEXTS = {
   view_photo_with_no_approve: '❗️ Пока фото не прошли модерацию они будут выглядеть размытыми и их сможешь увидеть только ты',
   publish_profile_request: '❗️ У вас есть фото/видео которые не прошли модерацию и не будут отображаться в анкете пока не пройдут модерацию, вы точно хотите опубликовать профиль в канал без фото?',
   publish_profile_complete: `Готово, анкета опубликованна 🎉`,
-  publish_profile_timeout: (outTime, textTime) => `Постить анкету можно только раз в ${textTime}, приходи через: __*${outTime}*__ ${Math.random() > 0.5 ? '⏳' : '⌛️'}`,
+  publish_profile_timeout: (outTime, textTime) => `Постить анкету можно только раз в ${textTime}, приходи через: __*${outTime}*__ ${WAIT_EMOJI}`,
   publish_profile_moderation_request: 'Анкета будет опубликована сразу после модераци 👌',
   publish_profile_moderation_reject_request: '❗️ Анкета отклонена модератором, для обжалования свяжитесь с поддержкой /support',
   publish_profile_moderation_ok: 'Выполненно ✅',
@@ -142,7 +151,7 @@ const TEXTS = {
   media_error: 'Какая\\-то ошибка, фото/видео этого человека больше нельзя просмотреть\\.\\.\\. ☠️',
   media_hidden: 'Фото/видео этого человека пока нельзя просмотреть, он скрыл свои медиа 🤔', 
   contact_error_privacy: type => `Контакты этого человека доступны только: ${type === 1 ? '«из моего и ближайших городов 🌇»' : '«только из моего города 🏡»'}`,
-  media_error_privacy: (city, media) => `Чтобы видеть фото/видео этого человека вам нужно также подходить под эти параметры: ${[city ? '«людям из моего города 🏡»' : null, media ? '«людям с фото/видео 📸»' : null].filter(f => f).join(' и ')}`,
+  media_error_privacy: (city, media) => `Чтобы видеть фото/видео этого человека вам нужно также подходить под эти параметры: ${[city ? '«людям из моего города 🏡»' : null, media ? `«людям с фото/видео ${CAMERA_EMOJI}»` : null].filter(f => f).join(' и ')}`,
   fulled_not_publish: '❗️ Твоя анкета еще не опубликована\n\nАнкета заполнена, осталось только опубликовать ✨\n\nНажми /start чтобы начать',
   not_fulled_not_publish: '❗️ Твоя анкета еще не опубликована\n\nПора заполнить анкету и останется только опубликовать ✨\n\nНажми /start чтобы начать',
   admin_bot: 'Назначен администратором бота', 
@@ -193,13 +202,13 @@ const TEXTS = {
   write_btn: 'Здесь можно просмотреть контакты, фото или видео человека которому хотите написать ✍️',
   hello_btn: `Не знаешь с чего начать? Поздоровайся или поставь лайк\\! 👋❤️ [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=hello)`,
   report_btn: 'Пожаловаться на анкету',
-  my_media_btn: 'Мои фото/видео 📹📸',
+  my_media_btn: 'Мои фото/видео',
   my_profile_btn: 'Моя анкета',
   profile_publish_confirm_request_btn: 'Все равно опубликовать',
-  profile_publish_auto_btn: 'Опубликовать автоматически ⏳',
+  profile_publish_auto_btn: 'Опубликовать автоматически',
   open_link_btn: 'Открыть',
-  contact_btn: 'Контакты ☎️',
-  media_btn: 'Фото/видео 📹📸',
+  contact_btn: 'Контакты',
+  media_btn: 'Фото/видео',
   long_hello_btn: 'Помахать 👋',
   like_btn: 'Ты мне нравишься ❤️',
   report_profile_btn: 'Пожаловаться на анкету',
@@ -225,12 +234,12 @@ const TEXTS = {
   edit_profile_location_btn_3: 'Да 🏴‍☠️',
   edit_profile_location_btn_4: 'Нет',
 
-  edit_profile_media_btn: 'Фото/видео 📹📸',
-  edit_profile_media: allowCount => allowCount !== 0 ? `Хочешь добавить фото/видео к профилю? Можно загрузить еще ${allowCount} фото/видео 📹📸` : `Упс, кончилось место для фото/видео 📹📸, может стоит удалить? 🗑`,
-  edit_profile_media_btn_2: 'Удалить фото/видео 📹📸🗑',
+  edit_profile_media_btn: 'Фото/видео',
+  edit_profile_media: allowCount => allowCount !== 0 ? `Хочешь добавить фото/видео к профилю? Можно загрузить еще ${allowCount} фото/видео ${CAMERA_EMOJI}` : `Упс, кончилось место для фото/видео ${CAMERA_EMOJI}, может стоит удалить? 🗑`,
+  edit_profile_media_btn_2: 'Удалить фото/видео',
   edit_profile_media_additional: `Загружено\\!`,
-  edit_profile_media_question: allowCount => `Хочешь загрузить еще? Можно загрузить еще ${allowCount} фото/видео 📹📸`,
-  edit_profile_media_remove: allowCount => `Медиа удалены теперь можно добавить ${allowCount} фото/видео 📹📸`,
+  edit_profile_media_question: allowCount => `Хочешь загрузить еще? Можно загрузить еще ${allowCount} фото/видео ${CAMERA_EMOJI}`,
+  edit_profile_media_remove: allowCount => `Медиа удалены теперь можно добавить ${allowCount} фото/видео ${CAMERA_EMOJI}`,
   edit_profile_media_error: 'Что\\-то тут не так\\.\\.\\. я не могу это загрузить или обработать, я принимаю только фото и видео \\(до 15мб\\) 😢',
   edit_profile_media_resolve_inline_btn: '✅',
   edit_profile_media_reject_inline_btn: 'Отклонить',
@@ -248,12 +257,12 @@ const TEXTS = {
   edit_profile_media_privacy_media_btn: isSelect => `Людям с фото/видео${isSelect ? ' ✅' : ''}`,
   edit_profile_media_privacy_error_select: 'Этот вариант уже ✅',
 
-  edit_profile_contact_btn: 'Контакты ☎️',
-  edit_profile_contact: isUsername => isUsername ? `У вас установлен username 👍 это нужно чтоб тебе могли написать ${LINK_EMOJI}` : `У вас не установлен username 👎 установи его чтобы продолжить, это нужно чтоб тебе могли написать ${LINK_EMOJI}\n\n__*[Как установить username в Телеграм](https://dzen.ru/a/ZLZzSY55_nT7X7Lz)*__`,
+  edit_profile_contact_btn: 'Контакты',
+  edit_profile_contact: isUsername => isUsername ? `У вас установлен username ${THUMBS_UP_EMOJI} это нужно чтоб тебе могли написать ${LINK_EMOJI}` : `У вас не установлен username 👎 установи его чтобы продолжить, это нужно чтоб тебе могли написать ${LINK_EMOJI}\n\n__*[Как установить username в Телеграм](https://dzen.ru/a/ZLZzSY55_nT7X7Lz)*__`,
   edit_profile_contact_confirm_btn: 'Установил(а) ✅',
   edit_profile_contact_error: 'Username все еще не установлен\\.\\. @',
-  edit_profile_contact_privacy: 'Кому видны твои контакты? ☎️',
-  edit_profile_contact_privacy_help: `Некоторые пользователи ограничивают доступ к своим контактам по гео позиции\\. Настроить эту функцию можно в разделе «Анкета → ${EDIT_EMOJI} Редактировать → Контакты ☎️ → Настроить приватность 🔒»`,
+  edit_profile_contact_privacy: `Кому видны твои контакты? ${PHONE_EMOJI}`,
+  edit_profile_contact_privacy_help: `Некоторые пользователи ограничивают доступ к своим контактам по гео позиции\\. Настроить эту функцию можно в разделе «Анкета → ${EDIT_EMOJI} Редактировать → ${PHONE_EMOJI} Контакты → Настроить приватность 🔒»`,
   edit_profile_contact_privacy_btn_1: select => `Всем 👥${select === 0 ? ` — ✅` : ''}`,
   edit_profile_contact_privacy_btn_2: select => `Из моего и ближайших городов 🌇${select === 1 ? ` — ✅` : ''}`,
   edit_profile_contact_privacy_btn_3: select => `Только из моего города 🏡${select === 2 ? ` — ✅` : ''}`,
@@ -266,9 +275,9 @@ const TEXTS = {
   edit_profile_notification_btn_3: select => `Из моего города и рядом 🌇${select === 2 ? ` — ✅` : ''}`,
   edit_profile_notification_btn_4: select => `Из любого города мира 🌏${select === 3 ? ` — ✅` : ''}`,
 
-  edit_profile_visibility_btn: 'Видимость 👻',
-  edit_profile_visibility: 'Если ваша анкета будет скрыта, ваши контакты нельзя будет посмотереть также как: фото/видео, «помахать вам» и вы не сможете смотреть чужие контакты ☎️',
-  edit_profile_visibility_stop: `❗️ Анкета не может быть опубликована если она скрыта 🤔\n\nПерейдите раздел «Анкета → ${EDIT_EMOJI} Редактировать → Видимость 👻» измените «Отображать анкету»`,
+  edit_profile_visibility_btn: 'Видимость',
+  edit_profile_visibility: `Если ваша анкета будет скрыта, ваши контакты нельзя будет посмотереть также как: фото/видео, «помахать вам» и вы не сможете смотреть чужие контакты ${PHONE_EMOJI}`,
+  edit_profile_visibility_stop: `❗️ Анкета не может быть опубликована если она скрыта 🤔\n\nПерейдите раздел «Анкета → ${EDIT_EMOJI} Редактировать → ${GHOST_EMOJI} Видимость» измените «Отображать анкету»`,
   edit_profile_visibility_btn_1: isHidden => `Отображать анкету${!isHidden ? ` — ✅` : ''}`,
   edit_profile_visibility_btn_2: isHidden => `Скрыть анкету${isHidden ? ` — ✅` : ''}`,
 
@@ -322,10 +331,10 @@ const edit_menu = {
   reply_markup: Markup.keyboard([
     [{ text: TEXTS.edit_profile_text_btn, icon_custom_emoji_id: EDIT_CUSTOM_EMOJI_ID }],
     [{ text: TEXTS.edit_profile_location_btn, icon_custom_emoji_id: LOCATION_CUSTOM_EMOJI_ID }],
-    [TEXTS.edit_profile_media_btn],
-    [TEXTS.edit_profile_contact_btn],
+    [{ text: TEXTS.edit_profile_media_btn, icon_custom_emoji_id: CAMERA_CUSTOM_EMOJI_ID }],
+    [{ text: TEXTS.edit_profile_contact_btn, icon_custom_emoji_id: PHONE_CUSTOM_EMOJI_ID }],
     [TEXTS.edit_profile_notification_btn],
-    [TEXTS.edit_profile_visibility_btn],
+    [{ text: TEXTS.edit_profile_visibility_btn, icon_custom_emoji_id: GHOST_CUSTOM_EMOJI_ID }],
     [TEXTS.edit_profile_autodelete_btn],
     [BACK_TO_MENU_BUTTON]
   ]).resize().reply_markup
@@ -373,7 +382,7 @@ const edit_profile_media_menu = {
   reply_markup: Markup.keyboard(
     [
       [TEXTS.edit_profile_privacy_btn],
-      [TEXTS.edit_profile_media_btn_2],
+      [{ text: TEXTS.edit_profile_media_btn_2, icon_custom_emoji_id: CAMERA_CUSTOM_EMOJI_ID }],
       [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
@@ -444,7 +453,7 @@ const view_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
     [{ text: TEXTS.my_profile_btn, icon_custom_emoji_id: PROFILE_CUSTOM_EMOJI_ID }],
-    [TEXTS.my_media_btn],
+    [{ text: TEXTS.my_media_btn, icon_custom_emoji_id: CAMERA_CUSTOM_EMOJI_ID }],
     [BACK_TO_MENU_BUTTON]
   ]).resize().reply_markup
 }
@@ -471,7 +480,7 @@ const profile_publish_confirm_request_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
     [{ text: TEXTS.profile_publish_confirm_request_btn, icon_custom_emoji_id: PUBLISH_CUSTOM_EMOJI_ID }],
-    [{ text: TEXTS.profile_publish_auto_btn, icon_custom_emoji_id: PUBLISH_CUSTOM_EMOJI_ID }],
+    [{ text: TEXTS.profile_publish_auto_btn, icon_custom_emoji_id: WAIT_CUSTOM_EMOJI_ID }],
     [BACK_TO_MENU_BUTTON]
   ]).resize().reply_markup
 }
@@ -479,8 +488,8 @@ const profile_publish_confirm_request_menu = {
 const contact_write_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
-    [TEXTS.contact_btn], 
-    [TEXTS.media_btn],
+    [{ text: TEXTS.contact_btn, icon_custom_emoji_id: PHONE_CUSTOM_EMOJI_ID }],
+    [{ text: TEXTS.media_btn, icon_custom_emoji_id: CAMERA_CUSTOM_EMOJI_ID }],
     [BACK_TO_MAIN_MENU_BUTTON]
   ]).resize().reply_markup
 }

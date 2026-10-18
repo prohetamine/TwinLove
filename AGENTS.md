@@ -6,7 +6,7 @@ TwinLove is a fork of an older Telegram bot. The current task is to adapt it for
 
 The user has decided to remove «Нижнометр», the $ONI token section, donations, and the source-code menu section from the user-facing bot. Do not bring them back into menus, onboarding, profile cards, notifications, or deep links. Other legacy features require a separate user decision before removal or repurposing.
 
-The former «Дополнительно 💼» menu has been removed. Its «Пригласить друзей» and «Общий чат» buttons now live in the main menu. The profile, all profiles, invite, chat, rules, support, and report buttons use 👤, ❤️, 🤝, 💬, 🚩, and ⚠️ custom emoji icons from the `TwinLoveEmoji` set. Telegram displays keyboard icons before the button text. Keep the button text free of a second emoji. The chat message uses the 💬 custom emoji, the invitation statistics use 👞 for link visits and ✈️ for published profiles from the set, and the rules heading uses the 🚩 custom emoji. The chat link in published profiles and the `/chat` and `/start chat` commands remain available. Keep the transition from saved `other-menu` scenes and old button labels working for existing users.
+The former «Дополнительно 💼» menu has been removed. Its «Пригласить друзей» and «Общий чат» buttons now live in the main menu. The profile, all profiles, invite, chat, rules, support, and report buttons use 👤, ❤️, 🤝, 💬, 🚩, and ⚠️ custom emoji icons from the `TwinLoveEmoji` set. Telegram displays keyboard icons before the button text. Keep the button text free of a second emoji. The chat message uses the 💬 custom emoji, the invitation statistics use 👞 for link visits and ✈️ for published profiles from the set, and the rules heading uses the 🚩 custom emoji. The chat link in published profiles and the `/chat` and `/start chat` commands remain available. Saved `other-menu` scene names are redirected to the current menu.
 
 Referral codes are four-character `/start` payloads. Referral registration checks existing records and the current inviter's list to avoid repeat counts, and ignores a user's own link. The public invitation view shows the link, the number of people who opened it, and how many of them have a published profile.
 
@@ -40,21 +40,25 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - The main copy and keyboard labels live in `src/assets/ui/ru.js`. `TEXTS` keys are used by handlers as well as for display; keep keys stable unless every reference is updated.
 - Many messages use Telegram `MarkdownV2`. Preserve escaping, formatting, links, newlines, interpolations, and dynamic value screening. Check rendered meaning as well as JavaScript syntax.
 - Keyboard text can be an exact-match command in scene handlers. If a button label changes, inspect all comparisons with that `TEXTS` value and related keyboard definitions.
+- Scene handlers match current `TEXTS` button labels only. Do not add fallback checks for old visible labels; the user asked to remove that compatibility code.
 - Deep-link payloads (`/start ...`), callback data, and scene names connect separate handlers. Do not rename them for copy style alone.
 - The user chose to keep the compact «(?)» link beside the 18+ rule; it opens the age explanation through `/start dating18`.
 - The four rules bullets use the ⏺️ custom emoji from the `TwinLoveEmoji` set through MarkdownV2. Keep the fallback emoji text aligned with the sticker's emoji value.
-- Location messages and keyboard buttons use the 📍 custom emoji from `TwinLoveEmoji`. Published channel cards use an ordinary 📍 because this bot cannot use custom emoji in channel posts under Telegram's current eligibility. Keep location request buttons functional and continue accepting old button text where needed.
-- Publication buttons use the ⬆️ custom emoji from `TwinLoveEmoji`. Accept their older text labels with an ordinary ⬆️ so saved keyboards still work.
-- Both return buttons use the ⏪ custom emoji from `TwinLoveEmoji`, and scenes accept the older button text with an ordinary ⏪. The pencil ✏️ in the profile guidance uses the matching custom emoji. When a sticker is replaced in the set, update its ID in the UI.
-- «Редактировать» and «Текст анкеты» use the ✏️ custom emoji as a button icon, replacing the old ordinary 📝. Keep old button labels working for saved keyboards.
-- «Показать» uses the 👁 custom emoji as a button icon; keep the older «Показать 👁» label working. The «Как опубликовать анкету?» tip uses the custom ⬆️ in its heading and action path. Update existing custom emoji IDs when Telegram assigns replacements in the set, including 👤.
+- Location messages and keyboard buttons use the 📍 custom emoji from `TwinLoveEmoji`. Published channel cards use an ordinary 📍 because this bot cannot use custom emoji in channel posts under Telegram's current eligibility. Keep location request buttons functional.
+- Publication buttons use the ⬆️ custom emoji from `TwinLoveEmoji`.
+- Both return buttons use the ⏪ custom emoji from `TwinLoveEmoji`. The pencil ✏️ in the profile guidance uses the matching custom emoji. When a sticker is replaced in the set, update its ID in the UI.
+- «Редактировать» and «Текст анкеты» use the ✏️ custom emoji as a button icon.
+- «Показать» uses the 👁 custom emoji as a button icon. The «Как опубликовать анкету?» tip uses the custom ⬆️ in its heading and action path. Update existing custom emoji IDs when Telegram assigns replacements in the set, including 👤.
 - All private URL buttons that display 🔗, including opening the chat, channel, and channel post, use the custom 🔗 icon from `TwinLoveEmoji`. Inline text references use a MarkdownV2 custom emoji entity.
 - Profile cards and automated notifications are user-facing copy too. Check them when removing a term from the interface.
 - Tips stay text-only. Use a short bold heading with one emoji, a concise explanation, and a separate action path with the current button labels. Escape tip text for Telegram MarkdownV2.
 - The «Пригласи знакомых» tip, referral statistics heading, and «Пригласить друзей» button use 🤝 from `TwinLoveEmoji`.
-- The ❌ icon from `TwinLoveEmoji` is used on rejection, hide, and notification opt-out buttons. Keep old keyboard labels with ordinary ❌ working. Telegram callback answer popups remain plain text because they do not support custom emoji entities.
+- The ❌ icon from `TwinLoveEmoji` is used on rejection, hide, and notification opt-out buttons. Telegram callback answer popups remain plain text because they do not support custom emoji entities.
 - The «Все анкеты TwinLove» heading uses the custom ❤️ from `TwinLoveEmoji`, matching the main menu button.
 - The edit menu prompt uses the custom ⚙️ from `TwinLoveEmoji`. When checking the pack, update changed IDs too; 📍 was replaced and now has ID `5379990525912853171`.
+- Photo and video buttons and private messages use the custom 📸 from `TwinLoveEmoji`; auto-publication and waiting messages use custom ⏳.
+- Contact buttons and private contact guidance use custom ☎️; the username confirmation uses custom 👍 from `TwinLoveEmoji`.
+- The visibility button and related private guidance use custom 👻 from `TwinLoveEmoji`.
 
 ## Repository map and verification
 

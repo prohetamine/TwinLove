@@ -5,7 +5,7 @@ import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
 const autodeleteMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
+  if (text === TEXTS.back_to_menu_btn) {
     await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
     await ctx.enterScene('edit-menu')
     return

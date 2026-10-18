@@ -42,14 +42,12 @@ test('an existing user who already accepted rules gets the main menu after age c
   assert.deepEqual(replies.at(-1).options.reply_markup, BUTTONS.main_menu.reply_markup)
 })
 
-test('new and saved return buttons both work after adding the custom icon', async () => {
+test('return button uses the custom icon and opens the main menu', async () => {
   const returnButton = BUTTONS.rules_menu.reply_markup.keyboard.flat().find(button => button.text === TEXTS.back_to_main_menu_btn)
   assert.equal(returnButton.icon_custom_emoji_id, '5379787743326941514')
 
-  for (const label of [TEXTS.back_to_main_menu_btn, 'Назад в главное меню ⏪']) {
-    const { ctx, replies } = makeContext(label)
-    await rulesMenu(ctx)
-    assert.equal(ctx.user.scene, 'main-menu')
-    assert.equal(replies.at(-1).message, TEXTS.home)
-  }
+  const { ctx, replies } = makeContext(TEXTS.back_to_main_menu_btn)
+  await rulesMenu(ctx)
+  assert.equal(ctx.user.scene, 'main-menu')
+  assert.equal(replies.at(-1).message, TEXTS.home)
 })

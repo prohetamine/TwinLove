@@ -5,7 +5,7 @@ import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
 const notificationMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_menu_btn || text === 'Назад в меню ⏪') {
+  if (text === TEXTS.back_to_menu_btn) {
     await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
     await ctx.enterScene('edit-menu')
     return
@@ -17,7 +17,7 @@ const notificationMenu = async ctx => {
       TEXTS.edit_profile_notification_btn_2(-1),
       TEXTS.edit_profile_notification_btn_3(-1),
       TEXTS.edit_profile_notification_btn_4(-1)
-    ].findIndex(btn => text.replace(/ ❌| — ✅/g, '') === btn.replace(/ — ✅/, ''))
+    ].findIndex(btn => text.replace(/ — ✅/, '') === btn.replace(/ — ✅/, ''))
 
     if (findIndex !== -1) {
       ctx.user.newNotification = findIndex

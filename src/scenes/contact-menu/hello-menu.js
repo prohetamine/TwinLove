@@ -5,7 +5,7 @@ import { invites, invitesLike, posts, users } from '../../helpers/db.js'
 const helloMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
-  if (text === TEXTS.back_to_main_menu_btn || text === 'Назад в главное меню ⏪') {
+  if (text === TEXTS.back_to_main_menu_btn) {
     await ctx.reply(TEXTS.home, BUTTONS.main_menu)
     await ctx.enterScene('main-menu')
     return
