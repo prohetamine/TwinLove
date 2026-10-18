@@ -1,4 +1,3 @@
-/* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
 import { User, Referal, Post, Invite, InvitesLike, Media, Notify, NotifyComplete } from './helpers/models.js'
 import express from 'express'

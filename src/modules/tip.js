@@ -6,7 +6,6 @@ const tip = async ctx => {
     Math.random() > 0.9 && 
     (
       ctx.user.scene === 'main-menu' ||
-      ctx.user.scene === 'other-menu' ||
       ctx.user.scene === 'profile-menu'
     )
   ) {

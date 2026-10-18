@@ -5,6 +5,8 @@ import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 import { nanoid } from 'nanoid'
 import sleep from 'sleep-promise'
 import { CHANNEL_ID } from '../../configs/env.js'
+import registerReferral from './register-referral.js'
+import sendWelcomeSticker from './send-welcome-sticker.js'
 
 const commands = async ctx => {
   const text = ctx.update?.message?.text || ''
@@ -64,12 +66,6 @@ const commands = async ctx => {
     return
   } 
 
-  if (command === '/donate' || (command === '/start' && payload === 'donate')) {
-    await ctx.reply(TEXTS.donate, BUTTONS.main_menu)
-    await ctx.enterScene('main-menu')
-    return
-  } 
-
   if (text === '/channel' || (command === '/start' && payload === 'channel')) {
     await ctx.reply(TEXTS.channel, {
       ...BUTTONS.channel_inline
@@ -116,19 +112,9 @@ const commands = async ctx => {
 
   if (command === '/start' && payload.length === 4) {
     const id = ctx.update.message.from.id
+    await registerReferral(payload, id, { users, referals })
 
-    const [isReferal = false] = await referals.all({ 'system_referals': [id] })
-
-    if (!isReferal) {
-      const [referalOwner = false] = await users.all({ 'system_referalHashId': payload }) 
-      
-      if (referalOwner) {
-        const ownerUser = await referals.get(referalOwner.id)
-        ownerUser.ids.push(id)
-        await referals.set(ownerUser.id, ownerUser)
-      }
-    }
-
+    await sendWelcomeSticker(ctx)
     await ctx.reply(TEXTS.hello, BUTTONS.main_menu)
     await ctx.enterScene('main-menu')
     return

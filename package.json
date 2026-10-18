@@ -7,8 +7,9 @@
   "scripts": {
     "build:typed": "tsc",
     "typecheck:typed": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
     "test": "node --test test/*.test.js",
-    "verify": "npm run build:typed && npm test",
+    "verify": "npm run build:typed && npm run lint && npm test",
     "predev": "npm run verify",
     "dev": "mode=dev nodemon src/index.js",
     "predevtest": "npm run verify",
@@ -48,6 +49,7 @@
     "@eslint/js": "^9.28.0",
     "eslint": "^9.28.0",
     "globals": "^16.2.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.2"
   }
 }

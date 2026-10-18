@@ -1,4 +1,4 @@
-import { users } from '../helpers/db.js'
+import { users, referals, posts } from '../helpers/db.js'
 import { TEXTS, BUTTONS } from './../assets/ui/ru.js'
 import { nanoid } from 'nanoid'
 
@@ -11,9 +11,25 @@ const mainMenu = async ctx => {
     return
   }
 
-  if (text === TEXTS.other_btn) {
-    await ctx.reply(TEXTS.other, BUTTONS.other_menu)
-    await ctx.enterScene('other-menu')
+  if (text === 'Дополнительно 💼') {
+    await ctx.reply(TEXTS.home, BUTTONS.main_menu)
+    return
+  }
+
+  if (text === TEXTS.chat_btn || text === 'Общий чат 📝' || text === 'Общий чат' || text === 'Ламповый чат 📝') {
+    await ctx.reply(TEXTS.chat, BUTTONS.chat_inline)
+    return
+  }
+
+  if (text === TEXTS.referal_link_btn || text === 'Реферальная ссылка 🔗') {
+    const referalHashId = ctx.user.system_referalHashId
+    const _referals = (await referals.get(ctx.user.id)).ids
+    const referalUsers = await users.all({ id: { $in: _referals } })
+    const _posts = (await posts.all({ id: { $in: _referals } }))
+      .map(({ ids }) => ids.length > 0 ? 1 : 0)
+      .reduce((total, isPost) => total + isPost, 0)
+
+    await ctx.reply(TEXTS.referal_link(referalHashId, referalUsers.length, _posts), BUTTONS.main_menu)
     return
   }
 

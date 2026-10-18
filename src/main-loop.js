@@ -3,7 +3,6 @@ import sceneHandler from './lib/scene-handler.js'
 
 import start from './scenes/start.js'
 import mainMenu from './scenes/main-menu.js'
-import otherMenu from './scenes/other-menu.js'
 import profileMenu from './scenes/profile-menu.js'
 import supportMenu from './scenes/support-menu.js'
 import adminMenu from './scenes/admin-menu.js'
@@ -63,7 +62,7 @@ const mainLoop = async (ctx, next) => {
 
   ctx.user.system_username = username || ''
 
-  if (ctx.user.scene === 'bottom-internet' || ctx.user.scene === 'crypto-menu') {
+  if (['bottom-internet', 'crypto-menu', 'other-menu'].includes(ctx.user.scene)) {
     ctx.user.scene = ctx.user.scene === 'bottom-internet' ? 'profile-menu' : 'main-menu'
     await users.set(ctx.user.id, ctx.user)
   }
@@ -122,7 +121,6 @@ const mainLoop = async (ctx, next) => {
   await sh.add('age18confirm-menu', age18confirmMenu)
   await sh.add('rules-menu', rulesMenu)
   await sh.add('main-menu', mainMenu)
-  await sh.add('other-menu', otherMenu)
   await sh.add('profile-menu', profileMenu)
   await sh.add('support-menu', supportMenu)
   await sh.add('admin-menu', adminMenu)

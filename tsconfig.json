@@ -9,6 +9,9 @@
   },
   "include": [
     "src/lib/create-import-id.ts",
-    "src/lib/text-screening.ts"
+    "src/lib/text-screening.ts",
+    "src/lib/get-city-by-id.ts",
+    "src/lib/get-city-by-title.ts",
+    "src/modules/check-valid.ts"
   ]
 }
