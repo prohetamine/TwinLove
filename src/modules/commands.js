@@ -37,12 +37,12 @@ const commands = async ctx => {
   }
 
   if (command === '/start' && payload === 'nonotify') {
-    await ctx.reply(TEXTS.edit_profile_notification_help)
+    await ctx.reply(TEXTS.edit_profile_notification_help, { parse_mode: 'MarkdownV2' })
     return
   }
 
   if (command === '/start' && payload === 'vsj') {
-    await ctx.reply(TEXTS.rules_vsj)
+    await ctx.reply(TEXTS.rules_vsj, { parse_mode: 'MarkdownV2' })
     return
   }
 

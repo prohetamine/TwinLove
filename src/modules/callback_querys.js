@@ -59,7 +59,7 @@ const callback_querys = async ctx => {
       user.system_publishModerationStatus = false
       await users.set(user.id, user)
       try {
-        await ctx.telegram.sendMessage(user.id, TEXTS.publish_profile_moderation_reject_request)
+        await ctx.telegram.sendMessage(user.id, TEXTS.publish_profile_moderation_reject_request, { parse_mode: 'MarkdownV2' })
       } catch (e) {}
       await ctx.deleteMessage()
     }

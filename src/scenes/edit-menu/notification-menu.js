@@ -17,7 +17,7 @@ const notificationMenu = async ctx => {
       TEXTS.edit_profile_notification_btn_2(-1),
       TEXTS.edit_profile_notification_btn_3(-1),
       TEXTS.edit_profile_notification_btn_4(-1)
-    ].findIndex(btn => text.replace(/ — ✅/, '') === btn.replace(/ — ✅/, ''))
+    ].findIndex(btn => text === btn)
 
     if (findIndex !== -1) {
       ctx.user.newNotification = findIndex

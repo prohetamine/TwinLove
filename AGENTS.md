@@ -6,7 +6,7 @@ TwinLove is a fork of an older Telegram bot. The current task is to adapt it for
 
 The user has decided to remove «Нижнометр», the $ONI token section, donations, and the source-code menu section from the user-facing bot. Do not bring them back into menus, onboarding, profile cards, notifications, or deep links. Other legacy features require a separate user decision before removal or repurposing.
 
-The former «Дополнительно 💼» menu has been removed. Its «Пригласить друзей» and «Общий чат» buttons now live in the main menu. The profile, all profiles, invite, chat, rules, support, and report buttons use 👤, ❤️, 🤝, 💬, 🚩, and ⚠️ custom emoji icons from the `TwinLoveEmoji` set. Telegram displays keyboard icons before the button text. Keep the button text free of a second emoji. The chat message uses the 💬 custom emoji, the invitation statistics use 👞 for link visits and ✈️ for published profiles from the set, and the rules heading uses the 🚩 custom emoji. The chat link in published profiles and the `/chat` and `/start chat` commands remain available. Saved `other-menu` scene names are redirected to the current menu.
+The former «Дополнительно 💼» menu has been removed. Its «Пригласить друзей» and «Общий чат» buttons now live in the main menu. The profile, all profiles, invite, chat, rules, support, and report buttons use 👤, ❤️, 🤝, 💬, 🚩, and ⚠️ custom emoji icons from the `TwinLoveEmoji` set. Telegram displays keyboard icons before the button text. Keep the button text free of a second emoji. The chat message uses the 💬 custom emoji, the invitation statistics use 👞 for link visits and ⬆️ for published profiles from the set, and the rules heading uses the 🚩 custom emoji. The chat link in published profiles and the `/chat` and `/start chat` commands remain available. Saved `other-menu` scene names are redirected to the current menu.
 
 Referral codes are four-character `/start` payloads. Referral registration checks existing records and the current inviter's list to avoid repeat counts, and ignores a user's own link. The public invitation view shows the link, the number of people who opened it, and how many of them have a published profile.
 
@@ -60,8 +60,13 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - Contact buttons and private contact guidance use custom ☎️; the username confirmation uses custom 👍 from `TwinLoveEmoji`.
 - The visibility button and related private guidance use custom 👻 from `TwinLoveEmoji`.
 - The notification button, message, and tip use custom 📲 from `TwinLoveEmoji`; the new-profiles tip uses custom 📣.
+- Notification, contact privacy, media privacy, visibility, and auto-delete setting choices have no decorative emoji. Only selected choices show the custom ✅ icon.
+- The `/start nonotify` help message uses MarkdownV2 so its custom ❤️ renders correctly. Keep its reassurance that notifications can be disabled without blocking or deleting the bot; escape ordinary text when editing it.
 - The private media moderation button for «Человек» uses custom 👤. Keep ordinary ❤️ in like messages and the «Ты мне нравишься» button, and ordinary ⚠️ on published channel cards, as the user chose.
+- The 👤 custom emoji ID is `5381935789615657235`. All private ❗️ messages use the custom emoji ID `5382333129925110609` with MarkdownV2; escape plain text when composing those messages.
 - Publication confirmation uses custom 🎉. Auto-delete UI and the remove-media button use custom 🗑 from `TwinLoveEmoji`.
+- Age, rules, username, and moderation approval buttons use custom ✅. Selected option buttons also use custom ✅ before the label; callback popups use plain words because custom emoji entities are unsupported there.
+- The «Сохранил» message uses custom 💾 from `TwinLoveEmoji`. Every reply that sends it must set MarkdownV2, including replies that remove the keyboard.
 
 ## Repository map and verification
 

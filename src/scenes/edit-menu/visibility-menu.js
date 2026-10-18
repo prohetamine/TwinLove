@@ -15,7 +15,7 @@ const visibilityMenu = async ctx => {
     const findIndex = [
       TEXTS.edit_profile_visibility_btn_1(-1),
       TEXTS.edit_profile_visibility_btn_2(-1),
-    ].findIndex(btn => text.replace(/ — ✅/, '') === btn.replace(/ — ✅/, ''))
+    ].findIndex(btn => text === btn)
 
     if (findIndex !== -1) {
       ctx.user.hidden = findIndex !== 0

@@ -11,7 +11,7 @@ const age18confirmMenu = async ctx => {
   }
 
   if (text === TEXTS.age18Confirm_btn_1) {
-    const { message_id } = await ctx.reply(TEXTS.edit_profile_update, BUTTONS.remove_menu)
+    const { message_id } = await ctx.reply(TEXTS.edit_profile_update, { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
 
     await sleep(1000)
     await ctx.deleteMessage(message_id)

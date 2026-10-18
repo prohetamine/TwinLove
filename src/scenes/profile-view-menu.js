@@ -52,7 +52,7 @@ const profileViewMenu = async ctx => {
         }
 
         if (media.find(file => !file.isApprove)) {
-          await ctx.reply(TEXTS.view_photo_with_no_approve)
+          await ctx.reply(TEXTS.view_photo_with_no_approve, { parse_mode: 'MarkdownV2' })
         }
       }
     }

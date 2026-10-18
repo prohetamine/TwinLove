@@ -28,7 +28,7 @@ const locationMenu = async ctx => {
     ctx.user.location = '999|666'
     await users.set(ctx.user.id, ctx.user)
 
-    const { message_id } = await ctx.reply(TEXTS.edit_profile_update, BUTTONS.remove_menu)
+    const { message_id } = await ctx.reply(TEXTS.edit_profile_update, { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
 
     await sleep(1000)
     await ctx.deleteMessage(message_id)
@@ -54,7 +54,7 @@ const locationMenu = async ctx => {
       ctx.user.location = city
       await users.set(ctx.user.id, ctx.user)
 
-      const { message_id } = await ctx.reply(TEXTS.edit_profile_update, BUTTONS.remove_menu)
+      const { message_id } = await ctx.reply(TEXTS.edit_profile_update, { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
 
       await sleep(1000)
       await ctx.deleteMessage(message_id)

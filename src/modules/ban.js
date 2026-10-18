@@ -12,7 +12,7 @@ const ban = async ctx => {
     return
   }
 
-  await ctx.reply(TEXTS.blocked(ctx.user), BUTTONS.remove_menu)
+  await ctx.reply(TEXTS.blocked(ctx.user), { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
 }
 
 export default ban

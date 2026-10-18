@@ -18,7 +18,7 @@ const rulesMenu = async ctx => {
   }
 
   if (text === TEXTS.rules_no_confirm_btn) {
-    const { message_id } = await ctx.reply(TEXTS.edit_profile_update, BUTTONS.remove_menu)
+    const { message_id } = await ctx.reply(TEXTS.edit_profile_update, { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
 
     await sleep(1000)
     await ctx.deleteMessage(message_id)
