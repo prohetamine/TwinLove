@@ -8,17 +8,15 @@ import notifyStartUp from './engines/notify-startup.js'
 
 global.bot = new Telegraf(BOT_TOKEN)
 
-/*
 let timeoutOver = false
 setTimeout(() => {
   timeoutOver = true
 }, 5000)
-*/
 
 global.bot.use((ctx, next) => {
-  /*if (!timeoutOver) {
+  if (!timeoutOver) {
     return
-  }*/
+  }
   
   next()
 })
