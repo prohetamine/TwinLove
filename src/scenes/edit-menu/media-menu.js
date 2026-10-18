@@ -1,6 +1,6 @@
 import { users } from '../../helpers/db.js'
 import sleep from 'sleep-promise'
-import { MEDIA, TEXTS, BUTTONS } from '../../assets/ui/ru.js'
+import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
 import { nanoid } from 'nanoid'
 import textScreening from '../../lib/text-screening.js'
 
@@ -111,9 +111,7 @@ const mediaMenu = async ctx => {
     return
   }
 
-  await ctx.replyWithPhoto(MEDIA.help, {
-    caption: TEXTS.help.replace(/\\/gi, ''),
-  })
+  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
 }
 
 export default mediaMenu

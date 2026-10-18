@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
 import { users, posts, referals } from '../helpers/db.js'
-import { TEXTS, BUTTONS, MEDIA } from '../assets/ui/ru.js'
+import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 import { nanoid } from 'nanoid'
 import sleep from 'sleep-promise'
 import { CHANNEL_ID } from '../../configs/env.js'
@@ -56,8 +56,7 @@ const commands = async ctx => {
   }
 
   if (command === '/rules' || (command === '/start' && payload === 'rules')) {
-    await ctx.replyWithPhoto(MEDIA.rules_bg, {
-      caption: TEXTS.rules,
+    await ctx.reply(TEXTS.rules, {
       ...BUTTONS.main_menu,
       disable_web_page_preview: true
     })
@@ -72,8 +71,7 @@ const commands = async ctx => {
   } 
 
   if (text === '/channel' || (command === '/start' && payload === 'channel')) {
-    await ctx.replyWithPhoto(MEDIA.channel_bg, {
-      caption: TEXTS.channel, 
+    await ctx.reply(TEXTS.channel, {
       ...BUTTONS.channel_inline
     })
     await ctx.enterScene('main-menu')
@@ -85,8 +83,7 @@ const commands = async ctx => {
     ctx.user.system_selectCallAction = ''
     ctx.user.system_selectCallHashId = ''
     await users.set(ctx.user.id, ctx.user)
-    await ctx.replyWithPhoto(MEDIA.support_bg, {
-      caption: TEXTS.support, 
+    await ctx.reply(TEXTS.support, {
       ...BUTTONS.back_to_main_menu
     })
     await ctx.enterScene('support-menu')
@@ -132,20 +129,7 @@ const commands = async ctx => {
       }
     }
 
-    try {
-      await ctx.replyWithVideoNote(MEDIA.logo, {
-        duration: 2,
-        length: 250,
-        ...BUTTONS.main_menu
-      })
-    } catch (e) {
-      await ctx.replyWithDocument(MEDIA.logo_gif, {
-        filename: 'oninet.gif',
-        ...BUTTONS.main_menu
-      })
-    }
-  
-    await ctx.reply(TEXTS.hello, BUTTONS.channel_start_inline)
+    await ctx.reply(TEXTS.hello, BUTTONS.main_menu)
     await ctx.enterScene('main-menu')
     return
   }

@@ -1,6 +1,6 @@
 import sleep from 'sleep-promise'
 import { users } from '../../helpers/db.js'
-import { MEDIA, TEXTS, BUTTONS } from '../../assets/ui/ru.js'
+import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
 import getCityIdByLocation from '../../lib/get-city-id-by-location.js'
 import getCityById from '../../lib/get-city-by-id.js'
 import getCityByTitle from '../../lib/get-city-by-title.js'
@@ -65,9 +65,7 @@ const locationMenu = async ctx => {
     }
   }
 
-  await ctx.replyWithPhoto(MEDIA.help, {
-    caption: TEXTS.help.replace(/\\/gi, ''),
-  })
+  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
 }
 
 export default locationMenu

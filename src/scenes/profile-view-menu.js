@@ -1,4 +1,4 @@
-import { MEDIA, TEXTS, BUTTONS } from '../assets/ui/ru.js'
+import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 import getUserMedia from '../modules/get-user-media.js'
 import sendProfileCard from '../modules/send-profile-card.js'
 
@@ -58,9 +58,7 @@ const profileViewMenu = async ctx => {
     return
   }
 
-  await ctx.replyWithPhoto(MEDIA.help, {
-    caption: TEXTS.help.replace(/\\/gi, ''),
-  })
+  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
 }
 
 export default profileViewMenu

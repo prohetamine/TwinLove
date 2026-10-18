@@ -1,5 +1,5 @@
 import { users, referals, posts } from '../helpers/db.js'
-import { MEDIA, TEXTS, BUTTONS } from '../assets/ui/ru.js'
+import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 
 const otherMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
@@ -21,8 +21,7 @@ const otherMenu = async ctx => {
   }
 
   if (text === TEXTS.source_code_btn) {
-    await ctx.replyWithPhoto(MEDIA.source_bg, {
-      caption: TEXTS.source_code, 
+    await ctx.reply(TEXTS.source_code, {
       ...BUTTONS.other_menu
     })
     return
@@ -41,9 +40,7 @@ const otherMenu = async ctx => {
     return
   }
   
-  await ctx.replyWithPhoto(MEDIA.help, {
-    caption: TEXTS.help.replace(/\\/gi, ''),
-  })
+  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
 }
 
 export default otherMenu

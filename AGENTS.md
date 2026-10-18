@@ -1,22 +1,51 @@
-# TwinLove: project guidance
+# TwinLove — guidance for contributors and agents
 
-This repository is a fork of an older Telegram bot. TwinLove is being developed as a general dating service. Treat the older project's name, subculture references, and promotional claims as legacy copy, not as the voice or identity of TwinLove.
+## Product direction
 
-The public product name is TwinLove. The legacy «Нижнометр» test and the $ONI token section are removed from the user interface. Do not restore them in menus, profile cards, deep links, or onboarding copy.
+TwinLove is a fork of an older Telegram bot. The current task is to adapt it for a broad audience looking for dating and meaningful connections. The public name is **TwinLove**. The old project's identity, in-jokes, subculture, and promotional claims are legacy material; they do not define the new product.
 
-## User-facing text
+The user has decided to remove «Нижнометр» and the $ONI token section from the user-facing bot. Do not bring them back into menus, onboarding, profile cards, notifications, or deep links. Other legacy features require a separate user decision before removal or repurposing.
 
-- Write natural, warm Russian for adults looking to meet people. Address users consistently as «ты» unless the user approves a different style.
-- Use clear everyday language. Avoid slang, insults, stigmatizing labels, profanity, crude jokes, and references to the original project's subculture.
-- Keep messages concise and helpful. Explain what a person can do next when an action fails.
-- Preserve the meaning of safety, age, privacy, moderation, and consent messages. Do not add claims about product behavior that the code does not support.
-- Preserve Telegram MarkdownV2 escaping, links, placeholders, interpolation, `TEXTS` keys, and button behavior when editing copy in `src/assets/ui/ru.js`.
-- The user wants to choose replacements for subjective wording. Present specific existing phrases and proposed alternatives in small groups, then apply their choices. Straightforward spelling and grammar corrections can be made without asking.
-- Do not guess a new public product name, slogan, donation message, or position on legacy features. Ask the user when a choice changes product identity or scope.
+Use text-only messages for decorative bot UI, including onboarding, rules, menus, and help. Keep user-uploaded profile media and support attachments working; those are content, not decoration.
 
-## Implementation
+## Scope of the current phase
 
-- This phase is a copy and audience adaptation. Keep the existing bot architecture, data model, and user flows. Change behavior only when the user explicitly requests a feature to be removed or changed.
-- Keep copy changes separate from behavior changes where practical. For a removed feature, prefer hiding its entry points and output over deleting unrelated implementation or stored data.
-- Check JavaScript syntax after editing text. For Telegram messages, also check MarkdownV2 special characters and dynamic values.
-- Never start the live bot or publish content as part of copy review.
+- Work primarily on Russian copy and the visible interface. Preserve the bot's architecture, data model, and existing user flows unless the user explicitly asks to change a feature.
+- A copy change must not silently change eligibility, moderation, privacy, publication, notification, or contact rules.
+- If hiding a retired feature, change the smallest set of entry points and outputs needed. Keep unrelated implementation and stored user data intact. Existing users may have saved scene names from the old bot; handle them without stranding users.
+- Do not treat this file as permission to rename bot accounts, channels, links, payment addresses, or deployment configuration. Their current values may still point to the original project and need explicit product decisions.
+
+## Voice and copy decisions
+
+- Write warm, clear, natural Russian for adults. Use «ты» consistently in user-facing messages, unless the user chooses another form of address. Prefer short sentences and ordinary words over formal legalese or marketing superlatives.
+- Avoid slang, profanity, insults, stigmatizing labels, crude jokes, and references to the old internet subculture. Avoid judging a user's appearance, age, identity, or reasons for dating.
+- Make errors and restrictions useful: state what happened and what the person can do next. Keep safety, age, privacy, consent, and moderation messages accurate.
+- Do not invent claims about security, anonymity, active moderation, free service, audience size, success rates, or future plans. Check behavior in code before describing it.
+- The user wants to choose subjective replacements. Show the exact current phrase and one or two concrete alternatives in small groups; apply the user's choices before moving on. Simple spelling and grammar fixes do not require a separate choice.
+- Preserve a friendly human tone. Removing offensive language does not mean turning every message into corporate or bureaucratic copy.
+
+## Telegram text and navigation
+
+- The main copy and keyboard labels live in `src/assets/ui/ru.js`. `TEXTS` keys are used by handlers as well as for display; keep keys stable unless every reference is updated.
+- Many messages use Telegram `MarkdownV2`. Preserve escaping, formatting, links, newlines, interpolations, and dynamic value screening. Check rendered meaning as well as JavaScript syntax.
+- Keyboard text can be an exact-match command in scene handlers. If a button label changes, inspect all comparisons with that `TEXTS` value and related keyboard definitions.
+- Deep-link payloads (`/start ...`), callback data, and scene names connect separate handlers. Do not rename them for copy style alone.
+- Profile cards and automated notifications are user-facing copy too. Check them when removing a term from the interface.
+
+## Repository map and verification
+
+- `src/index.js` starts the Telegraf bot and background workers. `src/main-loop.js` routes users to scenes. `src/scenes/` contains conversation flows; `src/modules/` contains commands, callbacks, and shared actions. `src/engines/` contains publication and notification loops. `src/helpers/` contains MongoDB models and the in-memory write cache.
+- `configs/` currently contains bot credentials and connection details. Never quote their values in reports or add new secrets to source files. Prefer environment variables for future configuration work, if that work is requested.
+- For text edits, run `node --check` on changed JavaScript files and inspect remaining legacy terms with `rg`. Do not launch the live bot, contact Telegram, or publish profiles to verify copy.
+- There is no established test suite. Avoid broad refactors or adding tests that only restate strings. Report checks performed and any copy that still awaits a product decision.
+
+## Gradual TypeScript migration
+
+- The user allows gradual migration of small, simple modules to TypeScript. Keep it incremental and separate from copy changes and larger behavior changes.
+- Current TypeScript sources are `src/lib/create-import-id.ts` and `src/lib/text-screening.ts`. Their neighboring `.js` files are generated runtime files; edit the `.ts` source, then run `npm run build:typed` and `npm run typecheck:typed`.
+- Existing JavaScript imports must keep working. Do not require a new runtime loader or convert the whole application as part of a small migration.
+- Preserve exported names, arguments, return behavior, and side effects when migrating a module. Verify a representative behavior case before moving on.
+
+## Unresolved legacy material
+
+The repository still includes old bot/channel links, media assets, donation details, a source-code promise, and some onboarding and rules text written for the former audience. Do not present those as current TwinLove facts. Review each area with the user before changing claims, destinations, or payment information.

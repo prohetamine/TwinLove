@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import sleep from 'sleep-promise'
 import { CHANNEL_ID } from '../../configs/env.js'
-import { MEDIA, TEXTS, BUTTONS } from '../assets/ui/ru.js'
+import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 import { notifys, posts, users } from '../helpers/db.js'
 import checkValid from '../modules/check-valid.js'
 import getUserMedia from '../modules/get-user-media.js'
@@ -142,9 +142,7 @@ const profileMenu = async ctx => {
     return
   }
 
-  await ctx.replyWithPhoto(MEDIA.help, {
-    caption: TEXTS.help.replace(/\\/gi, ''),
-  })
+  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
 }
 
 export default profileMenu

@@ -1,5 +1,5 @@
 import { users } from '../helpers/db.js'
-import { MEDIA, TEXTS, BUTTONS } from './../assets/ui/ru.js'
+import { TEXTS, BUTTONS } from './../assets/ui/ru.js'
 import { nanoid } from 'nanoid'
 
 const mainMenu = async ctx => {
@@ -18,8 +18,7 @@ const mainMenu = async ctx => {
   }
 
   if (text === TEXTS.rules_btn) {
-    await ctx.replyWithPhoto(MEDIA.rules_bg, {
-      caption: TEXTS.rules,
+    await ctx.reply(TEXTS.rules, {
       ...BUTTONS.main_menu,
       disable_web_page_preview: true
     })
@@ -27,8 +26,7 @@ const mainMenu = async ctx => {
   }
 
   if (text === TEXTS.channel_btn) {
-    await ctx.replyWithPhoto(MEDIA.channel_bg, {
-      caption: TEXTS.channel, 
+    await ctx.reply(TEXTS.channel, {
       ...BUTTONS.channel_inline
     })
     return
@@ -39,17 +37,14 @@ const mainMenu = async ctx => {
     ctx.user.system_selectCallAction = ''
     ctx.user.system_selectCallHashId = ''
     await users.set(ctx.user.id, ctx.user)
-    await ctx.replyWithPhoto(MEDIA.support_bg, {
-      caption: TEXTS.support, 
+    await ctx.reply(TEXTS.support, {
       ...BUTTONS.back_to_main_menu
     })
     await ctx.enterScene('support-menu')
     return
   }
   
-  await ctx.replyWithPhoto(MEDIA.help, {
-    caption: TEXTS.help.replace(/\\/gi, ''),
-  })
+  await ctx.reply(TEXTS.help.replace(/\\/gi, ''))
 }
 
 export default mainMenu
