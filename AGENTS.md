@@ -6,6 +6,8 @@ TwinLove is a fork of an older Telegram bot. The current task is to adapt it for
 
 The user has decided to remove «Нижнометр» and the $ONI token section from the user-facing bot. Do not bring them back into menus, onboarding, profile cards, notifications, or deep links. Other legacy features require a separate user decision before removal or repurposing.
 
+The MongoDB database name is `twinlove`. Changing the connection target does not migrate data from the legacy `openoni` database; plan any data migration separately and never overwrite or delete legacy data without an explicit request.
+
 Use text-only messages for decorative bot UI, including onboarding, rules, menus, and help. Keep user-uploaded profile media and support attachments working; those are content, not decoration.
 
 ## Scope of the current phase
@@ -37,7 +39,7 @@ Use text-only messages for decorative bot UI, including onboarding, rules, menus
 - `src/index.js` starts the Telegraf bot and background workers. `src/main-loop.js` routes users to scenes. `src/scenes/` contains conversation flows; `src/modules/` contains commands, callbacks, and shared actions. `src/engines/` contains publication and notification loops. `src/helpers/` contains MongoDB models and the in-memory write cache.
 - `configs/` currently contains bot credentials and connection details. Never quote their values in reports or add new secrets to source files. Prefer environment variables for future configuration work, if that work is requested.
 - For text edits, run `node --check` on changed JavaScript files and inspect remaining legacy terms with `rg`. Do not launch the live bot, contact Telegram, or publish profiles to verify copy.
-- There is no established test suite. Avoid broad refactors or adding tests that only restate strings. Report checks performed and any copy that still awaits a product decision.
+- Small utility tests live in `test/` and run with `npm test`. `npm run verify` builds the typed modules and runs those tests before `npm run dev`, `npm run start`, or `npm run startnopm2` launches the bot. Avoid tests that only restate strings; add tests for meaningful behavior. Report checks performed and any copy that still awaits a product decision.
 
 ## Gradual TypeScript migration
 

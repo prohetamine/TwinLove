@@ -7,9 +7,15 @@
   "scripts": {
     "build:typed": "tsc",
     "typecheck:typed": "tsc --noEmit",
+    "test": "node --test test/*.test.js",
+    "verify": "npm run build:typed && npm test",
+    "predev": "npm run verify",
     "dev": "mode=dev nodemon src/index.js",
-    "devtest": "mode=dev nodemon src/test.js",
+    "predevtest": "npm run verify",
+    "devtest": "node --test --watch test/*.test.js",
+    "prestartnopm2": "npm run verify",
     "startnopm2": "node src/index.js",
+    "prestart": "npm run verify",
     "start": "pm2 start ecosystem.config.cjs",
     "stop": "pm2 stop ecosystem.config.cjs",
     "restart": "yarn stop && yarn start"

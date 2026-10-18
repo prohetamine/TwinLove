@@ -27,6 +27,6 @@ export {
 }
 
 mongoose.connect(MONGODB_URL, {
-  dbName: 'openoni'
+  dbName: 'twinlove'
 })
   .then(() => console.log('Connect mongodb!'))
