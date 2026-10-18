@@ -59,6 +59,9 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - Photo and video buttons and private messages use the custom 📸 from `TwinLoveEmoji`; auto-publication and waiting messages use custom ⏳.
 - Contact buttons and private contact guidance use custom ☎️; the username confirmation uses custom 👍 from `TwinLoveEmoji`.
 - The visibility button and related private guidance use custom 👻 from `TwinLoveEmoji`.
+- The notification button, message, and tip use custom 📲 from `TwinLoveEmoji`; the new-profiles tip uses custom 📣.
+- The private media moderation button for «Человек» uses custom 👤. Keep ordinary ❤️ in like messages and the «Ты мне нравишься» button, and ordinary ⚠️ on published channel cards, as the user chose.
+- Publication confirmation uses custom 🎉. Auto-delete UI and the remove-media button use custom 🗑 from `TwinLoveEmoji`.
 
 ## Repository map and verification
 

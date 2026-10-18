@@ -48,7 +48,7 @@ const locationMenu = async ctx => {
   }
 
   if (text) {
-    const city = ctx.user.nighLocations.find(id => id === getCityByTitle(text.replace(/(г. |📍)/gi, ''))?.id)
+    const city = ctx.user.nighLocations.find(id => id === getCityByTitle(text.replace(/^г\.\s*/i, ''))?.id)
 
     if (city) {
       ctx.user.location = city

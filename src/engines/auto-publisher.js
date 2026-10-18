@@ -69,7 +69,7 @@ const autoPublisher = async () => {
           
           if (messageId) {
             try {
-              await global.bot.telegram.sendMessage(user.id, TEXTS.publish_profile_complete)
+              await global.bot.telegram.sendMessage(user.id, TEXTS.publish_profile_complete, { parse_mode: 'MarkdownV2' })
             } catch (e) {}
           }
           
