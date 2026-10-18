@@ -6,7 +6,7 @@ TwinLove is a fork of an older Telegram bot. The current task is to adapt it for
 
 The user has decided to remove «Нижнометр», the $ONI token section, donations, and the source-code menu section from the user-facing bot. Do not bring them back into menus, onboarding, profile cards, notifications, or deep links. Other legacy features require a separate user decision before removal or repurposing.
 
-The former «Дополнительно 💼» menu has been removed. Its «Пригласить друзей 🔗» and «Общий чат 💬» buttons now live in the main menu. The chat link in published profiles and the `/chat` and `/start chat` commands remain available. Keep the transition from saved `other-menu` scenes and old button labels working for existing users.
+The former «Дополнительно 💼» menu has been removed. Its «Пригласить друзей» and «Общий чат» buttons now live in the main menu. The profile, all profiles, invite, chat, rules, support, and report buttons use 👤, ❤️, 🤝, 💬, 🚩, and ⚠️ custom emoji icons from the `TwinLoveEmoji` set. Telegram displays keyboard icons before the button text. Keep the button text free of a second emoji. The chat message uses the 💬 custom emoji, the invitation statistics use 👞 for link visits and ✈️ for published profiles from the set, and the rules heading uses the 🚩 custom emoji. The chat link in published profiles and the `/chat` and `/start chat` commands remain available. Keep the transition from saved `other-menu` scenes and old button labels working for existing users.
 
 Referral codes are four-character `/start` payloads. Referral registration checks existing records and the current inviter's list to avoid repeat counts, and ignores a user's own link. The public invitation view shows the link, the number of people who opened it, and how many of them have a published profile.
 
@@ -37,6 +37,7 @@ Use text-only messages for decorative bot UI, including rules, menus, and help. 
 - Keyboard text can be an exact-match command in scene handlers. If a button label changes, inspect all comparisons with that `TEXTS` value and related keyboard definitions.
 - Deep-link payloads (`/start ...`), callback data, and scene names connect separate handlers. Do not rename them for copy style alone.
 - The user chose to keep the compact «(?)» link beside the 18+ rule; it opens the age explanation through `/start dating18`.
+- The four rules bullets use the ⏺️ custom emoji from the `TwinLoveEmoji` set through MarkdownV2. Keep the fallback emoji text aligned with the sticker's emoji value.
 - Profile cards and automated notifications are user-facing copy too. Check them when removing a term from the interface.
 - Tips stay text-only. Use a short bold heading with one emoji, a concise explanation, and a separate action path with the current button labels. Escape tip text for Telegram MarkdownV2.
 

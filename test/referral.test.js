@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import registerReferral from '../src/modules/register-referral.js'
-import { TEXTS } from '../src/assets/ui/ru.js'
+import { TEXTS, BUTTONS } from '../src/assets/ui/ru.js'
 
 const makeRepositories = () => {
   const owners = [
@@ -50,4 +50,10 @@ test('the invite link is displayed without Markdown escapes inside its code span
   assert.match(message, /`https:\/\/[^`\\]+\?start=aB12`/)
   assert.match(message, /Перешли по ссылке: 3/)
   assert.match(message, /Опубликовали анкету: 1/)
+})
+
+test('the invite button uses the TwinLove handshake icon', () => {
+  const button = BUTTONS.main_menu.reply_markup.keyboard.flat().find(item => item.text === TEXTS.referal_link_btn)
+
+  assert.deepEqual(button, { text: 'Пригласить друзей', icon_custom_emoji_id: '5379672612433601461' })
 })

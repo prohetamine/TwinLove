@@ -11,7 +11,7 @@ const reportMenu = async ctx => {
     return
   } 
 
-  if (text === TEXTS.report_profile_btn || text === TEXTS.report_user_btn) {
+  if (text === TEXTS.report_profile_btn || text === TEXTS.report_user_btn || text === 'Пожаловаться на анкету ⚠️' || text === 'Пожаловаться на поведение ⚠️') {
     ctx.user.system_supportHashId = nanoid(6).replace(/(_|-)/gi, 'Z')
     await users.set(ctx.user.id, ctx.user)
     await ctx.reply(TEXTS.support, BUTTONS.back_to_main_menu)

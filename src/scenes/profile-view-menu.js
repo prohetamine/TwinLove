@@ -11,7 +11,7 @@ const profileViewMenu = async ctx => {
     return
   }
 
-  if (text === TEXTS.my_profile_btn) {
+  if (text === TEXTS.my_profile_btn || text === 'Моя анкета 👤') {
     if (ctx.user.media.filter(m => !m.isReject).length > 0) {
       const { message_id } = await ctx.reply(TEXTS.view_wait_load_media, BUTTONS.remove_menu)
       await sendProfileCard(ctx.user)

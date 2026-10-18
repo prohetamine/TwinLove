@@ -26,6 +26,7 @@ import commands from './modules/commands.js'
 import ban from './modules/ban.js'
 import tip from './modules/tip.js'
 import logs from './modules/logs.js'
+import { TEXTS } from './assets/ui/ru.js'
 
 const mainLoop = async (ctx, next) => {
   if (!ctx && !next) {
@@ -75,7 +76,8 @@ const mainLoop = async (ctx, next) => {
     await users.set(ctx.user.id, ctx.user)
   } else {
     if (
-      text !== 'Правила 🚩' && 
+      text !== TEXTS.rules_btn &&
+      text !== 'Правила 🚩' &&
       ctx.user.scene !== 'support-menu'
     ) {
       if (ctx.user?.system_age18Confirm === false) {
