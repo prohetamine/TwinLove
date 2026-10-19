@@ -8,6 +8,7 @@ import supportMenu from './scenes/support-menu.js'
 import adminMenu from './scenes/admin-menu.js'
 import editMenu from './scenes/edit-menu.js'
 import textMenu from './scenes/edit-menu/text-menu.js'
+import genderMenu from './scenes/edit-menu/gender-menu.js'
 import locationMenu from './scenes/edit-menu/location-menu.js'
 import mediaMenu from './scenes/edit-menu/media-menu.js'
 import contactMenu from './scenes/edit-menu/contact-menu.js'
@@ -133,6 +134,7 @@ const mainLoop = async (ctx, next) => {
   await sh.add('admin-menu', adminMenu)
   await sh.add('edit-menu', editMenu)
   await sh.add('edit-text-menu', textMenu)
+  await sh.add('edit-gender-menu', ctx => genderMenu(ctx, users))
   await sh.add('edit-location-menu', locationMenu)
   await sh.add('edit-media-menu', mediaMenu)
   await sh.add('edit-contact-menu', contactMenu)

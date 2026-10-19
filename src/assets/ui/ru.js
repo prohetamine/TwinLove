@@ -257,6 +257,11 @@ const TEXTS = {
   edit_profile_update: `Сохранил ${SAVE_EMOJI}`,
   edit_profile_privacy_btn: 'Настроить приватность',
   edit_profile_text_btn: 'Текст анкеты',
+  edit_profile_gender_btn: 'Пол',
+  edit_profile_gender: textScreening('Укажи пол. Пока он не показывается в анкете.'),
+  edit_profile_gender_male_btn: 'Мужчина',
+  edit_profile_gender_female_btn: 'Женщина',
+  edit_profile_gender_unspecified_btn: 'Не указывать',
   edit_profile_text: `Расскажи о себе в вольной форме или по шаблону, ниже в следующем сообщении будет будет шаблон по которому лучше всего написать о себе ${EDIT_EMOJI}`,
   edit_profile_text_tmp: '1. Сколько тебе лет и из какого ты города?\n2. Чем ты увлекаешься и как любишь проводить свободное время?\n3. С кем хочешь познакомиться?\n4. Что для тебя важно в общении или отношениях?\n5. Что ещё стоит о тебе узнать?',
   edit_profile_text_error_length: `Слишком коротко, попробуй еще раз\\.\\.\\. ${SAD_EMOJI}`,
@@ -377,6 +382,7 @@ const edit_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
     [{ text: TEXTS.edit_profile_text_btn, icon_custom_emoji_id: EDIT_CUSTOM_EMOJI_ID }],
+    [{ text: TEXTS.edit_profile_gender_btn, icon_custom_emoji_id: INVITE_CUSTOM_EMOJI_ID }],
     [{ text: TEXTS.edit_profile_location_btn, icon_custom_emoji_id: LOCATION_CUSTOM_EMOJI_ID }],
     [{ text: TEXTS.edit_profile_media_btn, icon_custom_emoji_id: CAMERA_CUSTOM_EMOJI_ID }],
     [{ text: TEXTS.edit_profile_contact_btn, icon_custom_emoji_id: PHONE_CUSTOM_EMOJI_ID }],
@@ -386,6 +392,16 @@ const edit_menu = {
     [BACK_TO_MENU_BUTTON]
   ]).resize().reply_markup
 }
+
+const edit_profile_gender_menu = selected => ({
+  parse_mode: 'MarkdownV2',
+  reply_markup: Markup.keyboard([
+    [optionButton(TEXTS.edit_profile_gender_male_btn, selected === 'male')],
+    [optionButton(TEXTS.edit_profile_gender_female_btn, selected === 'female')],
+    [optionButton(TEXTS.edit_profile_gender_unspecified_btn, !selected)],
+    [BACK_TO_MENU_BUTTON]
+  ]).resize().reply_markup
+})
 
 const edit_profile_text_menu = {
   parse_mode: 'MarkdownV2',
@@ -709,6 +725,7 @@ const BUTTONS = {
   main_menu,
   profile_menu,
   edit_menu,
+  edit_profile_gender_menu,
   edit_profile_text_menu,
   edit_profile_location_menu,
   edit_profile_location_anon_menu,

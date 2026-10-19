@@ -16,6 +16,7 @@ The one-time unpublished-profile reminder is scheduled for 24 hours after the us
 
 Profile cards show three inline buttons in one row. In private chats, the first button says «Написать» and uses the custom ✏️ icon from `TwinLoveEmoji`; 👋 and ⚠️ remain ordinary emoji-only buttons. Channel posts use ordinary ✏️, 👋, and ⚠️ without text labels because the bot cannot display custom button icons there under its current eligibility. Keep callback actions and deep links intact.
 Profile text uses ordinary 🏴‍☠️ and 📍 emoji in anonymous previews and published cards. Every city preview and card also shows the ordinary 📍 after its flag. Custom location and anonymity icons remain available for menus and buttons.
+The edit menu includes an optional gender choice, with the same custom 🤝 icon as the referral button, stored as `User.gender` (`male`, `female`, or empty). The bot must not show it in profile previews, channel posts, or public API responses until the user requests that separately; it is not a publication requirement.
 
 The MongoDB database name is `twinlove`. Changing the connection target does not migrate data from the legacy `openoni` database; plan any data migration separately and never overwrite or delete legacy data without an explicit request.
 
@@ -52,9 +53,9 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - Deep-link payloads (`/start ...`), callback data, and scene names connect separate handlers. Do not rename them for copy style alone.
 - The user chose to keep the compact «(?)» link beside the 18+ rule; it opens the age explanation through `/start dating18`.
 - The rules heading starts with the custom 🚩 inside the bold title; the support heading starts with custom ⚠️ in the same position. The four rules bullets use the ⏺️ custom emoji from the `TwinLoveEmoji` set through MarkdownV2. Keep the fallback emoji text aligned with the sticker's emoji value.
-- Location messages and keyboard buttons use the 📍 custom emoji from `TwinLoveEmoji`. Own profile previews omit the pin; other private cards keep the custom pin. Published channel cards use an ordinary 📍 because this bot cannot use custom emoji in channel posts under Telegram's current eligibility. Keep location request buttons functional.
+- Location messages and keyboard buttons use the 📍 custom emoji from `TwinLoveEmoji`. Profile previews and published cards use an ordinary 📍 after the flag. Keep location request buttons functional.
 - References to nearby cities and the city selection prompt use the existing custom 🌆 icon from `TwinLoveEmoji` in private messages, even where the older copy used 🌇 or 📶. Channel cards use ordinary 🌆 as the fallback; no separate 🌇 or 📶 sticker is needed.
-- Anonymous location buttons and private profile cards use the 🏴‍☠️ custom emoji. Channel cards retain the ordinary 🏴‍☠️ fallback. The «Кто видит твои фото и видео» tip uses custom 🖼.
+- Anonymous location buttons use the 🏴‍☠️ custom emoji. Private previews and channel cards use ordinary 🏴‍☠️. The «Кто видит твои фото и видео» tip uses custom 🖼.
 - Publication buttons use the ⬆️ custom emoji from `TwinLoveEmoji`.
 - Both return buttons use the ⏪ custom emoji from `TwinLoveEmoji`. The pencil ✏️ in the profile guidance uses the matching custom emoji. When a sticker is replaced in the set, update its ID in the UI.
 - «Редактировать» and «Текст анкеты» use the ✏️ custom emoji as a button icon.

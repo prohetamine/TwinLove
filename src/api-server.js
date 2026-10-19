@@ -39,7 +39,7 @@ const apiServer = () => {
         $sort: { system_lastPostTime: 1 }
       },
       {
-        $unset: 'system_phoneNumber'
+        $unset: ['system_phoneNumber', 'gender']
       }
     ]))
     .filter(user => user.media.filter(media => media.isPhoto && media.isApprove && media.isPeople).length > 0)
