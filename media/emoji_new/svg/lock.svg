@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <defs>
+    <path id="lock" fill-rule="evenodd" d="M23 47 H28 V33 C28 20 37 12 50 12 C63 12 72 20 72 33 V47 H77 C83 47 86 51 86 57 V81 C86 87 82 91 76 91 H24 C18 91 14 87 14 81 V57 C14 51 18 47 23 47 Z M39 47 H61 V33 C61 26 57 23 50 23 C43 23 39 27 39 33 Z"/>
+    <mask id="gap" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+      <rect width="100" height="100" fill="white"/>
+      <use href="#lock" fill="black" stroke="black" stroke-width="6" stroke-linejoin="round"/>
+    </mask>
+    <mask id="keyhole" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+      <rect width="100" height="100" fill="white"/>
+      <circle cx="50" cy="63" r="5" fill="black"/>
+      <path d="M48 66 L45 77 Q45 79 47 79 H53 Q55 79 55 77 L52 66 Z" fill="black"/>
+    </mask>
+    <clipPath id="shadow-zone">
+      <rect width="100" height="22"/>
+      <rect width="31" height="85"/>
+    </clipPath>
+  </defs>
+  <g mask="url(#gap)" clip-path="url(#shadow-zone)">
+    <use href="#lock" transform="translate(-8 -7)" fill="#06A5AD"/>
+  </g>
+  <use href="#lock" fill="#C2003E" mask="url(#keyhole)"/>
+</svg>

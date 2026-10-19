@@ -2,12 +2,20 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { BUTTONS } from '../src/assets/ui/ru.js'
 
-test('profile action buttons use ordinary emoji in one row in previews and channel posts', () => {
+test('profile actions use the custom pencil in private chats and an ordinary pencil in channel posts', () => {
   const previewRows = BUTTONS.profile_generate_inline({ isPreview: true, id: 'test' }).reply_markup.inline_keyboard
-  const channelRows = BUTTONS.profile_generate_inline({ id: 'test' }).reply_markup.inline_keyboard
+  const privateRows = BUTTONS.profile_generate_inline({ id: 'test' }).reply_markup.inline_keyboard
+  const channelRows = BUTTONS.profile_generate_inline({ isChannel: true, id: 'test' }).reply_markup.inline_keyboard
 
-  assert.deepEqual(previewRows.map(row => row.map(button => button.text)), [['✍️', '👋', '⚠️']])
-  assert.deepEqual(channelRows.map(row => row.map(button => button.text)), [['✍️', '👋', '⚠️']])
+  assert.deepEqual(previewRows.map(row => row.map(button => button.text)), [['Написать', '👋', '⚠️']])
+  assert.deepEqual(privateRows.map(row => row.map(button => button.text)), [['Написать', '👋', '⚠️']])
+  assert.deepEqual(channelRows.map(row => row.map(button => button.text)), [['✏️', '👋', '⚠️']])
+  assert.equal(previewRows[0][0].icon_custom_emoji_id, '5380098716139038805')
+  assert.equal(privateRows[0][0].icon_custom_emoji_id, '5380098716139038805')
+  assert.equal(channelRows[0][0].icon_custom_emoji_id, undefined)
+  assert.equal(previewRows[0][0].callback_data, 'w_test')
+  assert.match(privateRows[0][0].url, /\?start=w_test$/)
+  assert.match(channelRows[0][0].url, /\?start=w_test$/)
   assert.equal(previewRows[0][2].callback_data, 'r_test')
   assert.match(channelRows[0][2].url, /\?start=r_test$/)
 })

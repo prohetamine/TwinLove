@@ -21,6 +21,7 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
             ? BUTTONS.profile_generate_moderation_inline(user.id)
             : BUTTONS.profile_generate_inline({ 
                 isPreview: argId ? false : true, 
+                isChannel: argId === CHANNEL_ID,
                 id: user.system_callHashId
               })
         )
@@ -55,6 +56,7 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
               ? BUTTONS.profile_generate_moderation_inline(user.id)
               : BUTTONS.profile_generate_inline({ 
                   isPreview: argId ? false : true, 
+                  isChannel: argId === CHANNEL_ID,
                   id: user.system_callHashId
                 })
           )
@@ -92,6 +94,7 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
               ? BUTTONS.profile_generate_moderation_inline(user.id)
               : BUTTONS.profile_generate_inline({ 
                   isPreview: argId ? false : true, 
+                  isChannel: argId === CHANNEL_ID,
                   id: user.system_callHashId
                 })
           )

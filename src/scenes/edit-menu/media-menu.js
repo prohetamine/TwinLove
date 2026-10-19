@@ -108,7 +108,7 @@ const mediaMenu = async ctx => {
   }
 
   if (voice || video_note || animation || venue || sticker || location || invoice || game || dice || document || contact || audio || poll) {
-    await ctx.reply(TEXTS.content_error, BUTTONS.edit_profile_media_menu)
+    await ctx.reply(TEXTS.content_error_media, BUTTONS.edit_profile_media_menu)
     return
   }
 
