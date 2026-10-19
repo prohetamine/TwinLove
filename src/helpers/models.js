@@ -7,7 +7,8 @@ const userScheme = new Schema({
   scene: { type: String, default: 'start' }, /* сцена */
   upd: { type: Number, default: Date.now() },
   text: { type: String, default: '' }, /* текст поста */
-  gender: { type: String, enum: ['', 'male', 'female'], default: '' }, /* пол, пока не показывается в анкете */
+  name: { type: String, default: '' }, /* имя, выбранное для анкеты */
+  gender: { type: String, enum: ['', 'male', 'female'], default: '' }, /* значок пола показывается перед именем в анкете */
   media: { type: Array, default: [] }, /* медиа файлы */
   location: { type: String, default: '0|0' }, /* страна|город */
   nighLocations: { type: Array, default: [] }, /* ближайшие города */

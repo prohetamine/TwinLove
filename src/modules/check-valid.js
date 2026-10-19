@@ -1,4 +1,5 @@
 const checkValid = (ctx) => !(ctx.user?.location === '0|0' ||
+    !ctx.user?.name?.trim() ||
     !ctx.user?.text ||
     ctx.user?.text?.length < 20 ||
     ctx.user?.text?.length > 800 ||

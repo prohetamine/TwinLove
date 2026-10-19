@@ -19,7 +19,7 @@ const autoPublisher = async () => {
       for (let x = 0; x < _users.length; x++) {
         const user = _users[x]
 
-        if (!user.system_phoneNumber) continue
+        if (!user.system_phoneNumber || !user.name?.trim()) continue
   
         if (getPublicationCooldownRemaining(user.system_lastPostTime) > 0) {
           continue

@@ -58,6 +58,11 @@ const profileMenu = async ctx => {
   }
 
   if (isAutoPublishButton) {
+    if (!checkValid(ctx)) {
+      await ctx.reply(TEXTS.profile(ctx), BUTTONS.profile_menu)
+      await ctx.enterScene('profile-menu')
+      return
+    }
     ctx.user.system_publishModerationRequest = true
     await users.set(ctx.user.id, ctx.user)
     await ctx.reply(TEXTS.publish_profile_moderation_request, BUTTONS.profile_menu)
@@ -113,6 +118,10 @@ const profileMenu = async ctx => {
       }
 
       const messageId = await sendProfileCard(ctx.user, CHANNEL_ID)
+      if (!messageId) {
+        await ctx.reply(TEXTS.publish_profile_send_error, BUTTONS.profile_menu)
+        return
+      }
 
       const _posts = await posts.get(ctx.user.id)
 

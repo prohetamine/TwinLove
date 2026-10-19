@@ -6,6 +6,7 @@ import { TEXTS } from '../src/assets/ui/ru.js'
 const validContext = () => ({
   user: {
     location: '1|2',
+    name: 'Анна',
     text: 'а'.repeat(20),
     system_block_status: false,
     system_age18Confirm: true,
@@ -33,6 +34,19 @@ test('text outside the allowed length cannot be published', () => {
 
   ctx.user.text = undefined
   assert.equal(checkValid(ctx), false)
+})
+
+test('publication and preview require a chosen name', () => {
+  const ctx = validContext()
+  ctx.user.name = ''
+  assert.equal(checkValid(ctx), false)
+  assert.match(TEXTS.profile(ctx), /Имя/)
+
+  ctx.user.name = '   '
+  assert.equal(checkValid(ctx), false)
+
+  ctx.user.name = 'Анна'
+  assert.equal(checkValid(ctx), true)
 })
 
 test('the profile menu does not call saved text empty when another section is missing', () => {

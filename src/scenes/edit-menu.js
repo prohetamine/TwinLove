@@ -17,6 +17,12 @@ const editMenu = async ctx => {
     return
   }
 
+  if (text === TEXTS.edit_profile_name_btn) {
+    await ctx.reply(TEXTS.edit_profile_name(ctx.update?.message?.from?.first_name, ctx.user.name), BUTTONS.edit_profile_name_menu)
+    await ctx.enterScene('edit-name-menu')
+    return
+  }
+
   if (text === TEXTS.edit_profile_gender_btn) {
     await ctx.reply(TEXTS.edit_profile_gender, BUTTONS.edit_profile_gender_menu(ctx.user.gender))
     await ctx.enterScene('edit-gender-menu')

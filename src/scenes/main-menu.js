@@ -12,7 +12,7 @@ const mainMenu = async ctx => {
     return
   }
 
-  if (text === TEXTS.chat_btn) {
+  if (text === TEXTS.chat_btn || text === 'Общий чат') {
     await ctx.reply(TEXTS.chat, BUTTONS.chat_inline)
     return
   }
