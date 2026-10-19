@@ -1,6 +1,7 @@
 module.exports = {
   apps : [{
-    name   : "openoni-dev",
-    script : "./src/index.js"
+    name   : "twinlove-prod",
+    script : "./src/index.js",
+    env    : { mode: "prod" }
   }]
 }

@@ -98,6 +98,7 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 
 ## Repository map and verification
 
+- On the production server, deploy this repository under `/root/projects/TwinLove`. Use the repository-owned `ecosystem.config.cjs` with PM2 process name `twinlove-prod`. Keep the ignored `configs/prod.env.js` on the server with restrictive file permissions; never commit it. Follow `/root/AGENTS.md` for server-wide boundaries.
 - `src/index.js` starts the Telegraf bot and background workers. `src/main-loop.js` routes users to scenes. `src/scenes/` contains conversation flows; `src/modules/` contains commands, callbacks, and shared actions. `src/engines/` contains publication and notification loops. `src/helpers/` contains MongoDB models and the in-memory write cache.
 - `configs/` currently contains bot credentials and connection details. Never quote their values in reports or add new secrets to source files. Prefer environment variables for future configuration work, if that work is requested.
 - For text edits, run `node --check` on changed JavaScript files and inspect remaining legacy terms with `rg`. Do not launch the live bot, contact Telegram, or publish profiles to verify copy.
