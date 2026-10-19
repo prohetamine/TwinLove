@@ -29,7 +29,7 @@ const profileViewMenu = async ctx => {
     const media = await getUserMedia(ctx.user)
     
     if (media.length === 0) {
-      await ctx.reply(TEXTS.view_photo_empty)
+      await ctx.reply(TEXTS.view_photo_empty, { parse_mode: 'MarkdownV2' })
     } else {
       const mediaData = media.map(({ fileId, blured, bluredFileId, isPhoto, isApprove }) => {
         return ({
@@ -43,7 +43,7 @@ const profileViewMenu = async ctx => {
       }).filter(m => typeof(m.media) === 'string' ? m.media : m.media.source)
 
       if (mediaData.length === 0) {
-        await ctx.reply(TEXTS.view_photo_empty)
+        await ctx.reply(TEXTS.view_photo_empty, { parse_mode: 'MarkdownV2' })
       } else {
         try {
           await ctx.replyWithMediaGroup(mediaData)

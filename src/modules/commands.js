@@ -47,7 +47,7 @@ const commands = async ctx => {
   }
 
   if (command === '/start' && payload === 'hello') {
-    await ctx.reply(TEXTS.hello_action)
+    await ctx.reply(TEXTS.hello_action, { parse_mode: 'MarkdownV2' })
     return
   }
 

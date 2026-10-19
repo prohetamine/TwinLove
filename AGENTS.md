@@ -36,6 +36,7 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - Do not invent claims about security, anonymity, active moderation, free service, audience size, success rates, or future plans. Check behavior in code before describing it.
 - The user wants to choose subjective replacements. Show the exact current phrase and one or two concrete alternatives in small groups; apply the user's choices before moving on. Simple spelling and grammar fixes do not require a separate choice.
 - Preserve a friendly human tone. Removing offensive language does not mean turning every message into corporate or bureaucratic copy.
+- Approved copy choices: ask whether to publish an anonymous profile without a city; ask whether to receive notifications about new profiles; introduce a shared contact with «Вот контакт человека, с которым ты хочешь познакомиться.»; describe auto-delete as removing earlier channel posts when the same profile is published again. Keep the existing conversational «Упс, кончилось место для фото/видео…» message.
 
 ## Telegram text and navigation
 
@@ -45,8 +46,9 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - Scene handlers match current `TEXTS` button labels only. Do not add fallback checks for old visible labels; the user asked to remove that compatibility code.
 - Deep-link payloads (`/start ...`), callback data, and scene names connect separate handlers. Do not rename them for copy style alone.
 - The user chose to keep the compact «(?)» link beside the 18+ rule; it opens the age explanation through `/start dating18`.
-- The four rules bullets use the ⏺️ custom emoji from the `TwinLoveEmoji` set through MarkdownV2. Keep the fallback emoji text aligned with the sticker's emoji value.
+- The rules heading starts with the custom 🚩 inside the bold title; the support heading starts with custom ⚠️ in the same position. The four rules bullets use the ⏺️ custom emoji from the `TwinLoveEmoji` set through MarkdownV2. Keep the fallback emoji text aligned with the sticker's emoji value.
 - Location messages and keyboard buttons use the 📍 custom emoji from `TwinLoveEmoji`. Own profile previews omit the pin; other private cards keep the custom pin. Published channel cards use an ordinary 📍 because this bot cannot use custom emoji in channel posts under Telegram's current eligibility. Keep location request buttons functional.
+- References to nearby cities and the city selection prompt use the existing custom 🌆 icon from `TwinLoveEmoji` in private messages, even where the older copy used 🌇 or 📶. Channel cards use ordinary 🌆 as the fallback; no separate 🌇 or 📶 sticker is needed.
 - Anonymous location buttons and private profile cards use the 🏴‍☠️ custom emoji. Channel cards retain the ordinary 🏴‍☠️ fallback. The «Кто видит твои фото и видео» tip uses custom 🖼.
 - Publication buttons use the ⬆️ custom emoji from `TwinLoveEmoji`.
 - Both return buttons use the ⏪ custom emoji from `TwinLoveEmoji`. The pencil ✏️ in the profile guidance uses the matching custom emoji. When a sticker is replaced in the set, update its ID in the UI.
@@ -58,7 +60,7 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - The «Пригласи знакомых» tip, referral statistics heading, and «Пригласить друзей» button use 🤝 from `TwinLoveEmoji`.
 - The ❌ icon from `TwinLoveEmoji` is used on rejection, hide, and notification opt-out buttons. Telegram callback answer popups remain plain text because they do not support custom emoji entities.
 - The «Все анкеты TwinLove» heading and main menu button keep the original custom ❤️ with dots (`5379552576687613329`). Use the newer 🩵 sticker (`5379960362357534919`) for the «Ты мне нравишься» button, like messages, and other personal heart references.
-- The «Куда теперь?» main-menu message uses the custom 🧭 from `TwinLoveEmoji`.
+- The «Куда теперь?» main-menu message uses the custom 🏡 from `TwinLoveEmoji`.
 - The edit menu prompt uses the custom ⚙️ from `TwinLoveEmoji`. When checking the pack, update changed IDs too; 📍 was replaced and now has ID `5379990525912853171`.
 - Photo and video buttons and private messages use the custom 📸 from `TwinLoveEmoji`; auto-publication and waiting messages use custom ⏳.
 - Contact buttons and private contact guidance use custom ☎️; the username confirmation uses custom 👍 from `TwinLoveEmoji`.
@@ -68,7 +70,15 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - The `/start nonotify` help message uses MarkdownV2 so its custom 🩵 renders correctly. Keep its reassurance that notifications can be disabled without blocking or deleting the bot; escape ordinary text when editing it.
 - Private media moderation buttons use custom 👤 for «Человек» and custom 🐻 for «Без человека». Published channel cards keep ordinary ⚠️ because the current bot cannot display custom emoji there.
 - Draft PNG icons for ordinary emoji still present in the interface live in `media/emoji_new/`. They are visual assets only. Match the existing magenta and teal palette: shift teal up and left, leave a transparent gap between the offset silhouette and magenta shape, and avoid a teal shadow below the main shape. Draw eyes and mouths as filled details where appropriate, and use original pictograms rather than exact copies of standard emoji. Do not replace Telegram emoji IDs or wire these files into bot messages until the user reviews and uploads the chosen icons to the emoji set. See the mapping and attribution in that folder's README.
+- The 🏡 (`5382013842056325321`) and 📬 (`5382128981539595504`) icons are in `TwinLoveEmoji`. Use them in private MarkdownV2 messages; channel profile cards keep ordinary 🏡. The 📬 icon in `media/emoji/inbox.png` depicts a letter in an envelope, not a mailbox. Its editable vector source is `media/emoji_new/svg/inbox.svg`.
+- The 😳, 😊, 😒, 😢, and 👎 icons are in `TwinLoveEmoji` and replace ordinary emoji in empty-media, city-notification, media-error, and missing-username messages. Replies containing their custom emoji must use MarkdownV2.
 - The reviewed 📎, ☠️, 🤖, ✨, 👁, 🔍, 🌆, 🐻, and 🩵 icons are now in `TwinLoveEmoji`. Use their current custom emoji IDs in private MarkdownV2 messages and eligible buttons. Keep ordinary emoji in channel posts and buttons where Telegram cannot display the custom icon.
+- Messages that previously used 🤔 for hidden or unavailable profiles, contacts, and media now use the custom ☠️ icon. Keep `thinking.png` only as an unused draft.
+- Messages about an already-sent wave or like use the custom ✅ icon instead of 📵. Keep `phone-blocked.png` only as an unused draft.
+- The `/start hello` explanation uses custom 👁 instead of 👀 and must be sent with MarkdownV2.
+- Text-length validation messages use the custom 😢 icon instead of 📏. Keep `ruler.png` only as an unused draft.
+- The geolocation explanation uses the custom 🔒 icon instead of 🔐. Keep `secure.png` only as an unused draft.
+- The pending profile moderation message uses custom 👍 instead of 👌. Keep `okay.png` only as an unused draft.
 - The 👤 custom emoji ID is `5381935789615657235`. All private ❗️ messages use the custom emoji ID `5382046303419151366` with MarkdownV2; escape plain text when composing those messages.
 - Publication confirmation uses custom 🎉. Auto-delete UI and the remove-media button use custom 🗑 from `TwinLoveEmoji`.
 - Both age confirmation buttons contain only text, without emoji. Rules, username, and moderation approval buttons use custom ✅. Selected option buttons also use custom ✅ before the label; callback popups use plain words because custom emoji entities are unsupported there.
