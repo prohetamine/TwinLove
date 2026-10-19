@@ -20,9 +20,9 @@ const notifyMailer = async () => {
 
           const [isNotify = false] = await notifyCompletes.all({ id, ids: { $in: [notify.id] } })
 
-          const { newNotification, system_block_status } = await users.get(id)
+          const { newNotification, system_block_status, system_phoneNumber } = await users.get(id)
 
-          if (!isNotify && newNotification !== 0 && system_block_status === false) {
+          if (!isNotify && newNotification !== 0 && system_block_status === false && system_phoneNumber) {
             let isDelivered = false
 
             for (let x = 0; x < 100; x++) {
@@ -70,7 +70,7 @@ const notifyMailer = async () => {
           notify.ids = notify.ids.filter(([_id]) => _id !== id)
           await notifys.set(notify.id, notify)
 
-          if (!isNotify && newNotification !== 0 && system_block_status === false) {
+          if (!isNotify && newNotification !== 0 && system_block_status === false && system_phoneNumber) {
             await sleep(10000 * 1)
           }
         }

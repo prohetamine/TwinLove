@@ -7,12 +7,13 @@ const getUsersNotify = async user => {
 
   const _users = await users.all({ id: { $ne: user.id }, system_block_status: { $ne: true }, location: { $ne: '999|666' }, newNotification: { $ne: 0 } })
 
-  const nusers = _users.filter(_user => 
-    _user.newNotification === 1 
+  const nusers = _users.filter(_user =>
+    _user.system_phoneNumber &&
+    (_user.newNotification === 1
       ? _user.location === user.location
       : _user.newNotification === 2
-          ? _user.nighLocations.find(location => location === user.location)
-          : true        
+        ? _user.nighLocations.find(location => location === user.location)
+        : true)
   ).map(
     ({ id, location, nighLocations }) => 
       [

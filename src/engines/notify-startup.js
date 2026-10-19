@@ -23,6 +23,8 @@ const notifyStartUp = async () => {
       for (let x = 0; x < _users.length; x++) {
         const user = _users[x]
 
+        if (!user.system_phoneNumber) continue
+
         const [isNotify = false] = await notifyCompletes.all({ id: user.id, ids: { $in: [111] } })
 
         if (isNotify) {

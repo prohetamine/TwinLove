@@ -6,6 +6,7 @@ type ValidationContext = {
     system_block_status: boolean
     system_age18Confirm: boolean
     system_rulesConfirm: boolean
+    system_phoneNumber?: string
   }
   update?: {
     message?: {
@@ -21,6 +22,7 @@ const checkValid = (ctx: ValidationContext): boolean => !(
   ctx.user?.system_block_status === true ||
   ctx.user?.system_age18Confirm === false ||
   ctx.user?.system_rulesConfirm === false ||
+  !ctx.user?.system_phoneNumber ||
   !ctx?.update?.message?.from?.username
 )
 

@@ -16,6 +16,8 @@ Profile cards show three inline buttons in one row: ✍️, 👋, and ⚠️. Th
 
 The MongoDB database name is `twinlove`. Changing the connection target does not migrate data from the legacy `openoni` database; plan any data migration separately and never overwrite or delete legacy data without an explicit request.
 
+Onboarding requires age confirmation, acceptance of the rules, and then the user's own Telegram phone contact. Save the shared number in `User.system_phoneNumber` in MongoDB before opening the main menu; existing users without that field must complete the phone step too. The phone menu uses a `request_contact` keyboard button with the custom ☎️ icon, and its handler accepts a contact only when `contact.user_id` matches the current user. Route pending onboarding stages before commands and callback actions so a missing number cannot be bypassed through deep links or old buttons. Require the number for publication and notification delivery too. Do not show the saved number in public profiles, API responses, or logs.
+
 Use text-only messages for decorative bot UI, including rules and menus, except for two user-approved cases: send the saved file ID of the first sticker from the `TwinLove` sticker set before the welcome text on `/start`, and show `src/assets/buttons.png` with the unknown-command help text that points to `/start`. Do not fetch the sticker set for every `/start`. Keep user-uploaded profile media and support attachments working; those are content, not decoration.
 For the unknown-command help image, upload `buttons.png` once, save the largest returned photo `file_id` in `src/assets/cache.json`, and reuse it after restarts. The cache separates dev and prod bot IDs and includes an image hash so a changed image is uploaded again. Retry the local file if the cached ID fails, and fall back to text if sending the image fails. `cache.json` is runtime state and is ignored by Git.
 
@@ -56,6 +58,7 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - The «Пригласи знакомых» tip, referral statistics heading, and «Пригласить друзей» button use 🤝 from `TwinLoveEmoji`.
 - The ❌ icon from `TwinLoveEmoji` is used on rejection, hide, and notification opt-out buttons. Telegram callback answer popups remain plain text because they do not support custom emoji entities.
 - The «Все анкеты TwinLove» heading uses the custom ❤️ from `TwinLoveEmoji`, matching the main menu button.
+- The «Куда теперь?» main-menu message uses the custom 🧭 from `TwinLoveEmoji`.
 - The edit menu prompt uses the custom ⚙️ from `TwinLoveEmoji`. When checking the pack, update changed IDs too; 📍 was replaced and now has ID `5379990525912853171`.
 - Photo and video buttons and private messages use the custom 📸 from `TwinLoveEmoji`; auto-publication and waiting messages use custom ⏳.
 - Contact buttons and private contact guidance use custom ☎️; the username confirmation uses custom 👍 from `TwinLoveEmoji`.

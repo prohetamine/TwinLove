@@ -5,8 +5,7 @@ const age18confirmMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
   if (text === TEXTS.back_to_main_menu_btn) {
-    await ctx.enterScene('main-menu')
-    await ctx.reply(TEXTS.home, BUTTONS.main_menu)
+    await ctx.reply(TEXTS.age18Confirm, BUTTONS.age18Confirm_menu)
     return
   }
 
@@ -30,8 +29,8 @@ const age18confirmMenu = async ctx => {
     ctx.user.system_age18Confirm = true
 
     if (ctx.user.system_rulesConfirm) {
-      await ctx.enterScene('main-menu')
-      await ctx.reply(TEXTS.home, BUTTONS.main_menu)
+      await ctx.enterScene('phone-menu')
+      await ctx.reply(TEXTS.phone_request, BUTTONS.phone_menu)
     } else {
       await ctx.enterScene('rules-menu')
       await ctx.reply(TEXTS.rules, {

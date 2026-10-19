@@ -67,6 +67,7 @@ const userScheme = new Schema({
     false - правила не подтверждены 
   */
   system_age18Confirm: { type: Boolean, default: false },
+  system_phoneNumber: { type: String, default: '' }, /* номер, отправленный пользователем через Telegram */
   /*
     true - >=18
     false - <18

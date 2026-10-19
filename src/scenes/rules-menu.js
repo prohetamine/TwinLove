@@ -5,15 +5,14 @@ const rulesMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
   if (text === TEXTS.back_to_main_menu_btn) {
-    await ctx.enterScene('main-menu')
-    await ctx.reply(TEXTS.home, BUTTONS.main_menu)
+    await ctx.reply(TEXTS.rules, { ...BUTTONS.rules_menu, disable_web_page_preview: true })
     return
   }
 
   if (text === TEXTS.rules_confirm_btn) {
     ctx.user.system_rulesConfirm = true
-    await ctx.enterScene('main-menu')
-    await ctx.reply(TEXTS.home, BUTTONS.main_menu)
+    await ctx.enterScene('phone-menu')
+    await ctx.reply(TEXTS.phone_request, BUTTONS.phone_menu)
     return
   }
 
@@ -25,8 +24,7 @@ const rulesMenu = async ctx => {
     await sleep(500)
 
     ctx.user.system_rulesConfirm = false
-    await ctx.enterScene('main-menu')
-    await ctx.reply(TEXTS.home, BUTTONS.main_menu)
+    await ctx.reply(TEXTS.rules, { ...BUTTONS.rules_menu, disable_web_page_preview: true })
     return
   }
 

@@ -12,7 +12,8 @@ const makeContext = replyWithSticker => {
       if (replyWithSticker) await replyWithSticker(stickerId)
     },
     reply: async (text, options) => { events.push(['text', text, options]) },
-    enterScene: async scene => { events.push(['scene', scene]) }
+    enterScene: async scene => { events.push(['scene', scene]) },
+    user: { system_age18Confirm: false, system_rulesConfirm: false, system_phoneNumber: '' }
   }
 
   return { ctx, events }
@@ -26,8 +27,9 @@ test('start sends the saved TwinLove sticker before the welcome text', async () 
   assert.equal(events[0][0], 'sticker')
   assert.match(events[0][1], /^CAACAg[A-Za-z0-9_-]+$/)
   assert.deepEqual(events.slice(1), [
-    ['text', TEXTS.hello, BUTTONS.main_menu],
-    ['scene', 'main-menu']
+    ['text', TEXTS.hello, { parse_mode: 'MarkdownV2' }],
+    ['scene', 'age18confirm-menu'],
+    ['text', TEXTS.age18Confirm, BUTTONS.age18Confirm_menu]
   ])
 })
 
@@ -37,7 +39,8 @@ test('start still shows the welcome text if sending the sticker fails', async ()
   await start(ctx)
 
   assert.deepEqual(events.slice(1), [
-    ['text', TEXTS.hello, BUTTONS.main_menu],
-    ['scene', 'main-menu']
+    ['text', TEXTS.hello, { parse_mode: 'MarkdownV2' }],
+    ['scene', 'age18confirm-menu'],
+    ['text', TEXTS.age18Confirm, BUTTONS.age18Confirm_menu]
   ])
 })

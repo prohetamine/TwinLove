@@ -26,6 +26,7 @@ const apiServer = () => {
           system_block_status: { $ne: true },
           system_age18Confirm: { $ne: false },
           system_rulesConfirm: { $ne: false },
+          system_phoneNumber: { $exists: true, $nin: ['', null] },
           system_username: { $ne: '' }
         }
       },
@@ -39,6 +40,9 @@ const apiServer = () => {
       },*/
       {
         $sort: { system_lastPostTime: 1 }
+      },
+      {
+        $unset: 'system_phoneNumber'
       }
     ]))
     .filter(user => user.media.filter(media => media.isPhoto && media.isApprove && media.isPeople).length > 0)

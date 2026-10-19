@@ -8,7 +8,8 @@ const validContext = () => ({
     text: 'а'.repeat(20),
     system_block_status: false,
     system_age18Confirm: true,
-    system_rulesConfirm: true
+    system_rulesConfirm: true,
+    system_phoneNumber: '+79991234567'
   },
   update: { message: { from: { username: 'twinlove_user' } } }
 })
@@ -30,11 +31,12 @@ test('text outside the allowed length cannot be published', () => {
   assert.equal(checkValid(ctx), false)
 })
 
-test('publication requires a location, age and rules confirmation, and a username', () => {
+test('publication requires a location, age, rules, phone number, and username', () => {
   const cases = [
     ctx => { ctx.user.location = '0|0' },
     ctx => { ctx.user.system_age18Confirm = false },
     ctx => { ctx.user.system_rulesConfirm = false },
+    ctx => { ctx.user.system_phoneNumber = '' },
     ctx => { ctx.update.message.from.username = '' },
     ctx => { ctx.user.system_block_status = true }
   ]

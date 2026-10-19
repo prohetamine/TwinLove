@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 import sleep from 'sleep-promise'
 import { CHANNEL_ID } from '../../configs/env.js'
 import registerReferral from './register-referral.js'
-import sendWelcomeSticker from './send-welcome-sticker.js'
+import start from '../scenes/start.js'
 
 const commands = async ctx => {
   const text = ctx.update?.message?.text || ''
@@ -114,9 +114,7 @@ const commands = async ctx => {
     const id = ctx.update.message.from.id
     await registerReferral(payload, id, { users, referals })
 
-    await sendWelcomeSticker(ctx)
-    await ctx.reply(TEXTS.hello, BUTTONS.main_menu)
-    await ctx.enterScene('main-menu')
+    await start(ctx)
     return
   }
 

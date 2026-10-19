@@ -65,7 +65,7 @@ const TEXTS = {
   hello_next: 'TwinLove развивается благодаря людям, которым близка идея простых и искренних знакомств\\.',
   hello_next_2: 'Привет это снова я 👋\n\nЦель этого проект быть самым технологичным, честным и самым прозрачным\\.\n\nБез неких «скрытых пулов», подписок, лимитов, занижения рейтинга, теневых банов и прочего скама, все анкеты публикуются в канале реальными людьми, каждый профиль может быть зарепорчер если в нем есть проблема он будет удален или даже заблокирован\\.\n\nВ каком\\-то непоределенно далеком будущем мы стремимся к полной модерации сообществом\\.\n\n||Еще пару слов о последнем обновлении /next3||',
   hello_next_3: 'Meow',
-  home: '🏠 Куда теперь?',
+  home: '![🧭](tg://emoji?id=5382017247965391689) Куда теперь?',
   rules: `*Правила TwinLove* ${RULE_FLAG}\n\n` +
                `Здесь знакомятся и общаются с уважением друг к другу\\.\n\n` +
                `${RULE_BULLET} Используй анкету для знакомства, без рекламы и спама\\.\n` +
@@ -117,6 +117,8 @@ const TEXTS = {
     formatTip(INVITE_EMOJI, 'Пригласи знакомых', 'По личной ссылке можно пригласить друзей и посмотреть, сколько из них опубликовали анкеты.', 'Пригласить друзей'),
   ],
   age18Confirm: withAlert('Вам 18 лет или больше?'),
+  phone_request: 'Чтобы продолжить, поделись своим номером телефона через кнопку ниже. Номер сохранится в твоём профиле и не будет показан в анкете.',
+  phone_other_contact: 'Пожалуйста, отправь свой номер кнопкой ниже. Контакт другого человека не подойдёт.',
   blocked: ({ system_block_message, system_block_auto }) => withAlert(`Вы заблокированны${system_block_message ? ` по причине: «${system_block_message}»` : ''}${system_block_auto ? ' это автоматическая блокировка' : ''}, если вы не согласны с блокировкой свяжитесь с поддержкой /support`),
   ban: 'Заблокирован(а)',
   unban: 'Разблокирован(а)',
@@ -206,6 +208,7 @@ const TEXTS = {
   support_inline_btn: 'Ответить',
   age18Confirm_btn_1: 'Нет, мне меньше 18 лет',
   age18Confirm_btn_2: 'Да, мне 18 или больше лет',
+  phone_request_btn: 'Поделиться номером телефона',
   rules_confirm_btn: 'Согласен(a)',
   rules_no_confirm_btn: 'Не согласен(а)',
   write_inline_btn: '✍️',
@@ -483,6 +486,12 @@ const age18Confirm_menu = {
   ]).resize().reply_markup
 }
 
+const phone_menu = {
+  reply_markup: Markup.keyboard([
+    [{ ...Markup.button.contactRequest(TEXTS.phone_request_btn), icon_custom_emoji_id: PHONE_CUSTOM_EMOJI_ID }]
+  ]).resize().reply_markup
+}
+
 const rules_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
@@ -684,6 +693,7 @@ const BUTTONS = {
   edit_profile_autodelete_menu,
   view_menu,
   age18Confirm_menu,
+  phone_menu,
   rules_menu,
   back_to_main_menu,
   support_inline_menu,

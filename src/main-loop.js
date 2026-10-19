@@ -1,4 +1,4 @@
-import { users } from './helpers/db.js'
+import { users, referals } from './helpers/db.js'
 import sceneHandler from './lib/scene-handler.js'
 
 import start from './scenes/start.js'
@@ -17,6 +17,7 @@ import autodeleteMenu from './scenes/edit-menu/autodelete-menu.js'
 import profileViewMenu from './scenes/profile-view-menu.js'
 import age18confirmMenu from './scenes/age18confirm-menu.js'
 import rulesMenu from './scenes/rules-menu.js'
+import phoneMenu from './scenes/phone-menu.js'
 import writeMenu from './scenes/contact-menu/write-menu.js'
 import reportMenu from './scenes/contact-menu/report-menu.js'
 import helloMenu from './scenes/contact-menu/hello-menu.js'
@@ -26,7 +27,10 @@ import commands from './modules/commands.js'
 import ban from './modules/ban.js'
 import tip from './modules/tip.js'
 import logs from './modules/logs.js'
-import { TEXTS } from './assets/ui/ru.js'
+import registerReferral from './modules/register-referral.js'
+import routeOnboarding from './modules/route-onboarding.js'
+import onboardingStage from './lib/onboarding-stage.js'
+import { TEXTS, BUTTONS } from './assets/ui/ru.js'
 
 const mainLoop = async (ctx, next) => {
   if (!ctx && !next) {
@@ -71,25 +75,10 @@ const mainLoop = async (ctx, next) => {
   const text = ctx.update?.message?.text || ''
       , data = ctx.update?.callback_query?.data || ''
 
-  if (text.match(/^\/start$/) || text.match(/^\/start from-channel/)) {
+  const isStart = text === '/start' || text === '/start from-channel'
+  if (isStart) {
     ctx.user.scene = 'start'
     await users.set(ctx.user.id, ctx.user)
-  } else {
-    if (
-      text !== TEXTS.rules_btn &&
-      text !== 'Правила 🚩' &&
-      ctx.user.scene !== 'support-menu'
-    ) {
-      if (ctx.user?.system_age18Confirm === false) {
-        ctx.user.scene = 'age18confirm-menu'
-        await users.set(ctx.user.id, ctx.user)
-      } else {
-        if (ctx.user?.system_rulesConfirm === false) {
-          ctx.user.scene = 'rules-menu'
-          await users.set(ctx.user.id, ctx.user)
-        }
-      }
-    }
   }
 
   ctx.enterScene = async (label, { repeat = false } = { repeat: false }) => {
@@ -98,6 +87,14 @@ const mainLoop = async (ctx, next) => {
     if (repeat) {
       await mainLoop(ctx, next)
     }
+  }
+
+  if (await routeOnboarding(ctx, { registerReferral, users, referals })) return
+
+  if (ctx.user.scene === 'phone-menu' && !onboardingStage(ctx.user)) {
+    await ctx.enterScene('main-menu')
+    await ctx.reply(TEXTS.home, BUTTONS.main_menu)
+    return
   }
 
   if (data) {
@@ -122,6 +119,7 @@ const mainLoop = async (ctx, next) => {
   await sh.add('start', start)
   await sh.add('age18confirm-menu', age18confirmMenu)
   await sh.add('rules-menu', rulesMenu)
+  await sh.add('phone-menu', phoneMenu)
   await sh.add('main-menu', mainMenu)
   await sh.add('profile-menu', profileMenu)
   await sh.add('support-menu', supportMenu)
