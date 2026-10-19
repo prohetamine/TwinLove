@@ -44,7 +44,8 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - Deep-link payloads (`/start ...`), callback data, and scene names connect separate handlers. Do not rename them for copy style alone.
 - The user chose to keep the compact «(?)» link beside the 18+ rule; it opens the age explanation through `/start dating18`.
 - The four rules bullets use the ⏺️ custom emoji from the `TwinLoveEmoji` set through MarkdownV2. Keep the fallback emoji text aligned with the sticker's emoji value.
-- Location messages and keyboard buttons use the 📍 custom emoji from `TwinLoveEmoji`. Published channel cards use an ordinary 📍 because this bot cannot use custom emoji in channel posts under Telegram's current eligibility. Keep location request buttons functional.
+- Location messages and keyboard buttons use the 📍 custom emoji from `TwinLoveEmoji`. Own profile previews omit the pin; other private cards keep the custom pin. Published channel cards use an ordinary 📍 because this bot cannot use custom emoji in channel posts under Telegram's current eligibility. Keep location request buttons functional.
+- Anonymous location buttons and private profile cards use the 🏴‍☠️ custom emoji. Channel cards retain the ordinary 🏴‍☠️ fallback. The «Кто видит твои фото и видео» tip uses custom 🖼.
 - Publication buttons use the ⬆️ custom emoji from `TwinLoveEmoji`.
 - Both return buttons use the ⏪ custom emoji from `TwinLoveEmoji`. The pencil ✏️ in the profile guidance uses the matching custom emoji. When a sticker is replaced in the set, update its ID in the UI.
 - «Редактировать» and «Текст анкеты» use the ✏️ custom emoji as a button icon.
@@ -63,9 +64,9 @@ For the unknown-command help image, upload `buttons.png` once, save the largest 
 - Notification, contact privacy, media privacy, visibility, and auto-delete setting choices have no decorative emoji. Only selected choices show the custom ✅ icon.
 - The `/start nonotify` help message uses MarkdownV2 so its custom ❤️ renders correctly. Keep its reassurance that notifications can be disabled without blocking or deleting the bot; escape ordinary text when editing it.
 - The private media moderation button for «Человек» uses custom 👤. Keep ordinary ❤️ in like messages and the «Ты мне нравишься» button, and ordinary ⚠️ on published channel cards, as the user chose.
-- The 👤 custom emoji ID is `5381935789615657235`. All private ❗️ messages use the custom emoji ID `5382333129925110609` with MarkdownV2; escape plain text when composing those messages.
+- The 👤 custom emoji ID is `5381935789615657235`. All private ❗️ messages use the custom emoji ID `5382046303419151366` with MarkdownV2; escape plain text when composing those messages.
 - Publication confirmation uses custom 🎉. Auto-delete UI and the remove-media button use custom 🗑 from `TwinLoveEmoji`.
-- Age, rules, username, and moderation approval buttons use custom ✅. Selected option buttons also use custom ✅ before the label; callback popups use plain words because custom emoji entities are unsupported there.
+- Both age confirmation buttons contain only text, without emoji. Rules, username, and moderation approval buttons use custom ✅. Selected option buttons also use custom ✅ before the label; callback popups use plain words because custom emoji entities are unsupported there.
 - The «Сохранил» message uses custom 💾 from `TwinLoveEmoji`. Every reply that sends it must set MarkdownV2, including replies that remove the keyboard.
 
 ## Repository map and verification

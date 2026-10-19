@@ -15,7 +15,7 @@ const VIEW_CUSTOM_EMOJI_ID = '5379988790746066188'
 const VIEW_EMOJI = `![👁](tg://emoji?id=${VIEW_CUSTOM_EMOJI_ID})`
 const WARNING_CUSTOM_EMOJI_ID = '5377304212847766937'
 const WARNING_EMOJI = `![⚠️](tg://emoji?id=${WARNING_CUSTOM_EMOJI_ID})`
-const ALERT_EMOJI = '![❗️](tg://emoji?id=5382333129925110609)'
+const ALERT_EMOJI = '![❗️](tg://emoji?id=5382046303419151366)'
 const CROSS_CUSTOM_EMOJI_ID = '5379709467547969472'
 const LOCATION_CUSTOM_EMOJI_ID = '5379990525912853171'
 const LOCATION_EMOJI = `![📍](tg://emoji?id=${LOCATION_CUSTOM_EMOJI_ID})`
@@ -54,6 +54,9 @@ const LINK_EMOJI = `![🔗](tg://emoji?id=${LINK_CUSTOM_EMOJI_ID})`
 const RULE_FLAG = `![🚩](tg://emoji?id=${RULE_FLAG_CUSTOM_EMOJI_ID})`
 const RULE_BULLET = '![⏺️](tg://emoji?id=5379634348569962770)'
 const REFERRAL_VISITS_EMOJI = '![👞](tg://emoji?id=5380052815823547901)'
+const ANON_CUSTOM_EMOJI_ID = '5381905325412625519'
+const ANON_EMOJI = `![🏴‍☠️](tg://emoji?id=${ANON_CUSTOM_EMOJI_ID})`
+const PICTURE_EMOJI = '![🖼](tg://emoji?id=5382184150394516505)'
 const withAlert = message => `${ALERT_EMOJI} ${textScreening(message)}`
 
 const TEXTS = {
@@ -101,7 +104,7 @@ const TEXTS = {
     formatTip(PUBLISH_EMOJI, 'Как опубликовать анкету?', 'Заполненная анкета ещё не видна другим людям, пока ты её не опубликуешь.', 'Анкета → Опубликовать'),
     formatTip(ANNOUNCE_EMOJI, 'Следи за новыми анкетами', 'В канале появляются опубликованные анкеты. Подпишись, если хочешь видеть новые.', 'Все анкеты → Открыть канал'),
     formatTip('🔒', 'Кто видит твои контакты', 'Ты можешь настроить доступ к контактам.', 'Анкета → Редактировать → Контакты ☎️ → Настроить приватность 🔒'),
-    formatTip('🖼', 'Кто видит твои фото и видео', 'Ты можешь настроить доступ к загруженным файлам.', 'Анкета → Редактировать → Фото/видео 📹📸 → Настроить приватность 🔒'),
+    formatTip(PICTURE_EMOJI, 'Кто видит твои фото и видео', 'Ты можешь настроить доступ к загруженным файлам.', 'Анкета → Редактировать → Фото/видео 📹📸 → Настроить приватность 🔒'),
     formatTip('🔍', 'Проверь свои фото и видео', 'Посмотри, как выглядят загруженные файлы. Некоторые могут быть размыты до модерации.', 'Анкета → Показать 👁 → Мои фото/видео 📹📸'),
     formatTip(GHOST_EMOJI, 'Скрой анкету на время', 'Когда анкета скрыта, другие не увидят её контакты и медиа. Уже опубликованный пост останется в канале.', 'Анкета → Редактировать → Видимость 👻'),
     formatTip('📎', 'Сколько файлов можно добавить', 'В анкете может быть до пяти фото или видео. Размер каждого файла — до 15 МБ.', 'Анкета → Редактировать → Фото/видео 📹📸'),
@@ -119,13 +122,13 @@ const TEXTS = {
   unban: 'Разблокирован(а)',
   delete: 'Все посты этого пользователя удалены',
   error_delete: id => `Не удалось удалить сообщение автоматически, удалите его в ручную ${CHANNEL_LINK}/${id}`,
-  profile_generate: (user, useCustomEmoji = true) => {
+  profile_generate: (user, useCustomEmoji = true, isPreview = false) => {
     let text = ''
-    const locationEmoji = useCustomEmoji ? LOCATION_EMOJI : '📍'
+    const locationEmoji = isPreview ? '' : ` ${useCustomEmoji ? LOCATION_EMOJI : '📍'}`
 
     text += `${textScreening(user?.text)}\n\n`
     text += user?.location !== '999|666' ?  user?.privacyCity === 0 ? '' : user?.privacyCity === 1 ? `Мой и ближайшие города 🌇  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : `Только мой город 🏡  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : ''
-    text += user?.location !== '999|666' ? `*${textScreening(getCityById(user?.location).title)} ${getCityById(user?.location).flag}* ${locationEmoji}\n` : `*Анонимный 🏴‍☠️* ${locationEmoji}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=anon)\n`
+    text += user?.location !== '999|666' ? `*${textScreening(getCityById(user?.location).title)} ${getCityById(user?.location).flag}*${locationEmoji}\n` : `*Анонимный ${useCustomEmoji ? ANON_EMOJI : '🏴‍☠️'}*${locationEmoji}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=anon)\n`
     text += `\n`
     text += `[бот](${BOT_LINK}?start=from-channel)  •  [все анкеты](${BOT_LINK}?start=channel)  •  [общий чат](${BOT_LINK}?start=chat)${user?.location !== '999|666' ? `  •  \\#${textScreening(getCityById(user?.location).hash)}` : ''}`
     text += `\n||Теги: ${[...hashtag].sort(() => Math.random() - Math.random()).slice(0, user?.location === '999|666' ? 3 : 2).map(tag => textScreening(`#${tag}`)).join(' ')}||`
@@ -201,7 +204,7 @@ const TEXTS = {
   tip_inline_refresh_btn: 'Еще 🔄',
   tip_inline_hidden_btn: 'Скрыть',
   support_inline_btn: 'Ответить',
-  age18Confirm_btn_1: 'Нет, мне меньше 18 лет 🔞',
+  age18Confirm_btn_1: 'Нет, мне меньше 18 лет',
   age18Confirm_btn_2: 'Да, мне 18 или больше лет',
   rules_confirm_btn: 'Согласен(a)',
   rules_no_confirm_btn: 'Не согласен(а)',
@@ -239,8 +242,8 @@ const TEXTS = {
   edit_profile_location_anon_help: 'В этой анкете нет настоящего города, владелец анкеты пожелал остаться анонимным, будь осторожен\\(а\\) береги себя ❤️',
   edit_profile_location_city: 'Выберите ближайший к вам город из списка меню 📶',
   edit_profile_location_btn_1: 'Поделиться геопозицией',
-  edit_profile_location_btn_2: 'Хочу остаться анонимный 🏴‍☠️',
-  edit_profile_location_btn_3: 'Да 🏴‍☠️',
+  edit_profile_location_btn_2: 'Хочу остаться анонимным',
+  edit_profile_location_btn_3: 'Да',
   edit_profile_location_btn_4: 'Нет',
 
   edit_profile_media_btn: 'Фото/видео',
@@ -365,7 +368,7 @@ const edit_profile_location_menu = {
   reply_markup: Markup.keyboard(
     [
       [{ ...Markup.button.locationRequest(TEXTS.edit_profile_location_btn_1), icon_custom_emoji_id: LOCATION_CUSTOM_EMOJI_ID }],
-      [TEXTS.edit_profile_location_btn_2],
+      [{ text: TEXTS.edit_profile_location_btn_2, icon_custom_emoji_id: ANON_CUSTOM_EMOJI_ID }],
       [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
@@ -375,7 +378,7 @@ const edit_profile_location_anon_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard(
     [
-      [TEXTS.edit_profile_location_btn_3],
+      [{ text: TEXTS.edit_profile_location_btn_3, icon_custom_emoji_id: ANON_CUSTOM_EMOJI_ID }],
       [{ ...Markup.button.locationRequest(TEXTS.edit_profile_location_btn_4), icon_custom_emoji_id: LOCATION_CUSTOM_EMOJI_ID }],
       [BACK_TO_MENU_BUTTON]
     ]
@@ -475,7 +478,7 @@ const age18Confirm_menu = {
   parse_mode: 'MarkdownV2',
   reply_markup: Markup.keyboard([
     [TEXTS.age18Confirm_btn_1],
-    [{ text: TEXTS.age18Confirm_btn_2, icon_custom_emoji_id: CHECK_CUSTOM_EMOJI_ID }],
+    [TEXTS.age18Confirm_btn_2],
     [BACK_TO_MAIN_MENU_BUTTON]
   ]).resize().reply_markup
 }

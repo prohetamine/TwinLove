@@ -15,7 +15,7 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
     if (media.length === 0) {
       const { message_id } = await global.bot.telegram.sendMessage(
         argId || user.id,
-        TEXTS.profile_generate(user, argId !== CHANNEL_ID) + (isAdmin ? `\n\n\\- \\- \\- \\- \\-\nUser data: ${user.system_username ? `_@${textScreening(user.system_username)}_ ` : ``}\\(${user.id}\\)` : ''),
+        TEXTS.profile_generate(user, argId !== CHANNEL_ID, !argId) + (isAdmin ? `\n\n\\- \\- \\- \\- \\-\nUser data: ${user.system_username ? `_@${textScreening(user.system_username)}_ ` : ``}\\(${user.id}\\)` : ''),
         (
           isAdmin
             ? BUTTONS.profile_generate_moderation_inline(user.id)
@@ -49,7 +49,7 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
           argId || user.id,
           file, 
           {
-          caption: TEXTS.profile_generate(user, argId !== CHANNEL_ID) + (isAdmin ? `\n\n\\- \\- \\- \\- \\-\nUser data: ${user.system_username ? `_@${textScreening(user.system_username)}_ ` : ``}\\(${user.id}\\)` : ''),
+          caption: TEXTS.profile_generate(user, argId !== CHANNEL_ID, !argId) + (isAdmin ? `\n\n\\- \\- \\- \\- \\-\nUser data: ${user.system_username ? `_@${textScreening(user.system_username)}_ ` : ``}\\(${user.id}\\)` : ''),
           ...(
             isAdmin
               ? BUTTONS.profile_generate_moderation_inline(user.id)
@@ -86,7 +86,7 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
       } catch (e) {
         const { message_id } = await global.bot.telegram.sendMessage(
           argId || user.id,
-          TEXTS.profile_generate(user, argId !== CHANNEL_ID) + (isAdmin ? `\n\n\\- \\- \\- \\- \\-\nUser data: ${user.system_username ? `_@${textScreening(user.system_username)}_ ` : ``}\\(${user.id}\\)` : ''),
+          TEXTS.profile_generate(user, argId !== CHANNEL_ID, !argId) + (isAdmin ? `\n\n\\- \\- \\- \\- \\-\nUser data: ${user.system_username ? `_@${textScreening(user.system_username)}_ ` : ``}\\(${user.id}\\)` : ''),
           (
             isAdmin
               ? BUTTONS.profile_generate_moderation_inline(user.id)
