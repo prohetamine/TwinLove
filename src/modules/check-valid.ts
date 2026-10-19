@@ -2,7 +2,7 @@
 type ValidationContext = {
   user: {
     location: string
-    text: string
+    text?: string
     system_block_status: boolean
     system_age18Confirm: boolean
     system_rulesConfirm: boolean
@@ -17,6 +17,7 @@ type ValidationContext = {
 
 const checkValid = (ctx: ValidationContext): boolean => !(
   ctx.user?.location === '0|0' ||
+  !ctx.user?.text ||
   ctx.user?.text?.length < 20 ||
   ctx.user?.text?.length > 800 ||
   ctx.user?.system_block_status === true ||

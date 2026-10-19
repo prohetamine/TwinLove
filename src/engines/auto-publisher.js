@@ -79,7 +79,7 @@ const autoPublisher = async () => {
         }
       }
     
-      await sleep(60000 * 5)
+      await sleep(60000 * (IS_DEV ? 1 : 5))
     } catch (e) {
       console.log('autopublisher', e)
       await sleep(60000 * 10)

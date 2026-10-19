@@ -67,7 +67,6 @@ const RULE_FLAG = `![🚩](tg://emoji?id=${RULE_FLAG_CUSTOM_EMOJI_ID})`
 const RULE_BULLET = '![⏺️](tg://emoji?id=5379634348569962770)'
 const REFERRAL_VISITS_EMOJI = '![👞](tg://emoji?id=5380052815823547901)'
 const ANON_CUSTOM_EMOJI_ID = '5381905325412625519'
-const ANON_EMOJI = `![🏴‍☠️](tg://emoji?id=${ANON_CUSTOM_EMOJI_ID})`
 const PICTURE_EMOJI = '![🖼](tg://emoji?id=5382184150394516505)'
 const ATTACHMENT_EMOJI = '![📎](tg://emoji?id=5382138546431764504)'
 const SKULL_EMOJI = '![☠️](tg://emoji?id=5382272600951005858)'
@@ -108,7 +107,8 @@ const TEXTS = {
   support_response: 'Тикет выбран',
   profile: ctx => {
     let text = `У тебя __*не заполненны*__ разделы:\n`
-    text += !(ctx.user?.text > 20 && ctx.user?.text < 800) ? `• *__Текст анкеты__* ${EDIT_EMOJI}\n` : ``
+    const textLength = ctx.user?.text?.length ?? 0
+    text += textLength < 20 || textLength > 800 ? `• *__Текст анкеты__* ${EDIT_EMOJI}\n` : ``
     text += ctx.user?.location === '0|0' ? `• *__Страна и город__* ${LOCATION_EMOJI}\n` : ``
     text += !ctx.user?.system_username ? `• *__Контакты__* ${PHONE_EMOJI}\n` : ``
     text += `\nПерейди в раздел: «${EDIT_EMOJI} Редактировать» чтобы заполнить пробелы`
@@ -147,13 +147,13 @@ const TEXTS = {
   unban: 'Разблокирован(а)',
   delete: 'Все посты этого пользователя удалены',
   error_delete: id => `Не удалось удалить сообщение автоматически, удалите его в ручную ${CHANNEL_LINK}/${id}`,
-  profile_generate: (user, useCustomEmoji = true, isPreview = false) => {
+  profile_generate: (user, useCustomEmoji = true) => {
     let text = ''
-    const locationEmoji = isPreview ? '' : ` ${useCustomEmoji ? LOCATION_EMOJI : '📍'}`
+    const locationEmoji = ' 📍'
 
     text += `${textScreening(user?.text)}\n\n`
     text += user?.location !== '999|666' ?  user?.privacyCity === 0 ? '' : user?.privacyCity === 1 ? `Мой и ближайшие города ${useCustomEmoji ? CITY_EMOJI : '🌆'}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : `Только мой город ${useCustomEmoji ? HOUSE_EMOJI : '🏡'}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : ''
-    text += user?.location !== '999|666' ? `*${textScreening(getCityById(user?.location).title)} ${getCityById(user?.location).flag}*${locationEmoji}\n` : `*Анонимный ${useCustomEmoji ? ANON_EMOJI : '🏴‍☠️'}*${locationEmoji}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=anon)\n`
+    text += user?.location !== '999|666' ? `*${textScreening(getCityById(user?.location).title)} ${getCityById(user?.location).flag}*${locationEmoji}\n` : `*Анонимный 🏴‍☠️*${locationEmoji}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=anon)\n`
     text += `\n`
     text += `[бот](${BOT_LINK}?start=from-channel)  •  [все анкеты](${BOT_LINK}?start=channel)  •  [общий чат](${BOT_LINK}?start=chat)${user?.location !== '999|666' ? `  •  \\#${textScreening(getCityById(user?.location).hash)}` : ''}`
     text += `\n||Теги: ${[...hashtag].sort(() => Math.random() - Math.random()).slice(0, user?.location === '999|666' ? 3 : 2).map(tag => textScreening(`#${tag}`)).join(' ')}||`
@@ -265,7 +265,7 @@ const TEXTS = {
   edit_profile_location_btn: 'Страна и город',
   edit_profile_location: `Отправьте геолокацию кнопкой «Поделиться геопозицией» ${LOCATION_EMOJI} чтоб мы могли определить ближайщие к тебе города ${CITY_EMOJI} [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=geo)`,
   edit_profile_location_help: `${ALERT_EMOJI} Мы не храним и не передаем твое точное местоположение которое получаем от Телеграм\\.\n\n${LOCATION_EMOJI} Геоданные используются только один раз для установления ближайших городов это происходит локально без обращения к сторонним сервисам ${LOCK_EMOJI}`,
-  edit_profile_location_anon: `Хочешь опубликовать анкету без указания города? Никто не будет видеть твой город и твое местоположение, но также:\n\n• Мы не разошлем анкету нашим пользователям как уведомление в бота ${ROBOT_EMOJI}\n\n• Анкета отобразится в __*[канале](${CHANNEL_LINK})*__ без хештега города ${CITY_EMOJI}\n\n• Посмотреть контакты возможно будет только у пользователей с настройкой приватности «Всем»\n\n• Анкета будет опубликованна только после модерации ${SEARCH_EMOJI}`,
+  edit_profile_location_anon: `Хочешь опубликовать анкету без указания города? Никто не будет видеть твой город и твое местоположение, но также:\n\n${RULE_BULLET} Мы не разошлем анкету нашим пользователям как уведомление в бота ${ROBOT_EMOJI}\n\n${RULE_BULLET} Анкета отобразится в __*[канале](${CHANNEL_LINK})*__ без хештега города ${CITY_EMOJI}\n\n${RULE_BULLET} Посмотреть контакты возможно будет только у пользователей с настройкой приватности «Всем»\n\n${RULE_BULLET} Анкета будет опубликованна только после модерации ${SEARCH_EMOJI}`,
   edit_profile_location_anon_help: `В этой анкете нет настоящего города, владелец анкеты пожелал остаться анонимным, будь осторожен\\(а\\) береги себя ${LIKE_HEART_EMOJI}`,
   edit_profile_location_city: `Выберите ближайший к вам город из списка меню ${CITY_EMOJI}`,
   edit_profile_location_btn_1: 'Поделиться геопозицией',

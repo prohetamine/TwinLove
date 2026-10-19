@@ -14,15 +14,24 @@ test('location buttons keep their actions with the custom icon', () => {
   assert.equal(cityButton.icon_custom_emoji_id, '5379990525912853171')
 })
 
-test('own profile previews omit the pin while other private and channel cards keep it', () => {
+test('anonymous profile text uses ordinary pirate and pin icons in private and channel cards', () => {
   const user = { text: 'Привет!', location: '999|666' }
 
-  assert.doesNotMatch(TEXTS.profile_generate(user, true, true), /📍|tg:\/\/emoji\?id=5379990525912853171/)
-  assert.match(TEXTS.profile_generate(user, true, true), /tg:\/\/emoji\?id=5381905325412625519/)
-  assert.match(TEXTS.profile_generate(user), /tg:\/\/emoji\?id=5379990525912853171/)
-  assert.doesNotMatch(TEXTS.profile_generate(user, false), /tg:\/\/emoji/)
-  assert.match(TEXTS.profile_generate(user, false), /📍/)
-  assert.match(TEXTS.profile_generate(user, false), /🏴‍☠️/)
+  for (const card of [
+    TEXTS.profile_generate(user, true),
+    TEXTS.profile_generate(user, false)
+  ]) {
+    assert.match(card, /🏴‍☠️\* 📍/)
+    assert.doesNotMatch(card, /tg:\/\/emoji/)
+  }
+})
+
+test('city profile text shows an ordinary pin after the flag', () => {
+  const user = { text: 'Привет!', location: '5|1', privacyCity: 0 }
+
+  assert.match(TEXTS.profile_generate(user, true), /🇷🇺\* 📍/)
+  assert.match(TEXTS.profile_generate(user, false), /🇷🇺\* 📍/)
+  assert.doesNotMatch(TEXTS.profile_generate(user), /tg:\/\/emoji\?id=5379990525912853171/)
 })
 
 test('anonymous location buttons use the custom icon and retain their action text', () => {

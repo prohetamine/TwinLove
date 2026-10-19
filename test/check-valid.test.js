@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import checkValid from '../src/modules/check-valid.js'
+import { TEXTS } from '../src/assets/ui/ru.js'
 
 const validContext = () => ({
   user: {
@@ -29,6 +30,18 @@ test('text outside the allowed length cannot be published', () => {
 
   ctx.user.text = 'а'.repeat(801)
   assert.equal(checkValid(ctx), false)
+
+  ctx.user.text = undefined
+  assert.equal(checkValid(ctx), false)
+})
+
+test('the profile menu does not call saved text empty when another section is missing', () => {
+  const ctx = validContext()
+  ctx.user.location = '0|0'
+  const message = TEXTS.profile(ctx)
+
+  assert.match(message, /Страна и город/)
+  assert.doesNotMatch(message, /Текст анкеты/)
 })
 
 test('publication requires a location, age, rules, phone number, and username', () => {

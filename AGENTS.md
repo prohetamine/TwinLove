@@ -11,9 +11,11 @@ The former «Дополнительно 💼» menu has been removed. Its «Пр
 Referral codes are four-character `/start` payloads. Referral registration checks existing records and the current inviter's list to avoid repeat counts, and ignores a user's own link. The public invitation view shows the link, the number of people who opened it, and how many of them have a published profile.
 
 The 48-hour publication cooldown applies in production. In `mode=dev`, manual and automatic publication skip only this time limit; profile validation, moderation, and other publication checks still apply.
-After a successful automatic publication, the worker pauses for 1 minute in `mode=dev` and 15 minutes in production. Its normal database scan interval remains 5 minutes.
+After a successful automatic publication, the worker pauses for 1 minute in `mode=dev` and 15 minutes in production. Its normal database scan interval is 1 minute in `mode=dev` and 5 minutes in production. Publication remains polling-based; moderation callbacks do not wake the worker.
+The one-time unpublished-profile reminder is scheduled for 24 hours after the user's latest private-bot action, never before 24 hours after the first visit. Restore timers on startup from the existing `system_startTime` and `system_actionTime`; do not add a reminder timestamp to the database. Send only if the user has never published (`system_lastPostTime` is zero and no post exists). The «Не присылать уведомления» setting applies only to new-profile notifications and must not suppress this reminder.
 
 Profile cards show three inline buttons in one row. In private chats, the first button says «Написать» and uses the custom ✏️ icon from `TwinLoveEmoji`; 👋 and ⚠️ remain ordinary emoji-only buttons. Channel posts use ordinary ✏️, 👋, and ⚠️ without text labels because the bot cannot display custom button icons there under its current eligibility. Keep callback actions and deep links intact.
+Profile text uses ordinary 🏴‍☠️ and 📍 emoji in anonymous previews and published cards. Every city preview and card also shows the ordinary 📍 after its flag. Custom location and anonymity icons remain available for menus and buttons.
 
 The MongoDB database name is `twinlove`. Changing the connection target does not migrate data from the legacy `openoni` database; plan any data migration separately and never overwrite or delete legacy data without an explicit request.
 

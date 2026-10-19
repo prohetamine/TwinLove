@@ -12,6 +12,8 @@
 
 | Emoji | Файл |
 | --- | --- |
+| 🏴‍☠️ | `anon.png` — новый эскиз шляпы и очков; исходник `svg/anon.svg` |
+| 🖼 | `picture.png` — новый эскиз рамки с пейзажем; исходник `svg/picture.svg` |
 | 🌇 | `city-near.png` — запасной эскиз; в боте используется готовая 🌆 из набора |
 | 🌆 | `media/emoji/city.png` |
 | 🏡 | `media/emoji/house.png`; исходник `svg/house.svg` |

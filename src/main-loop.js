@@ -30,6 +30,7 @@ import logs from './modules/logs.js'
 import registerReferral from './modules/register-referral.js'
 import routeOnboarding from './modules/route-onboarding.js'
 import onboardingStage from './lib/onboarding-stage.js'
+import { scheduleProfileReminder } from './engines/notify-startup.js'
 import { TEXTS, BUTTONS } from './assets/ui/ru.js'
 
 const mainLoop = async (ctx, next) => {
@@ -61,11 +62,17 @@ const mainLoop = async (ctx, next) => {
   ctx.isSupport = user.system_isSupport
   ctx.user.system_actionTime = Date.now()
 
-  if (ctx.user.system_startTime === 0) {
+  if (!Number(ctx.user.system_startTime)) {
     ctx.user.system_startTime = Date.now()
   }
 
   ctx.user.system_username = username || ''
+  await users.set(ctx.user.id, {
+    system_actionTime: ctx.user.system_actionTime,
+    system_startTime: ctx.user.system_startTime,
+    system_username: ctx.user.system_username
+  })
+  scheduleProfileReminder(ctx.user)
 
   if (['bottom-internet', 'crypto-menu', 'other-menu'].includes(ctx.user.scene)) {
     ctx.user.scene = ctx.user.scene === 'bottom-internet' ? 'profile-menu' : 'main-menu'

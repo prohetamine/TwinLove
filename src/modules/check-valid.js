@@ -1,4 +1,5 @@
 const checkValid = (ctx) => !(ctx.user?.location === '0|0' ||
+    !ctx.user?.text ||
     ctx.user?.text?.length < 20 ||
     ctx.user?.text?.length > 800 ||
     ctx.user?.system_block_status === true ||

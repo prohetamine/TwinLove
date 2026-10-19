@@ -41,7 +41,7 @@ const profileMenu = async ctx => {
 
     if (isValid) {   
       if (ctx.user.media.filter(m => !m.isReject).length > 0) {
-        const { message_id } = await ctx.reply(TEXTS.view_wait_load_media, BUTTONS.remove_menu)
+        const { message_id } = await ctx.reply(TEXTS.view_wait_load_media, { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
         await sendProfileCard(ctx.user)        
         await ctx.deleteMessage(message_id)
       } else {
