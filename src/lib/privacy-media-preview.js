@@ -1,8 +1,6 @@
 import { registerFont, createCanvas, loadImage } from 'canvas'
-import fs from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
-import { nanoid } from 'nanoid'
 
 const __filename = fileURLToPath(import.meta.url)
     , __dirname = dirname(__filename)
@@ -20,13 +18,8 @@ const drawRoundedRect = (ctx, x, y, width, height, radius) => {
   ctx.fill()
 }
 
-// eslint-disable-next-line no-async-promise-executor
-const privacyMediaPreview = (filepath, config, locationUnknown) => new Promise(async resolve => {
+const privacyMediaPreview = async (filepath, config, locationUnknown) => {
   try {
-    const name = nanoid(64)
-  
-    let tmpfilepath = join(__dirname, `../../storage/tmp-${name}`)
-
     const image = await loadImage(filepath)
         , logo = await loadImage(join(__dirname, '../assets/circle-logo.png'))
         , homeEmoji = await loadImage(join(__dirname, '../assets/home.png'))
@@ -111,20 +104,11 @@ const privacyMediaPreview = (filepath, config, locationUnknown) => new Promise(a
     ctx.font = `${px(20)}px Inter-Bold`  
     ctx.fillText(`Условия просмотра фото*`, width - px(285), height - px(25))
 
-    canvas.createPNGStream()
-      .pipe(fs.createWriteStream(tmpfilepath))
-          .on('finish', () => {
-            resolve(
-              fs.readFileSync(tmpfilepath)
-            )
-            
-            fs.rmSync(tmpfilepath)
-          })
-          .on('error', () => resolve(false))
+    return canvas.toBuffer('image/png')
   } catch (e) {
     console.log('privacy-media-preview', e)
-    resolve(false)
+    return false
   }
-})
+}
 
 export default privacyMediaPreview

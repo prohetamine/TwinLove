@@ -2,6 +2,8 @@ import replyWithHelp from '../modules/reply-with-help.js'
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 import getUserMedia from '../modules/get-user-media.js'
 import sendProfileCard from '../modules/send-profile-card.js'
+import { prepareMediaVariant, saveMediaVariantFileId } from '../modules/media-variants.js'
+import { users } from '../helpers/db.js'
 
 const profileViewMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
@@ -31,22 +33,41 @@ const profileViewMenu = async ctx => {
     if (media.length === 0) {
       await ctx.reply(TEXTS.view_photo_empty, { parse_mode: 'MarkdownV2' })
     } else {
-      const mediaData = media.map(({ fileId, blured, bluredFileId, isPhoto, isApprove }) => {
-        return ({
-          type: isApprove
-                  ? isPhoto 
-                          ? 'photo' 
-                          : 'video'
-                  : 'photo',
-          media: (isApprove ? fileId : bluredFileId) || { source: blured }
-        })
-      }).filter(m => typeof(m.media) === 'string' ? m.media : m.media.source)
+      const preparedMedia = (await Promise.all(media.map(async item => {
+        try {
+          const prepared = await prepareMediaVariant(
+            item,
+            item.isApprove ? 'original' : 'blurred',
+            { telegram: ctx.telegram }
+          )
+          return prepared ? { item, prepared } : null
+        } catch (error) {
+          console.log('profile-view-menu media', error)
+          return null
+        }
+      }))).filter(Boolean)
 
-      if (mediaData.length === 0) {
+      if (preparedMedia.length === 0) {
         await ctx.reply(TEXTS.view_photo_empty, { parse_mode: 'MarkdownV2' })
       } else {
         try {
-          await ctx.replyWithMediaGroup(mediaData)
+          const mediaData = preparedMedia.map(({ prepared }) => ({
+            type: prepared.type,
+            media: prepared.media
+          }))
+          const messages = mediaData.length === 1
+            ? [await ctx[mediaData[0].type === 'photo' ? 'replyWithPhoto' : 'replyWithVideo'](mediaData[0].media)]
+            : await ctx.replyWithMediaGroup(mediaData)
+
+          await Promise.all(messages.map((message, index) =>
+            saveMediaVariantFileId(
+              ctx.user,
+              preparedMedia[index].item,
+              preparedMedia[index].prepared,
+              message,
+              users
+            )
+          ))
         } catch (e) {
           console.log(e)
         }

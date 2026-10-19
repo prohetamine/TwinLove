@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
-import { medias, users } from '../helpers/db.js'
+import { users } from '../helpers/db.js'
 import textScreening from '../lib/text-screening.js'
 import getUserMedia from './get-user-media.js'
+import { prepareMediaVariant, saveMediaVariantFileId } from './media-variants.js'
 import { CHANNEL_ID } from '../../configs/env.js'
 
 const sendProfileCard = async (user, argId = false, isAdmin = false) => {
@@ -10,7 +11,6 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
     let media = await getUserMedia(user)
 
     media = media.filter(({ isApprove, isPeople }) => isApprove === true && isPeople === true)
-    await users.set(user.id, user)
 
     if (media.length === 0) {
       const { message_id } = await global.bot.telegram.sendMessage(
@@ -30,25 +30,23 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
       return message_id
     } else {
       try {
-        const { isPhoto, isApprove, fileId, bluredFileId, blured, bluredPrivacy, bluredPrivacyFileId, id } = media[parseInt(Math.random() * media.length)]
+        const selected = media[parseInt(Math.random() * media.length)]
+        const prepared = await prepareMediaVariant(
+          selected,
+          user.privacyMedia[0] ? 'privacy' : 'original',
+          {
+            telegram: global.bot.telegram,
+            privacyMedia: user.privacyMedia,
+            locationUnknown: user.location === '999|666'
+          }
+        )
+        if (!prepared) throw new Error('Unable to prepare profile media')
 
-        const file = user.privacyMedia[0] 
-                      ? bluredPrivacyFileId || { source: bluredPrivacy }
-                      : isApprove 
-                          ? fileId
-                          : bluredFileId || { source: blured }
-
-        const { photo, video, message_id } = await global.bot.telegram[
-          isApprove
-            ? user.privacyMedia[0] 
-                ? 'sendPhoto'
-                : isPhoto 
-                    ? 'sendPhoto' 
-                    : 'sendVideo'
-            : 'sendPhoto'
+        const sent = await global.bot.telegram[
+          prepared.type === 'photo' ? 'sendPhoto' : 'sendVideo'
         ](
           argId || user.id,
-          file, 
+          prepared.media,
           {
           caption: TEXTS.profile_generate(user, argId !== CHANNEL_ID, !argId) + (isAdmin ? `\n\n\\- \\- \\- \\- \\-\nUser data: ${user.system_username ? `_@${textScreening(user.system_username)}_ ` : ``}\\(${user.id}\\)` : ''),
           ...(
@@ -62,29 +60,13 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
           )
         })
 
-        if (video || photo) {
-          const { file_id } = video || photo.pop()
-
-          const media = await medias.get(id)
-
-          if (user.privacyMedia[0]) {
-            if (!bluredPrivacyFileId) {
-              media.bluredPrivacyFileId = file_id
-              media.bluredPrivacy = []
-            }
-          } else {
-            if (!isApprove) {
-              if (!bluredFileId) {
-                media.bluredFileId = file_id
-                media.blured = []
-              }
-            }
-          }
-
-          await medias.set(id, media)
+        try {
+          await saveMediaVariantFileId(user, selected, prepared, sent, users)
+        } catch (error) {
+          console.log('send-profile-card media cache', error)
         }
 
-        return message_id
+        return sent.message_id
       } catch (e) {
         const { message_id } = await global.bot.telegram.sendMessage(
           argId || user.id,

@@ -11,10 +11,13 @@ The former «Дополнительно 💼» menu has been removed. Its «Пр
 Referral codes are four-character `/start` payloads. Referral registration checks existing records and the current inviter's list to avoid repeat counts, and ignores a user's own link. The public invitation view shows the link, the number of people who opened it, and how many of them have a published profile.
 
 The 48-hour publication cooldown applies in production. In `mode=dev`, manual and automatic publication skip only this time limit; profile validation, moderation, and other publication checks still apply.
+After a successful automatic publication, the worker pauses for 1 minute in `mode=dev` and 15 minutes in production. Its normal database scan interval remains 5 minutes.
 
 Profile cards show three inline buttons in one row. In private chats, the first button says «Написать» and uses the custom ✏️ icon from `TwinLoveEmoji`; 👋 and ⚠️ remain ordinary emoji-only buttons. Channel posts use ordinary ✏️, 👋, and ⚠️ without text labels because the bot cannot display custom button icons there under its current eligibility. Keep callback actions and deep links intact.
 
 The MongoDB database name is `twinlove`. Changing the connection target does not migrate data from the legacy `openoni` database; plan any data migration separately and never overwrite or delete legacy data without an explicit request.
+
+User photo and video originals live in Telegram. Each `User.media` entry stores the original `fileId` plus `bluredFileId`, `bluredPrivacyFileId`, and `privacyHash` for its previews. Generate previews in memory, save only Telegram `file_id` values after sending them, and never persist preview Buffers, base64 data, or temporary media files. New code no longer uses a separate `Media` model or collection; old running bot processes must be stopped before removing their legacy collection from MongoDB. Keep privacy preview invalidation tied to `privacyHash`.
 
 Onboarding requires age confirmation, acceptance of the rules, and then the user's own Telegram phone contact. Save the shared number in `User.system_phoneNumber` in MongoDB before opening the main menu; existing users without that field must complete the phone step too. The phone menu uses a `request_contact` keyboard button with the custom ☎️ icon, and its handler accepts a contact only when `contact.user_id` matches the current user. Route pending onboarding stages before commands and callback actions so a missing number cannot be bypassed through deep links or old buttons. Require the number for publication and notification delivery too. Do not show the saved number in public profiles, API responses, or logs.
 

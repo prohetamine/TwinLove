@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-vars */
-import { User, Referal, Post, Invite, InvitesLike, Media, Notify, NotifyComplete } from './helpers/models.js'
+import { User, Post } from './helpers/models.js'
 import express from 'express'
-import { Telegraf } from 'telegraf'
 import cors from 'cors'
 
-const bot = new Telegraf('6631950601:AAHHdQTRTvOMH1efIRnCqQhCFAwKNFmI1nM')
 const app = express()
 
 app.use(cors())
@@ -57,19 +54,9 @@ const apiServer = () => {
     _users = await Promise.all(_users.map(
       async user => ({
         ...user,
-        media: await Promise.all(
-          user.media.filter(media => media.isPhoto && media.isApprove && media.isPeople).map(async ({ fileId }) => {
-            try {
-              const { href } = await bot.telegram.getFileLink(fileId)
-              const blob = await fetch(href).then(async data => {             
-                return `data:${data.headers.get('content-type')};base64,${Buffer.from(await data.arrayBuffer()).toString('base64')}`
-              })
-              return blob
-            } catch (e) {
-              return false
-            }
-          }).filter(data => data)
-        )
+        media: user.media
+          .filter(media => media.isPhoto && media.isApprove && media.isPeople)
+          .map(({ fileId }) => fileId)
       })
     ))
 

@@ -3,7 +3,7 @@
 import { posts, users, notifys } from '../helpers/db.js'
 import sleep from 'sleep-promise'
 import sendProfileCard from '../modules/send-profile-card.js'
-import { CHANNEL_ID, CHANNEL_LOG_ID } from '../../configs/env.js'
+import { CHANNEL_ID, CHANNEL_LOG_ID, IS_DEV } from '../../configs/env.js'
 import getUserNotifys from '../modules/get-users-notify.js'
 import { TEXTS } from '../assets/ui/ru.js'
 import getPublicationCooldownRemaining from '../modules/get-publication-cooldown-remaining.js'
@@ -75,7 +75,7 @@ const autoPublisher = async () => {
             } catch (e) {}
           }
           
-          await sleep(60000 * 15)
+          await sleep(60000 * (IS_DEV ? 1 : 15))
         }
       }
     

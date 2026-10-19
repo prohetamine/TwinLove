@@ -135,17 +135,6 @@ const inviteLikeScheme = new Schema({
   ids: { type: Array, default: [/* ids */] },
 })
 
-/* Хранилище медиа файлов */
-const mediaScheme = new Schema({
-  id: { type: String },
-  upd: { type: Number, default: Date.now() },
-  blured: { type: Buffer },
-  bluredFileId: { type: String, default: '' },
-  bluredPrivacy: { type: Buffer },
-  bluredPrivacyFileId: { type: String, default: '' },
-  privacyHash: { type: String, default: '' }
-})
-
 /* Рассылка уведомлений */
 const notifyScheme = new Schema({
   id: { type: Number },
@@ -165,7 +154,6 @@ const User = model('user', userScheme)
     , Post = model('post', postScheme)
     , Invite = model('invite', inviteScheme)
     , InvitesLike = model('invitesLike', inviteLikeScheme)
-    , Media = model('media', mediaScheme)
     , Notify = model('notify', notifyScheme)
     , NotifyComplete = model('notifyComplete', notifyCompleteScheme)
 
@@ -175,7 +163,6 @@ export {
   Post,
   Invite,
   InvitesLike,
-  Media,
   Notify,
   NotifyComplete
 }
