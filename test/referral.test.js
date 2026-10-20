@@ -17,8 +17,6 @@ const makeRepositories = () => {
   return {
     db: {
       users: { all: async ({ system_referalHashId }) => owners.filter(owner => owner.system_referalHashId === system_referalHashId) },
-      persistLink: async (id, link) => { persistedLinks.push({ id, code: link.code }) },
-      persistLinkVisit: async (id, code, visitorId) => { persistedVisits.push({ id, code, visitorId }) },
       referals: {
         get: async id => records.get(id),
         all: async query => [...records.values()].filter(record => {
@@ -27,7 +25,18 @@ const makeRepositories = () => {
           if ('links.ids' in query) return record.links?.some(link => link.ids.includes(query['links.ids']))
           return false
         }),
-        set: async (id, record) => { records.set(id, record); writes++ }
+        addLink: async (id, link) => {
+          persistedLinks.push({ id, code: link.code })
+          records.get(id).links = [...(records.get(id).links || []), link]
+          writes++
+        },
+        addVisit: async (id, code, visitorId) => {
+          persistedVisits.push({ id, code, visitorId })
+          const record = records.get(id)
+          if (code) record.links.find(link => link.code === code).ids.push(visitorId)
+          else record.ids.push(visitorId)
+          writes++
+        }
       }
     },
     records,

@@ -1,6 +1,5 @@
 import { nanoid } from 'nanoid'
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
-import { Referal } from '../helpers/models.js'
 
 const MAX_LINKS = 20
 
@@ -16,7 +15,7 @@ const referralView = async (user, { referals, posts }) => {
   })))
 }
 
-const createReferralLink = async (user, { users, referals, persistLink = (id, link) => Referal.updateOne({ id }, { $push: { links: link } }) }) => {
+const createReferralLink = async (user, { users, referals }) => {
   const record = await referals.get(user.id)
   if ((record.links || []).length >= MAX_LINKS - 1) return false
   for (let attempt = 0; attempt < 20; attempt++) {
@@ -25,9 +24,7 @@ const createReferralLink = async (user, { users, referals, persistLink = (id, li
     const [secondary] = await referals.all({ 'links.code': code })
     if (primary || secondary) continue
     const link = { code, ids: [] }
-    await persistLink(user.id, link)
-    record.links = [...(record.links || []), link]
-    await referals.set(user.id, record)
+    await referals.addLink(user.id, link)
     return code
   }
   throw new Error('Could not create a unique referral code')
