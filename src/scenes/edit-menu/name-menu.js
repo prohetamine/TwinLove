@@ -10,7 +10,9 @@ export const normalizeProfileName = value => {
 const saveName = async (ctx, userStore, name) => {
   ctx.user.name = name
   await userStore.set(ctx.user.id, { name })
-  await ctx.reply(TEXTS.edit_profile_update, BUTTONS.edit_profile_name_menu)
+  await ctx.reply(TEXTS.edit_profile_update, { parse_mode: 'MarkdownV2' })
+  await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
+  await ctx.enterScene('edit-menu')
 }
 
 export const nameMenu = async (ctx, userStore) => {
@@ -62,5 +64,4 @@ export const nameInputMenu = async (ctx, userStore) => {
   }
 
   await saveName(ctx, userStore, name)
-  await ctx.enterScene('edit-name-menu')
 }

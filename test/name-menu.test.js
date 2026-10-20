@@ -30,7 +30,12 @@ test('name can be taken from Telegram or typed manually', async () => {
   ctx.update.message.text = TEXTS.edit_profile_name_telegram_btn
   await nameMenu(ctx, store)
   assert.deepEqual(saved.at(-1), { id: 42, patch: { name: 'Имя из Telegram' } })
+  assert.equal(ctx.user.scene, 'edit-menu')
+  assert.equal(replies.at(-1).message, TEXTS.edit)
+  assert.equal(replies.at(-1).options, BUTTONS.edit_menu)
 
+  ctx.update.message.text = TEXTS.edit_profile_name_btn
+  await editMenu(ctx)
   ctx.update.message.text = TEXTS.edit_profile_name_manual_btn
   await nameMenu(ctx, store)
   assert.equal(ctx.user.scene, 'edit-name-input-menu')
@@ -38,8 +43,12 @@ test('name can be taken from Telegram or typed manually', async () => {
   ctx.update.message.text = '  Анна   Мария  '
   await nameInputMenu(ctx, store)
   assert.deepEqual(saved.at(-1), { id: 42, patch: { name: 'Анна Мария' } })
-  assert.equal(ctx.user.scene, 'edit-name-menu')
+  assert.equal(ctx.user.scene, 'edit-menu')
+  assert.equal(replies.at(-1).message, TEXTS.edit)
+  assert.equal(replies.at(-1).options, BUTTONS.edit_menu)
 
+  ctx.update.message.text = TEXTS.edit_profile_name_btn
+  await editMenu(ctx)
   ctx.update.message.text = TEXTS.edit_profile_name_clear_btn
   await nameMenu(ctx, store)
   assert.deepEqual(saved.at(-1), { id: 42, patch: { name: 'Анна Мария' } })
