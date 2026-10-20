@@ -11,8 +11,6 @@ const makeRepositories = () => {
   ]
   const records = new Map(owners.map(owner => [owner.id, { id: owner.id, ids: [] }]))
   let writes = 0
-  const persistedLinks = []
-  const persistedVisits = []
 
   return {
     db: {
@@ -25,23 +23,10 @@ const makeRepositories = () => {
           if ('links.ids' in query) return record.links?.some(link => link.ids.includes(query['links.ids']))
           return false
         }),
-        addLink: async (id, link) => {
-          persistedLinks.push({ id, code: link.code })
-          records.get(id).links = [...(records.get(id).links || []), link]
-          writes++
-        },
-        addVisit: async (id, code, visitorId) => {
-          persistedVisits.push({ id, code, visitorId })
-          const record = records.get(id)
-          if (code) record.links.find(link => link.code === code).ids.push(visitorId)
-          else record.ids.push(visitorId)
-          writes++
-        }
+        set: async (id, record) => { records.set(id, record); writes++ }
       }
     },
     records,
-    persistedLinks,
-    persistedVisits,
     getWrites: () => writes
   }
 }
@@ -66,7 +51,7 @@ test('a user cannot invite themselves or use an unknown referral code', async ()
 })
 
 test('each added link keeps its own visits and published-profile count', async () => {
-  const { db, records, persistedLinks, persistedVisits } = makeRepositories()
+  const { db, records } = makeRepositories()
   const code = await createReferralLink({ id: 1 }, db)
   assert.equal(code.length, 4)
   assert.equal(await registerReferral(code, 3, db), true)
@@ -74,8 +59,6 @@ test('each added link keeps its own visits and published-profile count', async (
   assert.equal(await registerReferral('efgh', 3, db), false)
   assert.deepEqual(records.get(1).links[0].ids, [3])
   assert.deepEqual(records.get(1).ids, [])
-  assert.deepEqual(persistedLinks, [{ id: 1, code }])
-  assert.deepEqual(persistedVisits, [{ id: 1, code, visitorId: 3 }])
 
   const view = await referralView({ id: 1, system_referalHashId: 'abcd' }, {
     referals: db.referals,

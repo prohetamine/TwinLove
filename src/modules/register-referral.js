@@ -11,7 +11,9 @@ const registerReferral = async (code, invitedUserId, { users, referals }) => {
   const [existingLinkReferal] = await referals.all({ 'links.ids': invitedUserId })
   if (existingReferal || existingLinkReferal) return false
 
-  await referals.addVisit(ownerId, primaryOwner ? null : code, invitedUserId)
+  if (primaryOwner) ownerReferals.ids.push(invitedUserId)
+  else ownerReferals.links.find(link => link.code === code).ids.push(invitedUserId)
+  await referals.set(ownerId, ownerReferals)
   return true
 }
 

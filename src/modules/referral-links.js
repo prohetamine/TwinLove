@@ -24,7 +24,8 @@ const createReferralLink = async (user, { users, referals }) => {
     const [secondary] = await referals.all({ 'links.code': code })
     if (primary || secondary) continue
     const link = { code, ids: [] }
-    await referals.addLink(user.id, link)
+    record.links = [...(record.links || []), link]
+    await referals.set(user.id, record)
     return code
   }
   throw new Error('Could not create a unique referral code')
