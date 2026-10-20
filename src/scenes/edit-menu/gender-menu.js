@@ -1,4 +1,5 @@
 import replyWithHelp from '../../modules/reply-with-help.js'
+import sleep from 'sleep-promise'
 import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
 
 const GENDER_BY_BUTTON = new Map([
@@ -23,7 +24,10 @@ const genderMenu = async (ctx, userStore) => {
 
   ctx.user.gender = GENDER_BY_BUTTON.get(text)
   await userStore.set(ctx.user.id, { gender: ctx.user.gender })
-  await ctx.reply(TEXTS.edit_profile_update, { parse_mode: 'MarkdownV2' })
+  const { message_id } = await ctx.reply(TEXTS.edit_profile_update, { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
+  await sleep(1000)
+  await ctx.deleteMessage(message_id)
+  await sleep(500)
   await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
   await ctx.enterScene('edit-menu')
 }

@@ -21,10 +21,15 @@ test('gender is optional and accepts only supported values in the user model', (
 test('gender menu saves the choice and returns to the edit menu', async () => {
   const saved = []
   const replies = []
+  const deleted = []
   const ctx = {
     user: { id: 42, gender: '' },
     update: { message: { text: TEXTS.edit_profile_gender_female_btn } },
-    reply: async (message, options) => replies.push({ message, options }),
+    reply: async (message, options) => {
+      replies.push({ message, options })
+      return { message_id: replies.length }
+    },
+    deleteMessage: async id => { deleted.push(id) },
     enterScene: async scene => { ctx.user.scene = scene }
   }
   const store = { set: async (id, patch) => saved.push({ id, patch }) }
@@ -35,12 +40,15 @@ test('gender menu saves the choice and returns to the edit menu', async () => {
   assert.equal(ctx.user.scene, 'edit-menu')
   assert.equal(replies.at(-1).message, TEXTS.edit)
   assert.equal(replies.at(-1).options, BUTTONS.edit_menu)
+  assert.equal(deleted.length, 1)
+  assert.equal(replies.at(-2).options.reply_markup.remove_keyboard, true)
 
   ctx.update.message.text = TEXTS.edit_profile_gender_male_btn
   await genderMenu(ctx, store)
   assert.equal(ctx.user.gender, 'male')
   assert.equal(ctx.user.scene, 'edit-menu')
   assert.equal(replies.at(-1).options, BUTTONS.edit_menu)
+  assert.equal(deleted.length, 2)
 
   ctx.update.message.text = TEXTS.edit_profile_gender_unspecified_btn
   await genderMenu(ctx, store)
@@ -48,6 +56,7 @@ test('gender menu saves the choice and returns to the edit menu', async () => {
   assert.deepEqual(saved.at(-1), { id: 42, patch: { gender: '' } })
   assert.equal(ctx.user.scene, 'edit-menu')
   assert.equal(replies.at(-1).options, BUTTONS.edit_menu)
+  assert.equal(deleted.length, 3)
 })
 
 test('the edit menu opens gender choices', async () => {

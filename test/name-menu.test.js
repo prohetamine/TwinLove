@@ -7,17 +7,22 @@ import { BUTTONS, TEXTS } from '../src/assets/ui/ru.js'
 
 const makeContext = text => {
   const replies = []
+  const deleted = []
   const ctx = {
     user: { id: 42, name: '', scene: 'edit-menu' },
     update: { message: { text, from: { first_name: 'Имя из Telegram' } } },
-    reply: async (message, options) => replies.push({ message, options }),
+    reply: async (message, options) => {
+      replies.push({ message, options })
+      return { message_id: replies.length }
+    },
+    deleteMessage: async id => { deleted.push(id) },
     enterScene: async scene => { ctx.user.scene = scene }
   }
-  return { ctx, replies }
+  return { ctx, replies, deleted }
 }
 
 test('name can be taken from Telegram or typed manually', async () => {
-  const { ctx, replies } = makeContext(TEXTS.edit_profile_name_btn)
+  const { ctx, replies, deleted } = makeContext(TEXTS.edit_profile_name_btn)
   const saved = []
   const store = { set: async (id, patch) => saved.push({ id, patch }) }
 
@@ -33,6 +38,8 @@ test('name can be taken from Telegram or typed manually', async () => {
   assert.equal(ctx.user.scene, 'edit-menu')
   assert.equal(replies.at(-1).message, TEXTS.edit)
   assert.equal(replies.at(-1).options, BUTTONS.edit_menu)
+  assert.equal(deleted.length, 1)
+  assert.equal(replies.at(-2).options.reply_markup.remove_keyboard, true)
 
   ctx.update.message.text = TEXTS.edit_profile_name_btn
   await editMenu(ctx)
@@ -46,6 +53,7 @@ test('name can be taken from Telegram or typed manually', async () => {
   assert.equal(ctx.user.scene, 'edit-menu')
   assert.equal(replies.at(-1).message, TEXTS.edit)
   assert.equal(replies.at(-1).options, BUTTONS.edit_menu)
+  assert.equal(deleted.length, 2)
 
   ctx.update.message.text = TEXTS.edit_profile_name_btn
   await editMenu(ctx)

@@ -1,4 +1,5 @@
 import replyWithHelp from '../../modules/reply-with-help.js'
+import sleep from 'sleep-promise'
 import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
 
 export const normalizeProfileName = value => {
@@ -10,7 +11,10 @@ export const normalizeProfileName = value => {
 const saveName = async (ctx, userStore, name) => {
   ctx.user.name = name
   await userStore.set(ctx.user.id, { name })
-  await ctx.reply(TEXTS.edit_profile_update, { parse_mode: 'MarkdownV2' })
+  const { message_id } = await ctx.reply(TEXTS.edit_profile_update, { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
+  await sleep(1000)
+  await ctx.deleteMessage(message_id)
+  await sleep(500)
   await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
   await ctx.enterScene('edit-menu')
 }
