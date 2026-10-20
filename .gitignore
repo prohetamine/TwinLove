@@ -8,3 +8,5 @@ import.json
 prod.env.js
 src/assets/cache.json
 .DS_Store
+log.txt
+.telegram-test/
