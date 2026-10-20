@@ -51,7 +51,7 @@ const supportMenu = async ctx => {
         }
 
         const userData = `*${textScreening(from.first_name ? `${from.first_name} ` : '')}${textScreening(from.last_name ? `${from.last_name} ` : '')}*${from.username ? `\\| _@${textScreening(from.username)}_ ` : ``}\\(${from.id}\\)`
-            , sysData = `*Support hash ID:* \\#${ctx.user.system_supportHashId}\n*Call action:* ${ctx.user.system_selectCallAction || 'none'}\n*Call ID:* ${ctx.user.system_selectCallHashId || 'none'}\n*Blocked status:* ${ctx.user.system_block_status ? ctx.user.system_block_message || '🔴' : (ctx.user.system_block_status ? '🔴' : '🟢')}${postId ? `\n*Post:* ${textScreening(CHANNEL_LINK)}/${postId}` : ''}`
+            , sysData = `*ID обращения:* \\#${ctx.user.system_supportHashId}\n*Действие:* ${ctx.user.system_selectCallAction || 'none'}\n*ID вызова:* ${ctx.user.system_selectCallHashId || 'none'}\n*Статус блокировки:* ${ctx.user.system_block_status ? ctx.user.system_block_message || '🔴' : (ctx.user.system_block_status ? '🔴' : '🟢')}${postId ? `\n*Публикация:* ${textScreening(CHANNEL_LINK)}/${postId}` : ''}`
 
         await ctx.telegram.sendMessage(support[x].id, `_Текст:_ ${textScreening(text)}\n——————\n${userData}\n\\- \\- \\- \\- \\-\n${sysData}`, BUTTONS.support_inline_menu(`${from.id}`))
         await sleep(5000)
@@ -75,7 +75,7 @@ const supportMenu = async ctx => {
         }
 
         const userData = `*${textScreening(from.first_name ? `${from.first_name} ` : '')}${textScreening(from.last_name ? `${from.last_name} ` : '')}*${from.username ? `\\| _@${textScreening(from.username)}_ ` : ``}\\(${from.id}\\)`
-            , sysData = `*Support hash ID:* \\#${ctx.user.system_supportHashId}\n*Call action:* ${ctx.user.system_selectCallAction || 'none'}\n*Call ID:* ${ctx.user.system_selectCallHashId || 'none'}\n*Blocked status:* ${ctx.user.system_block_status ? ctx.user.system_block_message || '🔴' : (ctx.user.system_block_status ? '🔴' : '🟢')}${postId ? `\n*Post:* ${textScreening(CHANNEL_LINK)}/${postId}` : ''}`
+            , sysData = `*ID обращения:* \\#${ctx.user.system_supportHashId}\n*Действие:* ${ctx.user.system_selectCallAction || 'none'}\n*ID вызова:* ${ctx.user.system_selectCallHashId || 'none'}\n*Статус блокировки:* ${ctx.user.system_block_status ? ctx.user.system_block_message || '🔴' : (ctx.user.system_block_status ? '🔴' : '🟢')}${postId ? `\n*Публикация:* ${textScreening(CHANNEL_LINK)}/${postId}` : ''}`
 
         await ctx.telegram[photo ? 'sendPhoto' : 'sendVideo'](support[x].id, file_id, {
           caption: `${caption.length !== 0 ? `_Текст:_ ${textScreening(caption)}\n` : ''}——————\n${userData}\n\\- \\- \\- \\- \\-\n${sysData}`,
