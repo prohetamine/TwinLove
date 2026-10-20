@@ -1,13 +1,36 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
-import { users } from '../helpers/db.js'
+import { users, referals, posts } from '../helpers/db.js'
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 import sleep from 'sleep-promise'
+import { createReferralLink, referralView, referralMessageOptions } from './referral-links.js'
 
 const kickOldMessage = { /* user id */ }
 
 const callback_querys = async ctx => {
   const data = ctx.update?.callback_query?.data || ''
+
+  if (data === 'referral_add') {
+    try {
+      const code = await createReferralLink(ctx.user, { users, referals })
+      if (!code) {
+        await ctx.answerCbQuery(TEXTS.referal_limit)
+        return
+      }
+      await ctx.telegram.editMessageText(
+        ctx.update.callback_query.message.chat.id,
+        ctx.update.callback_query.message.message_id,
+        undefined,
+        await referralView(ctx.user, { referals, posts }),
+        referralMessageOptions
+      )
+      await ctx.answerCbQuery(TEXTS.referal_added)
+    } catch (error) {
+      console.log('referral_add', error)
+      await ctx.answerCbQuery(TEXTS.referal_add_error)
+    }
+    return
+  }
   
   if (data.match(/support_\d+/)) {
     try {

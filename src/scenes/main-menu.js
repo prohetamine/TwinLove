@@ -2,6 +2,7 @@ import replyWithHelp from '../modules/reply-with-help.js'
 import { users, referals, posts } from '../helpers/db.js'
 import { TEXTS, BUTTONS } from './../assets/ui/ru.js'
 import { nanoid } from 'nanoid'
+import { referralView, referralMessageOptions } from '../modules/referral-links.js'
 
 const mainMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
@@ -18,14 +19,7 @@ const mainMenu = async ctx => {
   }
 
   if (text === TEXTS.referal_link_btn) {
-    const referalHashId = ctx.user.system_referalHashId
-    const _referals = (await referals.get(ctx.user.id)).ids
-    const referalUsers = await users.all({ id: { $in: _referals } })
-    const _posts = (await posts.all({ id: { $in: _referals } }))
-      .map(({ ids }) => ids.length > 0 ? 1 : 0)
-      .reduce((total, isPost) => total + isPost, 0)
-
-    await ctx.reply(TEXTS.referal_link(referalHashId, referalUsers.length, _posts), BUTTONS.main_menu)
+    await ctx.reply(await referralView(ctx.user, { referals, posts }), referralMessageOptions)
     return
   }
 

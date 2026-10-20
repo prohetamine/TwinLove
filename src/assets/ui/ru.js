@@ -101,6 +101,11 @@ const TEXTS = {
   rules_vsj: withAlert('ВСЖ — в какой стране живешь.'),
   chat: `Заходи в чат, чтобы познакомиться и пообщаться ${CHAT_EMOJI}`,
   referal_link: (id, referals, referalsPost) => `${INVITE_EMOJI} *Пригласи друзей в TwinLove*\nОтправь ссылку человеку, которому тоже интересны знакомства:\n\n\`${escapeMarkdownCode(`${BOT_LINK}?start=${id}`)}\`\n\n${REFERRAL_VISITS_EMOJI} Перешли по ссылке: ${referals}\n${PUBLISH_EMOJI} Опубликовали анкету: ${referalsPost}`,
+  referal_links: links => `${INVITE_EMOJI} *Пригласи друзей в TwinLove*\nОтправь ссылку человеку, которому тоже интересны знакомства:\n\n${links.map(({ code, visits, published }) => `${ATTACHMENT_EMOJI} \`${escapeMarkdownCode(`${BOT_LINK}?start=${code}`)}\`\n${REFERRAL_VISITS_EMOJI} Перешли по ссылке: ${visits}\n${PUBLISH_EMOJI} Опубликовали анкету: ${published}`).join('\n\n')}`,
+  referal_add_btn: 'Добавить ссылку',
+  referal_added: 'Ссылка добавлена',
+  referal_limit: 'В одном сообщении можно показать до 20 ссылок',
+  referal_add_error: 'Не удалось добавить ссылку. Попробуй ещё раз',
   channel: `*Все анкеты TwinLove* ${ALL_PROFILES_EMOJI}\n\nВ канале публикуются анкеты\\.\n\nЧтобы посмотреть контакты другого человека, тебе нужна опубликованная анкета\\.`,
   help: 'Такой команды нет, в этом меню нужно использовать кнопки, нажми ⌘ чтобы открыть меню\\.\n\nЕсли бот завис нажмите: /start',
   edit: `Выбери пункт который хочешь изменить ${SETTINGS_EMOJI}`,
@@ -657,6 +662,12 @@ const tips_inline_menu = {
   }
 }
 
+const referral_links_inline = {
+  reply_markup: {
+    inline_keyboard: [[{ text: TEXTS.referal_add_btn, callback_data: 'referral_add' }]]
+  }
+}
+
 const support_inline_menu = id => ({
   parse_mode: 'MarkdownV2',
   disable_web_page_preview: true,
@@ -782,6 +793,7 @@ const BUTTONS = {
   contact_hello_menu,
   channel_start_inline,
   tips_inline_menu,
+  referral_links_inline,
   channel_inline,
   chat_inline,
   edit_profile_media_admin_approve_inline,

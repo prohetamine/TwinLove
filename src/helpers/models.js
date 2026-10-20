@@ -115,6 +115,7 @@ const referalScheme = new Schema({
   id: { type: Number },
   upd: { type: Number, default: Date.now() },
   ids: { type: Array, default: [/* ids */] },
+  links: { type: Array, default: [] }, /* дополнительные ссылки: { code, ids } */
 })
 
 const postScheme = new Schema({

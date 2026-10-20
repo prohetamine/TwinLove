@@ -1,15 +1,19 @@
 const registerReferral = async (code, invitedUserId, { users, referals }) => {
-  const [owner] = await users.all({ system_referalHashId: code })
-  if (!owner || owner.id === invitedUserId) return false
+  const [primaryOwner] = await users.all({ system_referalHashId: code })
+  const [linkRecord] = primaryOwner ? [] : await referals.all({ 'links.code': code })
+  const ownerId = primaryOwner?.id ?? linkRecord?.id
+  if (!ownerId || ownerId === invitedUserId) return false
 
-  const ownerReferals = await referals.get(owner.id)
-  if (!ownerReferals || ownerReferals.ids.includes(invitedUserId)) return false
+  const ownerReferals = await referals.get(ownerId)
+  if (!ownerReferals || ownerReferals.ids.includes(invitedUserId) || ownerReferals.links?.some(link => link.ids.includes(invitedUserId))) return false
 
   const [existingReferal] = await referals.all({ ids: invitedUserId })
-  if (existingReferal) return false
+  const [existingLinkReferal] = await referals.all({ 'links.ids': invitedUserId })
+  if (existingReferal || existingLinkReferal) return false
 
-  ownerReferals.ids.push(invitedUserId)
-  await referals.set(owner.id, ownerReferals)
+  if (primaryOwner) ownerReferals.ids.push(invitedUserId)
+  else ownerReferals.links.find(link => link.code === code).ids.push(invitedUserId)
+  await referals.set(ownerId, ownerReferals)
   return true
 }
 
