@@ -312,7 +312,7 @@ const TEXTS = {
   edit_profile_location_btn_4: 'Нет',
 
   edit_profile_media_btn: 'Фото/видео',
-  edit_profile_media: allowCount => allowCount !== 0 ? `Хочешь добавить фото/видео к профилю? Можно загрузить еще ${allowCount} фото/видео ${CAMERA_EMOJI}` : `Упс, кончилось место для фото/видео ${CAMERA_EMOJI}, может стоит удалить? ${TRASH_EMOJI}`,
+  edit_profile_media: allowCount => allowCount !== 0 ? `Добавь фото или видео в анкету\\. Можно загрузить ещё ${allowCount} ${CAMERA_EMOJI}` : `Упс, кончилось место для фото/видео ${CAMERA_EMOJI}, может стоит удалить? ${TRASH_EMOJI}`,
   edit_profile_media_btn_2: 'Удалить фото/видео',
   edit_profile_media_additional: `Загружено\\!`,
   edit_profile_media_question: allowCount => `Хочешь загрузить еще? Можно загрузить еще ${allowCount} фото/видео ${CAMERA_EMOJI}`,
