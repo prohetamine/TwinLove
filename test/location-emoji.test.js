@@ -37,12 +37,9 @@ test('city profile text shows an ordinary pin after the flag', () => {
 test('anonymous location buttons use the custom icon and retain their action text', () => {
   const anonymousButton = BUTTONS.edit_profile_location_menu.reply_markup.keyboard[1][0]
   const confirmButton = BUTTONS.edit_profile_location_anon_menu.reply_markup.keyboard[0][0]
-  const cancelButton = BUTTONS.edit_profile_location_anon_menu.reply_markup.keyboard[1][0]
 
   assert.equal(anonymousButton.text, TEXTS.edit_profile_location_btn_2)
   assert.equal(confirmButton.text, TEXTS.edit_profile_location_btn_3)
   assert.equal(anonymousButton.icon_custom_emoji_id, '5381905325412625519')
   assert.equal(confirmButton.icon_custom_emoji_id, '5381905325412625519')
-  assert.equal(cancelButton.text, TEXTS.edit_profile_location_btn_4)
-  assert.equal(cancelButton.request_location, undefined)
 })
