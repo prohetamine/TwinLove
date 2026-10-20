@@ -172,7 +172,7 @@ const TEXTS = {
   demo: 'Не возможно, это твоя анкета ❌',
   view_photo_empty: `Кажется у тебя еще нет ни одного загруженного фото/видео\\.\\. ${SURPRISED_EMOJI}`,
   view_photo_with_no_approve: withAlert('Пока фото или видео проходят модерацию, они будут размыты и видны только тебе'),
-  publish_profile_request: withAlert('У вас есть фото/видео которые не прошли модерацию и не будут отображаться в анкете пока не пройдут модерацию, вы точно хотите опубликовать профиль в канал без фото?'),
+  publish_profile_request: withAlert('Некоторые фото или видео ещё не прошли модерацию и не появятся в анкете. Опубликовать анкету сейчас без них?'),
   publish_profile_complete: `Готово, анкета опубликована ${CELEBRATION_EMOJI}`,
   publish_profile_send_error: textScreening('Не удалось опубликовать анкету. Попробуй ещё раз чуть позже.'),
   publish_profile_timeout: (outTime, textTime) => `Постить анкету можно только раз в ${textTime}, приходи через: __*${outTime}*__ ${WAIT_EMOJI}`,
