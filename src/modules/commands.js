@@ -43,11 +43,6 @@ const commands = async ctx => {
     return
   }
 
-  if (command === '/start' && payload === 'vsj') {
-    await ctx.reply(TEXTS.rules_vsj, { parse_mode: 'MarkdownV2' })
-    return
-  }
-
   if (command === '/start' && payload === 'hello') {
     await ctx.reply(TEXTS.hello_action, { parse_mode: 'MarkdownV2' })
     return
