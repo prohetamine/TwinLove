@@ -39,6 +39,12 @@ const locationMenu = async ctx => {
     return
   }
 
+  if (text === TEXTS.edit_profile_location_btn_4) {
+    await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
+    await ctx.enterScene('edit-menu')
+    return
+  }
+
   if (location) {
     const citys = getCityIdByLocation(location, 5).map(cityId => getCityById(cityId))
     ctx.user.nighLocations = citys.map(city => city.id)

@@ -474,7 +474,7 @@ const edit_profile_location_anon_menu = {
   reply_markup: Markup.keyboard(
     [
       [{ text: TEXTS.edit_profile_location_btn_3, icon_custom_emoji_id: ANON_CUSTOM_EMOJI_ID }],
-      [{ ...Markup.button.locationRequest(TEXTS.edit_profile_location_btn_4), icon_custom_emoji_id: LOCATION_CUSTOM_EMOJI_ID }],
+      [{ text: TEXTS.edit_profile_location_btn_4 }],
       [BACK_TO_MENU_BUTTON]
     ]
   ).resize().reply_markup
