@@ -124,7 +124,7 @@ const commands = async ctx => {
       ? await referralStatsByCode(payload, { users, referals, posts })
       : null
     if (stats) {
-      await ctx.reply(TEXTS.referal_links([stats]), BUTTONS.main_menu)
+      await ctx.reply(TEXTS.referal_link(stats.code, stats.visits, stats.published), BUTTONS.main_menu)
     } else {
       await ctx.reply(TEXTS.referal_link_error, BUTTONS.main_menu)
     }
