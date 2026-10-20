@@ -123,7 +123,7 @@ const TEXTS = {
       : text
   },
   view: 'Смотри\\! ',
-  view_wait_load_media: `У тебя загружены медиа файлы, я пока не успел их обработать, дай мне немного времени, я скажу, когда всё будет готово ${WAIT_EMOJI}`,
+  view_wait_load_media: `Некоторые фото или видео ещё обрабатываются\\. Я сообщу, когда всё будет готово ${WAIT_EMOJI}`,
   banned_rule_age: 'нарушение правила: возраст',
   support_message_delivery: `Сообщение доставленно, дополните или ожидайте ответа поддержки в этом меню ${INBOX_EMOJI}`,
   content_error: textScreening('Не могу обработать это сообщение. Пришли фото или видео обычным сообщением, не как файл.'),
@@ -315,7 +315,7 @@ const TEXTS = {
   edit_profile_media: allowCount => allowCount !== 0 ? `Добавь фото или видео в анкету\\. Можно загрузить ещё ${allowCount} ${CAMERA_EMOJI}` : `Упс, кончилось место для фото/видео ${CAMERA_EMOJI}, может стоит удалить? ${TRASH_EMOJI}`,
   edit_profile_media_btn_2: 'Удалить фото/видео',
   edit_profile_media_additional: `Загружено\\!`,
-  edit_profile_media_question: allowCount => `Хочешь загрузить еще? Можно загрузить еще ${allowCount} фото/видео ${CAMERA_EMOJI}`,
+  edit_profile_media_question: allowCount => `Можно добавить ещё ${allowCount} фото или видео ${CAMERA_EMOJI}`,
   edit_profile_media_remove: allowCount => `Медиа удалены теперь можно добавить ${allowCount} фото/видео ${CAMERA_EMOJI}`,
   edit_profile_media_error: `Что\\-то тут не так\\.\\.\\. я не могу это загрузить или обработать, я принимаю только фото и видео \\(до 15мб\\) ${SAD_EMOJI}`,
   edit_profile_media_resolve_inline_btn: 'Одобрить',
