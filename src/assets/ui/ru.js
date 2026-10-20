@@ -316,7 +316,7 @@ const TEXTS = {
   edit_profile_media_btn_2: 'Удалить фото/видео',
   edit_profile_media_additional: `Загружено\\!`,
   edit_profile_media_question: allowCount => `Можно добавить ещё ${allowCount} фото или видео ${CAMERA_EMOJI}`,
-  edit_profile_media_remove: allowCount => `Медиа удалены теперь можно добавить ${allowCount} фото/видео ${CAMERA_EMOJI}`,
+  edit_profile_media_remove: allowCount => `Все фото и видео удалены\\. Теперь можно добавить до ${allowCount} новых ${CAMERA_EMOJI}`,
   edit_profile_media_error: `Не получилось загрузить или обработать файл\\. Пришли фото или видео размером до 15 МБ ${SAD_EMOJI}`,
   edit_profile_media_resolve_inline_btn: 'Одобрить',
   edit_profile_media_reject_inline_btn: 'Отклонить',
