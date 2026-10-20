@@ -326,7 +326,7 @@ const TEXTS = {
   edit_profile_media_ok: 'Изменено',
 
   edit_profile_media_approve: id => `Фото или видео одобрено${id ? ` (mediaID: ${id})` : ''}`,
-  edit_profile_media_reject: id => `Фото или видео заблокировано, для обжалования свяжитесь с поддержкой /support${id ? ` (mediaID: ${id})` : ''}`,
+  edit_profile_media_reject: id => withAlert(`Фото или видео не прошло модерацию. Если хочешь уточнить причину, напиши в поддержку: /support${id ? ` (mediaID: ${id})` : ''}`),
   edit_profile_media_privacy: 'Выбери, кому будут видны твои фото и видео:',
   edit_profile_media_privacy_all_btn: () => 'Видны всем',
   edit_profile_media_privacy_settings_btn: () => 'Видны в боте',

@@ -153,11 +153,16 @@ const callback_querys = async ctx => {
         try {
           const currentMedia = user.media.find(media => media.id === mediaId)
           await ctx.telegram.sendMessage(user.id, type === 'rej' ? TEXTS.edit_profile_media_reject(null) : TEXTS.edit_profile_media_approve(null), {
-            reply_to_message_id: currentMedia?.messageId
+            reply_to_message_id: currentMedia?.messageId,
+            ...(type === 'rej' ? { parse_mode: 'MarkdownV2' } : {})
           })
         } catch (e) {
           try {
-            await ctx.telegram.sendMessage(user.id, type === 'rej' ? TEXTS.edit_profile_media_reject(mediaId) : TEXTS.edit_profile_media_approve(mediaId))
+            await ctx.telegram.sendMessage(
+              user.id,
+              type === 'rej' ? TEXTS.edit_profile_media_reject(mediaId) : TEXTS.edit_profile_media_approve(mediaId),
+              type === 'rej' ? { parse_mode: 'MarkdownV2' } : undefined
+            )
           } catch (e) {}
         }
 
