@@ -317,7 +317,7 @@ const TEXTS = {
   edit_profile_media_additional: `Загружено\\!`,
   edit_profile_media_question: allowCount => `Можно добавить ещё ${allowCount} фото или видео ${CAMERA_EMOJI}`,
   edit_profile_media_remove: allowCount => `Медиа удалены теперь можно добавить ${allowCount} фото/видео ${CAMERA_EMOJI}`,
-  edit_profile_media_error: `Что\\-то тут не так\\.\\.\\. я не могу это загрузить или обработать, я принимаю только фото и видео \\(до 15мб\\) ${SAD_EMOJI}`,
+  edit_profile_media_error: `Не получилось загрузить или обработать файл\\. Пришли фото или видео размером до 15 МБ ${SAD_EMOJI}`,
   edit_profile_media_resolve_inline_btn: 'Одобрить',
   edit_profile_media_reject_inline_btn: 'Отклонить',
   edit_profile_media_people_inline_btn: 'Человек',
