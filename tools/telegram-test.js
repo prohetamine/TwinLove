@@ -139,8 +139,15 @@ async function click(client, bot, label, step) {
 }
 
 async function clickInline(client, bot, label, step) {
-  const message = (await messages(client, bot, 20)).find(item => item.replyMarkup instanceof Api.ReplyInlineMarkup)
-  if (!message || !(await buttonLabels(message)).includes(label)) {
+  let message = null
+  for (const item of await messages(client, bot, 20)) {
+    if (!(item.replyMarkup instanceof Api.ReplyInlineMarkup)) continue
+    if ((await buttonLabels(item)).includes(label)) {
+      message = item
+      break
+    }
+  }
+  if (!message) {
     log('SKIP', step, `нет inline кнопки «${label}»`)
     return null
   }

@@ -27,6 +27,7 @@ const WARNING_CUSTOM_EMOJI_ID = '5377304212847766937'
 const WARNING_EMOJI = `![⚠️](tg://emoji?id=${WARNING_CUSTOM_EMOJI_ID})`
 const ALERT_EMOJI = '![❗️](tg://emoji?id=5382046303419151366)'
 const CROSS_CUSTOM_EMOJI_ID = '5379709467547969472'
+const CROSS_EMOJI = `![❌](tg://emoji?id=${CROSS_CUSTOM_EMOJI_ID})`
 const LOCATION_CUSTOM_EMOJI_ID = '5379990525912853171'
 const LOCATION_EMOJI = `![📍](tg://emoji?id=${LOCATION_CUSTOM_EMOJI_ID})`
 const ALL_PROFILES_CUSTOM_EMOJI_ID = '5379552576687613329'
@@ -183,17 +184,17 @@ const TEXTS = {
   contact: (id, username) => `${textScreening('Вот контакт человека, с которым ты хочешь познакомиться.')}\n\n__*[${textScreening(username ? `@${username}` : '@username')}](tg://user?id=${id})*__`,
   media_empty: `У этого пользователя нет ни одного загруженного фото/видео\\.\\.\\. ${UNIMPRESSED_EMOJI}`,
   hello_hand: `Кто\\-то помахал ${WAVE_EMOJI} тебе, он или она хочет чтоб ты написал\\(а\\) ему/eй\\. Хочешь посмотреть его/eё анкету?`,
-  hello_like: `Кто\\-то поставил тебе лайк ${LIKE_HEART_EMOJI} тебе, ты нравишься кому\\-то он/она хочет чтоб ты написал\\(а\\) ему/eй\\. Хочешь посмотреть его/eё анкету?`,
-  hello_hand_confirmed: 'Теперь остается только ждать что тебе напишут, потерпи или напиши сам\\(а\\)\\!',
-  hello_like_confirmed: 'Теперь остается только ждать что тебе напишут, потерпи или напиши сам\\(а\\)\\!',
-  hello_error: `Какая\\-то ошибка, этому человеку нельзя больше помахать\\.\\.\\. ${SKULL_EMOJI}`,
-  hello_like_error: `Какая\\-то ошибка, этому человеку нельзя больше поставить лайк\\.\\.\\. ${SKULL_EMOJI}`,
+  hello_like: `Кому\\-то понравилась твоя анкета ${LIKE_HEART_EMOJI} Хочешь посмотреть анкету этого человека?`,
+  hello_hand_confirmed: `Готово\\! Теперь можно подождать ответа или написать первым\\(ой\\) ${WAVE_EMOJI}`,
+  hello_like_confirmed: `Готово\\! Теперь можно подождать ответа или написать первым\\(ой\\) ${LIKE_HEART_EMOJI}`,
+  hello_error: `Этому человеку сейчас нельзя помахать ${SKULL_EMOJI}`,
+  hello_like_error: `Этому человеку сейчас нельзя поставить лайк ${SKULL_EMOJI}`,
   hello_hidden: `Этому человеку пока нельзя помахать, он скрыл свой профиль ${SKULL_EMOJI}`,
   hello_like_hidden: `Этому человеку пока нельзя поставить лайк, он скрыл свой профиль ${SKULL_EMOJI}`,
-  hello_hand_used: `Вы уже помахали этому человеку, это действие нельзя повторить с одним и тем же человеком снова ${CHECK_EMOJI}`,
-  hello_like_used: `Вы уже поставили лайк этому человеку, это действие нельзя повторить с одним и тем же человеком снова ${CHECK_EMOJI}`,
+  hello_hand_used: `Ты уже помахал\\(а\\) этому человеку\\. Сделать это повторно нельзя ${CROSS_EMOJI}`,
+  hello_like_used: `Ты уже поставил\\(а\\) лайк этому человеку\\. Сделать это повторно нельзя ${CROSS_EMOJI}`,
   error_profile_notfound: `Ваша анкета не найдена, вы не можете просматривать чужие анкеты пока не опубликуете свою хотя бы раз ${SKULL_EMOJI}`,
-  contact_error: `Какая\\-то ошибка, этому человеку больше нельзя написать\\.\\.\\. ${SKULL_EMOJI}`,
+  contact_error: `Связаться с этим человеком сейчас нельзя ${SKULL_EMOJI}`,
   contact_hidden: `Этому человеку пока нельзя написать, он скрыл свои контакты ${SKULL_EMOJI}`,
   media_error: `Какая\\-то ошибка, фото/видео этого человека больше нельзя просмотреть\\.\\.\\. ${SKULL_EMOJI}`,
   media_hidden: `Фото/видео этого человека пока нельзя просмотреть, он скрыл свои медиа ${SKULL_EMOJI}`,
@@ -248,8 +249,8 @@ const TEXTS = {
   write_inline_btn_channel: '✍️',
   hello_hand_inline_btn: '👋',
   report_inline_btn: '⚠️',
-  write_btn: `Здесь можно просмотреть контакты, фото или видео человека которому хотите написать ${EDIT_EMOJI}`,
-  hello_btn: `Не знаешь с чего начать? Поздоровайся или поставь лайк\\! ${WAVE_EMOJI} ${LIKE_HEART_EMOJI} [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=hello)`,
+  write_btn: `Здесь можно посмотреть контакты, фото или видео человека, которому ты хочешь написать ${EDIT_EMOJI}`,
+  hello_btn: `Не знаешь, с чего начать? Поздоровайся или поставь лайк\\! ${WAVE_EMOJI} ${LIKE_HEART_EMOJI} [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=hello)`,
   report_btn: 'Пожаловаться на анкету',
   my_media_btn: 'Мои фото/видео',
   my_profile_btn: 'Моя анкета',
