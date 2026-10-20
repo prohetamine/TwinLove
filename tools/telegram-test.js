@@ -148,7 +148,9 @@ async function clickInline(client, bot, label, step) {
   const answer = await message.click({ text: label })
   await delay(1200)
   const [updated] = await client.getMessages(bot, { ids: [message.id] })
-  if (updated?.message !== before) {
+  if (!updated) {
+    log('INFO', step, 'исходное сообщение удалено')
+  } else if (updated.message !== before) {
     log('PASS', step, redact(updated.message))
   } else {
     log('INFO', step, `сообщение не изменилось; ответ кнопки: ${redact(answer?.message || '')}`)
