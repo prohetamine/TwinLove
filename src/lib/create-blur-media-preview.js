@@ -7,6 +7,8 @@ import sharp from 'sharp'
 
 const MAX_MEDIA_BYTES = 20 * 1024 * 1024
 const MAX_FRAME_BYTES = 32 * 1024 * 1024
+const DOWNLOAD_TIMEOUT_MS = 120000
+const DOWNLOAD_ATTEMPTS = 3
 
 const videoFrame = data => new Promise((resolve, reject) => {
   const process = spawn('ffmpeg', [
@@ -62,13 +64,25 @@ export const createBlurMediaPreviewFromBuffer = async (data, mime = '') => {
   return sharp(bigCanvas.toBuffer('image/png')).resize(200).toBuffer()
 }
 
+export const downloadMedia = async (url, request = axios.get) => {
+  let lastError
+  for (let attempt = 0; attempt < DOWNLOAD_ATTEMPTS; attempt++) {
+    try {
+      return await request(url, {
+        responseType: 'arraybuffer',
+        timeout: DOWNLOAD_TIMEOUT_MS,
+        maxContentLength: MAX_MEDIA_BYTES
+      })
+    } catch (error) {
+      lastError = error
+    }
+  }
+  throw lastError
+}
+
 const createBlurMediaPreview = async url => {
   try {
-    const response = await axios.get(url, {
-      responseType: 'arraybuffer',
-      timeout: 30000,
-      maxContentLength: MAX_MEDIA_BYTES
-    })
+    const response = await downloadMedia(url)
     const data = Buffer.from(response.data)
     const type = await fileTypeFromBuffer(data)
     const mime = type?.mime || response.headers['content-type'] || ''

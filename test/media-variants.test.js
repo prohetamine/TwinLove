@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import { createCanvas } from 'canvas'
 import sharp from 'sharp'
-import { createBlurMediaPreviewFromBuffer } from '../src/lib/create-blur-media-preview.js'
+import { createBlurMediaPreviewFromBuffer, downloadMedia } from '../src/lib/create-blur-media-preview.js'
 import { prepareMediaVariant, saveMediaVariantFileId } from '../src/modules/media-variants.js'
 
 const media = {
@@ -91,4 +91,19 @@ test('image and video previews are generated in memory', async () => {
   assert.equal(video.status, 0, video.stderr.toString())
   const videoPreview = await createBlurMediaPreviewFromBuffer(video.stdout, 'video/mp4')
   assert.equal((await sharp(videoPreview).metadata()).format, 'png')
+})
+
+test('Telegram media download retries with a longer timeout', async () => {
+  const calls = []
+  const response = { data: Buffer.from('media'), headers: {} }
+  const request = async (url, options) => {
+    calls.push({ url, options })
+    if (calls.length < 3) throw Object.assign(new Error('timeout'), { code: 'ECONNABORTED' })
+    return response
+  }
+
+  assert.equal(await downloadMedia('https://example.test/media', request), response)
+  assert.equal(calls.length, 3)
+  assert.equal(calls[0].options.timeout, 120000)
+  assert.equal(calls[0].options.maxContentLength, 20 * 1024 * 1024)
 })
