@@ -4,6 +4,7 @@ import sleep from 'sleep-promise'
 import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
 import { nanoid } from 'nanoid'
 import textScreening from '../../lib/text-screening.js'
+import isMediaLimitReached from '../../modules/is-media-limit-reached.js'
 
 const fixMediaGroup = { /* user save timer id */ }
 
@@ -46,6 +47,14 @@ const mediaMenu = async ctx => {
   }
 
   if (photo || video) {
+    if (isMediaLimitReached(ctx.user.media)) {
+      await ctx.reply(TEXTS.edit_profile_media(0), {
+        reply_to_message_id: ctx.update.message.message_id,
+        ...BUTTONS.edit_profile_media_menu
+      })
+      return
+    }
+
     const file = video || photo.pop()
 
     if (file.file_id) {
