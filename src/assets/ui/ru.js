@@ -94,7 +94,7 @@ const TEXTS = {
                `${RULE_BULLET} Пользуйся ботом, только если тебе исполнилось 18 лет [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=dating18)\n` +
                `${RULE_BULLET} Соблюдай закон\\.\n\n` +
                `За нарушение правил анкету могут удалить, а доступ к боту — ограничить\\.\n\n` +
-               `Береги себя: не отправляй деньги незнакомым людям и не делись личными данными\\. Если заметил нарушение, напиши в ${WARNING_EMOJI} [поддержку](${textScreening(BOT_LINK)}?start\\=support)\\.`,
+               `Не отправляй деньги незнакомым людям и не делись личными данными\\. Если заметил нарушение, напиши в ${WARNING_EMOJI} [поддержку](${textScreening(BOT_LINK)}?start\\=support)\\.`,
   rules_dating18: `${ALL_PROFILES_EMOJI} TwinLove — место для знакомств людей от 18 лет\\.\n\nЕсли тебе ещё нет 18, пожалуйста, не пользуйся ботом\\. Возвращайся, когда тебе исполнится 18\\.\n\nЕсли заметишь анкету человека младше 18 лет, сообщи в ${WARNING_EMOJI} [поддержку](${textScreening(BOT_LINK)}?start\\=support)\\.`,
   chat: `Заходи в чат, чтобы познакомиться и пообщаться ${CHAT_EMOJI}`,
   referal_link: (id, referals, referalsPost) => `${INVITE_EMOJI} *Пригласи друзей в TwinLove*\nОтправь ссылку человеку, которому тоже интересны знакомства:\n\n${ATTACHMENT_EMOJI} \`${escapeMarkdownCode(`${BOT_LINK}?start=${id}`)}\`\n${REFERRAL_VISITS_EMOJI} Перешли по ссылке: ${referals}\n${PUBLISH_EMOJI} Опубликовали анкету: ${referalsPost}`,
@@ -111,13 +111,13 @@ const TEXTS = {
   admin: withAlert('Напиши ответ пользователю. Если нужно, приложи скриншот или запись экрана.'),
   support_response: 'Тикет выбран',
   profile: ctx => {
-    let text = `У тебя __*не заполненны*__ разделы:\n`
+    let text = `У тебя __*не заполнены*__ разделы:\n`
     const textLength = ctx.user?.text?.length ?? 0
     text += !ctx.user?.name?.trim() ? `• *__Имя__* ![👤](tg://emoji?id=${PROFILE_CUSTOM_EMOJI_ID})\n` : ``
     text += textLength < 20 || textLength > 800 ? `• *__Текст анкеты__* ${EDIT_EMOJI}\n` : ``
     text += ctx.user?.location === '0|0' ? `• *__Страна и город__* ${LOCATION_EMOJI}\n` : ``
     text += !ctx.user?.system_username ? `• *__Контакты__* ${PHONE_EMOJI}\n` : ``
-    text += `\nПерейди в раздел: «${EDIT_EMOJI} Редактировать» чтобы заполнить пробелы`
+    text += `\nПерейди в раздел «${EDIT_EMOJI} Редактировать», чтобы заполнить анкету`
     
     return checkValid(ctx)
       ? `Анкета готова к публикации ${PUBLISH_EMOJI}`
@@ -135,7 +135,7 @@ const TEXTS = {
     formatTip(LOCK_EMOJI, 'Кто видит твои контакты', 'Ты можешь настроить доступ к контактам.', 'Анкета → Редактировать → ☎️ Контакты → 🔒 Настроить приватность'),
     formatTip(PICTURE_EMOJI, 'Кто видит твои фото и видео', 'Ты можешь настроить доступ к загруженным файлам.', 'Анкета → Редактировать → 📸 Фото/видео → 🔒 Настроить приватность'),
     formatTip(SEARCH_EMOJI, 'Проверь свои фото и видео', 'Посмотри, как выглядят загруженные файлы. Некоторые могут быть размыты до модерации.', 'Анкета → 👁 Показать → 📸 Мои фото/видео'),
-    formatTip(GHOST_EMOJI, 'Скрой анкету на время', 'Когда анкета скрыта, другие не увидят её контакты и медиа. Уже опубликованный пост останется в канале.', 'Анкета → Редактировать → 👻 Видимость'),
+    formatTip(GHOST_EMOJI, 'Скрой анкету на время', 'Когда анкета скрыта, другие не увидят её контакты, фото и видео. Уже опубликованный пост останется в канале.', 'Анкета → Редактировать → 👻 Видимость'),
     formatTip(ATTACHMENT_EMOJI, 'Сколько файлов можно добавить', 'В анкете может быть до пяти фото или видео. Размер каждого файла — до 15 МБ.', 'Анкета → Редактировать → 📸 Фото/видео'),
     formatTip(TRASH_EMOJI, 'Управляй старыми постами', 'Можно автоматически удалять прежние посты при публикации нового.', 'Анкета → Редактировать → Автоудаление'),
     formatTip(CAMERA_EMOJI, 'Добавь фото или видео', 'Так людям будет проще узнать тебя по анкете.', 'Анкета → Редактировать → 📸 Фото/видео'),
@@ -145,14 +145,19 @@ const TEXTS = {
     formatTip(VIEW_EMOJI, 'Посмотри анкету перед публикацией', 'Когда анкета заполнена, проверь, как выглядят её текст и фотографии.', 'Анкета → 👁 Показать'),
     formatTip(INVITE_EMOJI, 'Пригласи знакомых', 'По личной ссылке можно пригласить друзей и посмотреть, сколько из них опубликовали анкеты.', 'Пригласить друзей'),
   ],
-  age18Confirm: withAlert('Вам 18 лет или больше?'),
+  age18Confirm: withAlert('Тебе 18 лет или больше?'),
   phone_request: 'Чтобы продолжить, поделись своим номером телефона через кнопку ниже. Номер сохранится в твоём профиле и не будет показан в анкете.',
   phone_other_contact: 'Пожалуйста, отправь свой номер кнопкой ниже. Контакт другого человека не подойдёт.',
-  blocked: ({ system_block_message, system_block_auto }) => withAlert(`Вы заблокированны${system_block_message ? ` по причине: «${system_block_message}»` : ''}${system_block_auto ? ' это автоматическая блокировка' : ''}, если вы не согласны с блокировкой свяжитесь с поддержкой /support`),
+  blocked: ({ system_block_message, system_block_auto }) => withAlert([
+    'Твой аккаунт заблокирован.',
+    system_block_message ? `Причина: «${system_block_message}».` : null,
+    system_block_auto ? 'Блокировка установлена автоматически.' : null,
+    'Если считаешь, что произошла ошибка, напиши в поддержку: /support'
+  ].filter(Boolean).join('\\n')),
   ban: 'Заблокирован(а)',
   unban: 'Разблокирован(а)',
   delete: 'Все посты этого пользователя удалены',
-  error_delete: id => `Не удалось удалить сообщение автоматически, удалите его в ручную ${CHANNEL_LINK}/${id}`,
+  error_delete: id => `Не удалось удалить публикацию автоматически. Удали её вручную: ${CHANNEL_LINK}/${id}`,
   profile_generate: (user, useCustomEmoji = true) => {
     let text = ''
     const locationEmoji = ' 📍'
@@ -170,43 +175,45 @@ const TEXTS = {
 
     return text
   },
-  demo: 'Не возможно, это твоя анкета ❌',
-  view_photo_empty: `Кажется у тебя еще нет ни одного загруженного фото/видео\\.\\. ${SURPRISED_EMOJI}`,
+  demo: 'Это твоя анкета. Здесь это действие недоступно ❌',
+  view_photo_empty: `У тебя пока нет загруженных фото или видео ${SURPRISED_EMOJI}`,
   view_photo_with_no_approve: withAlert('Пока фото или видео проходят модерацию, они будут размыты и видны только тебе'),
   publish_profile_request: withAlert('Некоторые фото или видео ещё не прошли модерацию и не появятся в анкете. Опубликовать анкету сейчас без них?'),
   publish_profile_complete: `Готово, анкета опубликована ${CELEBRATION_EMOJI}`,
   publish_profile_send_error: textScreening('Не удалось опубликовать анкету. Попробуй ещё раз чуть позже.'),
-  publish_profile_timeout: (outTime, textTime) => `Постить анкету можно только раз в ${textTime}, приходи через: __*${outTime}*__ ${WAIT_EMOJI}`,
+  publish_profile_timeout: (outTime, textTime) => `Анкету можно публиковать раз в ${textTime}\\. Попробуй снова через: __*${outTime}*__ ${WAIT_EMOJI}`,
   publish_profile_moderation_request: `Анкета будет опубликована сразу после модерации ${THUMBS_UP_EMOJI}`,
-  publish_profile_moderation_reject_request: withAlert('Анкета отклонена модератором, для обжалования свяжитесь с поддержкой /support'),
+  publish_profile_moderation_reject_request: withAlert('Анкета не прошла модерацию. Если хочешь уточнить причину, напиши в поддержку: /support'),
   publish_profile_moderation_ok: 'Выполнено',
-  post_in_city: type => `Только что кто\\-то${type === 1 ? ' из твоего города' : type === 2 ? ' из твоего города или ближайшего' : ''} опубликовал анкету ${SMILE_EMOJI}`,
+  post_in_city: type => `Только что кто\\-то${type === 1 ? ' из твоего города' : type === 2 ? ' из твоего или ближайшего города' : ''} опубликовал анкету ${SMILE_EMOJI}`,
   contact: (id, username) => `${textScreening('Вот контакт человека, с которым ты хочешь познакомиться.')}\n\n__*[${textScreening(username ? `@${username}` : '@username')}](tg://user?id=${id})*__`,
-  media_empty: `У этого пользователя нет ни одного загруженного фото/видео\\.\\.\\. ${UNIMPRESSED_EMOJI}`,
-  hello_hand: `Кто\\-то помахал ${WAVE_EMOJI} тебе, он или она хочет чтоб ты написал\\(а\\) ему/eй\\. Хочешь посмотреть его/eё анкету?`,
+  media_empty: `У этого человека пока нет фото или видео ${UNIMPRESSED_EMOJI}`,
+  hello_hand: `Кто\\-то помахал тебе ${WAVE_EMOJI} Хочешь посмотреть анкету этого человека?`,
   hello_like: `Кому\\-то понравилась твоя анкета ${LIKE_HEART_EMOJI} Хочешь посмотреть анкету этого человека?`,
   hello_hand_confirmed: `Готово\\! Теперь можно подождать ответа или написать первым\\(ой\\) ${WAVE_EMOJI}`,
   hello_like_confirmed: `Готово\\! Теперь можно подождать ответа или написать первым\\(ой\\) ${LIKE_HEART_EMOJI}`,
   hello_error: `Этому человеку сейчас нельзя помахать ${SKULL_EMOJI}`,
   hello_like_error: `Этому человеку сейчас нельзя поставить лайк ${SKULL_EMOJI}`,
-  hello_hidden: `Этому человеку пока нельзя помахать, он скрыл свой профиль ${SKULL_EMOJI}`,
-  hello_like_hidden: `Этому человеку пока нельзя поставить лайк, он скрыл свой профиль ${SKULL_EMOJI}`,
+  hello_hidden: `Этот человек скрыл свой профиль\\. Помахать ему сейчас нельзя ${SKULL_EMOJI}`,
+  hello_like_hidden: `Этот человек скрыл свой профиль\\. Поставить ему лайк сейчас нельзя ${SKULL_EMOJI}`,
   hello_hand_used: `Ты уже помахал\\(а\\) этому человеку\\. Сделать это повторно нельзя ${CROSS_EMOJI}`,
   hello_like_used: `Ты уже поставил\\(а\\) лайк этому человеку\\. Сделать это повторно нельзя ${CROSS_EMOJI}`,
-  error_profile_notfound: `Ваша анкета не найдена, вы не можете просматривать чужие анкеты пока не опубликуете свою хотя бы раз ${SKULL_EMOJI}`,
+  error_profile_notfound: `Твоя анкета не опубликована\\. Чтобы посмотреть контакты, фото или видео других людей, сначала опубликуй свою анкету ${SKULL_EMOJI}`,
   contact_error: `Связаться с этим человеком сейчас нельзя ${SKULL_EMOJI}`,
-  contact_hidden: `Этому человеку пока нельзя написать, он скрыл свои контакты ${SKULL_EMOJI}`,
-  media_error: `Какая\\-то ошибка, фото/видео этого человека больше нельзя просмотреть\\.\\.\\. ${SKULL_EMOJI}`,
-  media_hidden: `Фото/видео этого человека пока нельзя просмотреть, он скрыл свои медиа ${SKULL_EMOJI}`,
-  contact_error_privacy: type => `Контакты этого человека доступны только: ${type === 1 ? `«из моего и ближайших городов ${CITY_EMOJI}»` : `«только из моего города ${HOUSE_EMOJI}»`}`,
-  media_error_privacy: (city, media) => `Чтобы видеть фото/видео этого человека вам нужно также подходить под эти параметры: ${[city ? `«людям из моего города ${HOUSE_EMOJI}»` : null, media ? `«людям с фото/видео ${CAMERA_EMOJI}»` : null].filter(f => f).join(' и ')}`,
-  fulled_not_publish: withAlertAndSparkles('Твоя анкета еще не опубликована\n\nАнкета заполнена, осталось только опубликовать ✨\n\nНажми /start чтобы начать'),
-  not_fulled_not_publish: withAlertAndSparkles('Твоя анкета еще не опубликована\n\nПора заполнить анкету и останется только опубликовать ✨\n\nНажми /start чтобы начать'),
+  contact_hidden: `Этот человек скрыл свои контакты ${SKULL_EMOJI}`,
+  media_error: `Фото или видео этого человека сейчас недоступны ${SKULL_EMOJI}`,
+  media_hidden: `Этот человек скрыл свои фото и видео ${SKULL_EMOJI}`,
+  contact_error_privacy: type => type === 1
+    ? `Этот человек показывает контакты только людям из своего и ближайших городов ${CITY_EMOJI}`
+    : `Этот человек показывает контакты только людям из своего города ${HOUSE_EMOJI}`,
+  media_error_privacy: (city, media) => `Чтобы посмотреть фото или видео этого человека, твоя анкета должна соответствовать условиям: ${[city ? `«людям из моего города ${HOUSE_EMOJI}»` : null, media ? `«людям с фото/видео ${CAMERA_EMOJI}»` : null].filter(f => f).join(' и ')}`,
+  fulled_not_publish: withAlertAndSparkles('Твоя анкета ещё не опубликована\n\nАнкета заполнена, осталось только опубликовать ✨\n\nНажми /start, чтобы начать'),
+  not_fulled_not_publish: withAlertAndSparkles('Твоя анкета ещё не опубликована\n\nПора заполнить анкету и останется только опубликовать ✨\n\nНажми /start, чтобы начать'),
   admin_bot: 'Назначен администратором бота', 
   un_admin_bot: 'Разжалован из администраторов бота', 
   support_bot: 'Назначен поддержкой бота',
   un_support_bot: 'Разжалован из поддержки бота',
-  not_user_set_admin: 'Вы не можете выдать этому пользователю роль', 
+  not_user_set_admin: 'Ты не можешь назначить этому пользователю роль',
   reload: 'Перезагружаю систему...',
   status: 'Все ок',
   mod_info: `
@@ -237,13 +244,13 @@ const TEXTS = {
   open_link_in_channel_btn: 'Открыть канал',
   open_link_in_start_channel_btn: 'Все анкеты',
   open_link_in_chat_btn: 'Открыть чат',
-  tip_inline_refresh_btn: 'Еще',
+  tip_inline_refresh_btn: 'Ещё',
   tip_inline_hidden_btn: 'Скрыть',
   support_inline_btn: 'Ответить',
   age18Confirm_btn_1: 'Нет, мне меньше 18 лет',
   age18Confirm_btn_2: 'Да, мне 18 или больше лет',
   phone_request_btn: 'Поделиться номером телефона',
-  rules_confirm_btn: 'Согласен(a)',
+  rules_confirm_btn: 'Согласен(а)',
   rules_no_confirm_btn: 'Не согласен(а)',
   write_inline_btn: 'Написать',
   write_inline_btn_channel: '✍️',
@@ -306,7 +313,7 @@ const TEXTS = {
   edit_profile_location_help: `${ALERT_EMOJI} Мы не храним и не передаём точное местоположение, которое получаем от Telegram\\.\n\n${LOCATION_EMOJI} Геоданные используются один раз, чтобы найти ближайшие города\\. Всё происходит локально, без обращения к сторонним сервисам ${LOCK_EMOJI}`,
   edit_profile_location_anon: `Хочешь опубликовать анкету без указания города? Твой город и местоположение никто не увидит\\. При этом действуют ограничения:\n\n${RULE_BULLET} Мы не отправим другим людям уведомление о твоей анкете ${ROBOT_EMOJI}\n\n${RULE_BULLET} Анкета отобразится в __*[канале](${CHANNEL_LINK})*__ без хештега города ${CITY_EMOJI}\n\n${RULE_BULLET} Ты сможешь посмотреть контакты только тех людей, которые открыли их «Всем»\n\n${RULE_BULLET} Анкета будет опубликована только после модерации ${SEARCH_EMOJI}`,
   edit_profile_location_anon_help: `В этой анкете город не указан: человек решил остаться анонимным\\. Соблюдай осторожность ${LIKE_HEART_EMOJI}`,
-  edit_profile_location_city: `Выберите ближайший к вам город из списка меню ${CITY_EMOJI}`,
+  edit_profile_location_city: `Выбери ближайший к тебе город из списка ${CITY_EMOJI}`,
   edit_profile_location_btn_1: 'Поделиться геопозицией',
   edit_profile_location_btn_2: 'Хочу остаться анонимным',
   edit_profile_location_btn_3: 'Да',
@@ -351,7 +358,7 @@ ${textScreening('Изменить настройку можно здесь:')}
 
   edit_profile_notification_btn: 'Уведомления',
   edit_profile_notification: `Хочешь получать уведомления о новых анкетах? ${NOTIFY_EMOJI} [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=nonotify)`,
-  edit_profile_notification_help: `${textScreening('Мы дорожим тобой')} ${LIKE_HEART_EMOJI} ${textScreening('и не хотим беспокоить без повода. Если ты не хочешь получать уведомления, не нужно блокировать или удалять бота. Просто нажми кнопку «')}${CHECK_EMOJI} ${textScreening('Не присылать уведомления».')}`,
+  edit_profile_notification_help: `${textScreening('Если не хочешь получать уведомления, не нужно блокировать или удалять бота. Нажми «')}${CHECK_EMOJI} ${textScreening('Не присылать уведомления».')}`,
   edit_profile_notification_btn_1: () => 'Не присылать уведомления',
   edit_profile_notification_btn_2: () => 'Только из моего города',
   edit_profile_notification_btn_3: () => 'Из моего города и рядом',
@@ -359,7 +366,7 @@ ${textScreening('Изменить настройку можно здесь:')}
 
   edit_profile_visibility_btn: 'Видимость',
   edit_profile_visibility: `Если скрыть анкету, другим людям станут недоступны «Контакты», «Фото/видео», «Помахать» и «Ты мне нравишься» в твоей анкете\\. Тебе также станут недоступны «Контакты» в чужих анкетах ${PHONE_EMOJI}`,
-  edit_profile_visibility_stop: `${ALERT_EMOJI} Анкета не может быть опубликована если она скрыта ${SKULL_EMOJI}\n\nПерейдите раздел «Анкета → ${EDIT_EMOJI} Редактировать → ${GHOST_EMOJI} Видимость» измените «Отображать анкету»`,
+  edit_profile_visibility_stop: `${ALERT_EMOJI} Анкету нельзя опубликовать, пока она скрыта ${SKULL_EMOJI}\n\nОткрой «Анкета → ${EDIT_EMOJI} Редактировать → ${GHOST_EMOJI} Видимость» и выбери «Отображать анкету»\\.`,
   edit_profile_visibility_btn_1: () => 'Отображать анкету',
   edit_profile_visibility_btn_2: () => 'Скрыть анкету',
 
