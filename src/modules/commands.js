@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid'
 import sleep from 'sleep-promise'
 import { CHANNEL_ID } from '../../configs/env.js'
 import registerReferral from './register-referral.js'
+import { referralStatsByCode } from './referral-links.js'
 import start from '../scenes/start.js'
 
 const commands = async ctx => {
@@ -118,18 +119,12 @@ const commands = async ctx => {
     return
   }
 
-  if (ctx.isAdmin && command === '/ref' && payload.match(/.{4,8}/)) {
-    const referalHashId = payload
-
-    const [user = false] = await users.all({ 'system_referalHashId': referalHashId })
-    
-    if (user) {
-      const referals = (await referals.get(user.id)).ids
-      const referalUsers = await users.all({ 'id': { $in: referals } })
-
-      const _posts = (await posts.all({ id: { $in: referals } })).map(({ ids }) => ids.length > 0 ? 1 : 0).reduce((ctx, isPost) => ctx + isPost, 0)
-      
-      await ctx.reply(TEXTS.referal_links([{ code: referalHashId, visits: referalUsers.length, published: _posts }]), BUTTONS.main_menu)
+  if (ctx.isAdmin && command === '/ref') {
+    const stats = payload.length === 4
+      ? await referralStatsByCode(payload, { users, referals, posts })
+      : null
+    if (stats) {
+      await ctx.reply(TEXTS.referal_links([stats]), BUTTONS.main_menu)
     } else {
       await ctx.reply(TEXTS.referal_link_error, BUTTONS.main_menu)
     }

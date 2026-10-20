@@ -1,20 +1,23 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import registerReferral from '../src/modules/register-referral.js'
-import { createReferralLink, deriveReferralCode, referralView } from '../src/modules/referral-links.js'
+import { createReferralLink, deriveReferralCode, referralStatsByCode, referralView } from '../src/modules/referral-links.js'
 import { TEXTS, BUTTONS } from '../src/assets/ui/ru.js'
 
 const makeRepositories = () => {
   const owners = [
     { id: 1, system_referalHashId: 'abcd' },
-    { id: 2, system_referalHashId: 'efgh' }
+    { id: 2, system_referalHashId: 'efgh' },
+    { id: 3, system_referalHashId: 'ijkl' }
   ]
   const records = new Map(owners.map(owner => [owner.id, { id: owner.id, ids: [] }]))
   let writes = 0
 
   return {
     db: {
-      users: { all: async ({ system_referalHashId }) => owners.filter(owner => owner.system_referalHashId === system_referalHashId) },
+      users: { all: async query => 'system_referalHashId' in query
+        ? owners.filter(owner => owner.system_referalHashId === query.system_referalHashId)
+        : owners.filter(owner => query.id.$in.includes(owner.id)) },
       referals: {
         get: async id => records.get(id),
         all: async query => [...records.values()].filter(record => {
@@ -80,6 +83,17 @@ test('extra referral codes derive from one primary code in a stable sequence', a
   assert.notEqual(first, second)
   assert.equal(first.length, 4)
   assert.equal(second.length, 4)
+})
+
+test('admin lookup finds an extra code and returns a useful result for unknown codes', async () => {
+  const { db } = makeRepositories()
+  const code = await createReferralLink({ id: 1, system_referalHashId: 'abcd' }, db)
+  await registerReferral(code, 3, db)
+  const posts = { all: async () => [{ id: 3, ids: [42] }] }
+
+  assert.deepEqual(await referralStatsByCode(code, { ...db, posts }), { code, visits: 1, published: 1 })
+  assert.equal(await referralStatsByCode('none', { ...db, posts }), null)
+  assert.equal(typeof TEXTS.referal_link_error, 'string')
 })
 
 test('the invite link is displayed without Markdown escapes inside its code span', () => {

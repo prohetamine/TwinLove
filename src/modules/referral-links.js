@@ -19,6 +19,17 @@ const referralView = async (user, { referals, posts }) => {
   })))
 }
 
+const referralStatsByCode = async (code, { users, referals, posts }) => {
+  const [owner] = await users.all({ system_referalHashId: code })
+  const [record] = owner ? [await referals.get(owner.id)] : await referals.all({ 'links.code': code })
+  if (!record) return null
+  const ids = owner ? record.ids : record.links.find(link => link.code === code)?.ids
+  if (!ids) return null
+  const visitors = await users.all({ id: { $in: ids } })
+  const published = (await posts.all({ id: { $in: ids } })).filter(post => post.ids.length > 0).length
+  return { code, visits: visitors.length, published }
+}
+
 const createReferralLink = async (user, { users, referals }) => {
   const record = await referals.get(user.id)
   if ((record.links || []).length >= MAX_LINKS - 1) return false
@@ -42,4 +53,4 @@ const referralMessageOptions = {
   reply_markup: BUTTONS.referral_links_inline.reply_markup
 }
 
-export { referralView, createReferralLink, deriveReferralCode, referralMessageOptions }
+export { referralView, referralStatsByCode, createReferralLink, deriveReferralCode, referralMessageOptions }

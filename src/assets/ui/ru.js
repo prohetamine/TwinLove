@@ -101,6 +101,7 @@ const TEXTS = {
   rules_vsj: withAlert('ВСЖ — в какой стране живешь.'),
   chat: `Заходи в чат, чтобы познакомиться и пообщаться ${CHAT_EMOJI}`,
   referal_links: links => `${INVITE_EMOJI} *Пригласи друзей в TwinLove*\nОтправь ссылку человеку, которому тоже интересны знакомства:\n\n${links.map(({ code, visits, published }) => `${ATTACHMENT_EMOJI} \`${escapeMarkdownCode(`${BOT_LINK}?start=${code}`)}\`\n${REFERRAL_VISITS_EMOJI} Перешли по ссылке: ${visits}\n${PUBLISH_EMOJI} Опубликовали анкету: ${published}`).join('\n\n')}`,
+  referal_link_error: 'Ссылка не найдена\\. Проверь четырёхсимвольный код и попробуй ещё раз\\.',
   referal_add_btn: 'Добавить ссылку',
   referal_added: 'Ссылка добавлена',
   referal_limit: 'В одном сообщении можно показать до 20 ссылок',
