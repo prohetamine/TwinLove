@@ -70,8 +70,8 @@ test('name can be taken from Telegram or typed manually', async () => {
 test('name validation rejects empty, multiline, and long values', () => {
   assert.equal(normalizeProfileName('   '), '')
   assert.equal(normalizeProfileName('Анна\nМария'), '')
-  assert.equal(normalizeProfileName('а'.repeat(41)), '')
-  assert.equal(normalizeProfileName('а'.repeat(40)), 'а'.repeat(40))
+  assert.equal(normalizeProfileName('а'.repeat(21)), '')
+  assert.equal(normalizeProfileName('а'.repeat(20)), 'а'.repeat(20))
 })
 
 test('selected name appears in the profile card', () => {

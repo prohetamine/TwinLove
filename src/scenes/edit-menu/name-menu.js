@@ -5,7 +5,7 @@ import { TEXTS, BUTTONS } from '../../assets/ui/ru.js'
 export const normalizeProfileName = value => {
   if (typeof value !== 'string' || /[\r\n]/.test(value)) return ''
   const name = value.trim().replace(/\s+/g, ' ')
-  return name && Array.from(name).length <= 40 ? name : ''
+  return name && Array.from(name).length <= 20 ? name : ''
 }
 
 const saveName = async (ctx, userStore, name) => {
