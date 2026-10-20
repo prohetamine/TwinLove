@@ -8,6 +8,7 @@ import { CHANNEL_ID } from '../../configs/env.js'
 import registerReferral from './register-referral.js'
 import { referralStatsByCode } from './referral-links.js'
 import start from '../scenes/start.js'
+import replyWithHelp from './reply-with-help.js'
 
 const commands = async ctx => {
   const text = ctx.update?.message?.text || ''
@@ -293,6 +294,8 @@ const commands = async ctx => {
     }
     return
   }
+
+  await replyWithHelp(ctx)
 }
 
 export default commands
