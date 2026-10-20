@@ -335,8 +335,8 @@ const TEXTS = {
   edit_profile_media_privacy_error_select: 'Этот вариант уже выбран',
 
   edit_profile_contact_btn: 'Контакты',
-  edit_profile_contact: isUsername => isUsername ? `У тебя указано имя пользователя ${THUMBS_UP_EMOJI} По нему другие люди смогут тебе написать ${LINK_EMOJI}` : `У вас не установлен username ${THUMBS_DOWN_EMOJI} установи его чтобы продолжить, это нужно чтоб тебе могли написать ${LINK_EMOJI}\n\n__*[Как установить username в Телеграм](https://dzen.ru/a/ZLZzSY55_nT7X7Lz)*__`,
-  edit_profile_contact_confirm_btn: 'Установил(а)',
+  edit_profile_contact: isUsername => isUsername ? `У тебя указано имя пользователя ${THUMBS_UP_EMOJI} По нему другие люди смогут тебе написать ${LINK_EMOJI}` : `У тебя не указано имя пользователя ${THUMBS_DOWN_EMOJI}\n\nДобавь его в настройках Telegram, чтобы другие люди могли тебе написать ${LINK_EMOJI}\n\n__*[Как установить username в Телеграм](https://dzen.ru/a/ZLZzSY55_nT7X7Lz)*__`,
+  edit_profile_contact_confirm_btn: 'Проверить снова',
   edit_profile_contact_error: 'Username все еще не установлен\\.\\. @',
   edit_profile_contact_privacy: `Кому видны твои контакты? ${PHONE_EMOJI}`,
   edit_profile_contact_privacy_help: `${ALERT_EMOJI} ${textScreening('Каждый сам выбирает, кому показывать свои контакты: всем, людям из своего и ближайших городов или только из своего города.')}
