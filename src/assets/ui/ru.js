@@ -272,7 +272,21 @@ const TEXTS = {
   edit_profile_privacy_btn: 'Настроить приватность',
   edit_profile_text_btn: 'Текст анкеты',
   edit_profile_name_btn: 'Имя',
-  edit_profile_name: (firstName, currentName) => `${textScreening(currentName ? `Сейчас в анкете: ${currentName}.` : 'Имя в анкете пока не указано.')}\n\n${textScreening(firstName ? `В Telegram у тебя указано: ${firstName}.` : 'Telegram не передал имя.')}\n${textScreening('Для публикации анкеты выбери имя из Telegram или введи своё.')}`,
+  edit_profile_name: (firstName, currentName) => {
+    if (currentName && currentName === firstName) {
+      return textScreening(`Как тебя называть в анкете?\n\nСейчас указано имя «${currentName}». Можешь оставить его или ввести другое.`)
+    }
+
+    if (currentName && firstName) {
+      return textScreening(`Как тебя называть в анкете?\n\nСейчас указано имя «${currentName}». Можешь взять имя из Telegram — «${firstName}» — или ввести другое.`)
+    }
+
+    if (firstName) {
+      return textScreening(`Как тебя называть в анкете?\n\nМожешь взять имя из Telegram — «${firstName}» — или ввести другое.`)
+    }
+
+    return textScreening('Как тебя называть в анкете?\n\nВведи имя, которое увидят другие люди.')
+  },
   edit_profile_name_telegram_btn: 'Взять из Telegram',
   edit_profile_name_manual_btn: 'Ввести имя',
   edit_profile_name_clear_btn: 'Не указывать имя',
