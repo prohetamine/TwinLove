@@ -82,14 +82,8 @@ const memoryDB = (Model, labelId, { pushTime, pullTime }) => {
   
   const all = async obj => {
     const datas = await Model.find(obj)
-
-    const cachedMatches = Object.values(memo[labelId]).filter(data => data && Object.entries(obj).every(([key, value]) => {
-      if (key === 'links.code') return data.links?.some(link => link.code === value)
-      if (key === 'links.ids') return data.links?.some(link => link.ids.includes(value))
-      return false
-    }))
   
-    const stored = datas.map(_data => {
+    return datas.map(_data => {
       const data = _data._doc
       delete data._id
       delete data.__v
@@ -104,7 +98,6 @@ const memoryDB = (Model, labelId, { pushTime, pullTime }) => {
           : data
       )
     })
-    return [...stored, ...cachedMatches.filter(cached => !stored.some(data => data.id === cached.id))]
   }
 
   return {

@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid'
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
+import { Referal } from '../helpers/models.js'
 
 const MAX_LINKS = 20
 
@@ -15,7 +16,7 @@ const referralView = async (user, { referals, posts }) => {
   })))
 }
 
-const createReferralLink = async (user, { users, referals }) => {
+const createReferralLink = async (user, { users, referals, persistLink = (id, link) => Referal.updateOne({ id }, { $push: { links: link } }) }) => {
   const record = await referals.get(user.id)
   if ((record.links || []).length >= MAX_LINKS - 1) return false
   for (let attempt = 0; attempt < 20; attempt++) {
@@ -23,7 +24,9 @@ const createReferralLink = async (user, { users, referals }) => {
     const [primary] = await users.all({ system_referalHashId: code })
     const [secondary] = await referals.all({ 'links.code': code })
     if (primary || secondary) continue
-    record.links = [...(record.links || []), { code, ids: [] }]
+    const link = { code, ids: [] }
+    await persistLink(user.id, link)
+    record.links = [...(record.links || []), link]
     await referals.set(user.id, record)
     return code
   }
