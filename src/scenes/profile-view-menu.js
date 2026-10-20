@@ -33,47 +33,56 @@ const profileViewMenu = async ctx => {
     if (media.length === 0) {
       await ctx.reply(TEXTS.view_photo_empty, { parse_mode: 'MarkdownV2' })
     } else {
-      const preparedMedia = (await Promise.all(media.map(async item => {
-        try {
-          const prepared = await prepareMediaVariant(
-            item,
-            item.isApprove ? 'original' : 'blurred',
-            { telegram: ctx.telegram }
-          )
-          return prepared ? { item, prepared } : null
-        } catch (error) {
-          console.log('profile-view-menu media', error)
-          return null
-        }
-      }))).filter(Boolean)
-
-      if (preparedMedia.length === 0) {
-        await ctx.reply(TEXTS.view_photo_empty, { parse_mode: 'MarkdownV2' })
-      } else {
-        try {
-          const mediaData = preparedMedia.map(({ prepared }) => ({
-            type: prepared.type,
-            media: prepared.media
-          }))
-          const messages = mediaData.length === 1
-            ? [await ctx[mediaData[0].type === 'photo' ? 'replyWithPhoto' : 'replyWithVideo'](mediaData[0].media)]
-            : await ctx.replyWithMediaGroup(mediaData)
-
-          await Promise.all(messages.map((message, index) =>
-            saveMediaVariantFileId(
-              ctx.user,
-              preparedMedia[index].item,
-              preparedMedia[index].prepared,
-              message,
-              users
+      const { message_id } = await ctx.reply(TEXTS.view_wait_load_media, { parse_mode: 'MarkdownV2' })
+      try {
+        const preparedMedia = (await Promise.all(media.map(async item => {
+          try {
+            const prepared = await prepareMediaVariant(
+              item,
+              item.isApprove ? 'original' : 'blurred',
+              { telegram: ctx.telegram }
             )
-          ))
-        } catch (e) {
-          console.log(e)
-        }
+            return prepared ? { item, prepared } : null
+          } catch (error) {
+            console.log('profile-view-menu media', error)
+            return null
+          }
+        }))).filter(Boolean)
 
-        if (media.find(file => !file.isApprove)) {
-          await ctx.reply(TEXTS.view_photo_with_no_approve, { parse_mode: 'MarkdownV2' })
+        if (preparedMedia.length === 0) {
+          await ctx.reply(TEXTS.view_photo_empty, { parse_mode: 'MarkdownV2' })
+        } else {
+          try {
+            const mediaData = preparedMedia.map(({ prepared }) => ({
+              type: prepared.type,
+              media: prepared.media
+            }))
+            const messages = mediaData.length === 1
+              ? [await ctx[mediaData[0].type === 'photo' ? 'replyWithPhoto' : 'replyWithVideo'](mediaData[0].media)]
+              : await ctx.replyWithMediaGroup(mediaData)
+
+            await Promise.all(messages.map((message, index) =>
+              saveMediaVariantFileId(
+                ctx.user,
+                preparedMedia[index].item,
+                preparedMedia[index].prepared,
+                message,
+                users
+              )
+            ))
+          } catch (e) {
+            console.log(e)
+          }
+
+          if (media.find(file => !file.isApprove)) {
+            await ctx.reply(TEXTS.view_photo_with_no_approve, { parse_mode: 'MarkdownV2' })
+          }
+        }
+      } finally {
+        try {
+          await ctx.deleteMessage(message_id)
+        } catch (error) {
+          console.log('profile-view-menu loading message', error)
         }
       }
     }
