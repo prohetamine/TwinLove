@@ -88,24 +88,6 @@ const commands = async ctx => {
     return
   }
 
-  if (text === '/next') {
-    await ctx.reply(TEXTS.hello_next, BUTTONS.main_menu)
-    await ctx.enterScene('main-menu')
-    return 
-  }
-
-  if (text === '/next2') {
-    await ctx.reply(TEXTS.hello_next_2, BUTTONS.main_menu)
-    await ctx.enterScene('main-menu')
-    return 
-  }
-
-  if (text === '/next3') {
-    await ctx.reply(TEXTS.hello_next_3, BUTTONS.main_menu)
-    await ctx.enterScene('main-menu')
-    return 
-  }
-
   if (text === '/chat' || (command === '/start' && payload === 'chat')) {
     await ctx.reply(TEXTS.chat, BUTTONS.chat_inline)
     await ctx.enterScene('main-menu')
