@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import registerReferral from '../src/modules/register-referral.js'
-import { createReferralLink, referralView } from '../src/modules/referral-links.js'
+import { createReferralLink, deriveReferralCode, referralView } from '../src/modules/referral-links.js'
 import { TEXTS, BUTTONS } from '../src/assets/ui/ru.js'
 
 const makeRepositories = () => {
@@ -52,7 +52,7 @@ test('a user cannot invite themselves or use an unknown referral code', async ()
 
 test('each added link keeps its own visits and published-profile count', async () => {
   const { db, records } = makeRepositories()
-  const code = await createReferralLink({ id: 1 }, db)
+  const code = await createReferralLink({ id: 1, system_referalHashId: 'abcd' }, db)
   assert.equal(code.length, 4)
   assert.equal(await registerReferral(code, 3, db), true)
   assert.equal(await registerReferral('abcd', 3, db), false)
@@ -67,6 +67,19 @@ test('each added link keeps its own visits and published-profile count', async (
   assert.match(view, /start=abcd`[\s\S]*Перешли по ссылке: 0/)
   assert.match(view, new RegExp(`start=${code}\`[\\s\\S]*Перешли по ссылке: 1[\\s\\S]*Опубликовали анкету: 1`))
   assert.match(view, /!\[📎\]\(tg:\/\/emoji\?id=5382138546431764504\) `https:\/\/[^`]+\?start=abcd`\n!\[👞\]/)
+})
+
+test('extra referral codes derive from one primary code in a stable sequence', async () => {
+  const { db } = makeRepositories()
+  const user = { id: 1, system_referalHashId: 'abcd' }
+  const first = await createReferralLink(user, db)
+  const second = await createReferralLink(user, db)
+
+  assert.equal(first, deriveReferralCode('abcd', 1))
+  assert.equal(second, deriveReferralCode('abcd', 2))
+  assert.notEqual(first, second)
+  assert.equal(first.length, 4)
+  assert.equal(second.length, 4)
 })
 
 test('the invite link is displayed without Markdown escapes inside its code span', () => {

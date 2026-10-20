@@ -1,7 +1,11 @@
-import { nanoid } from 'nanoid'
+import { createHash } from 'node:crypto'
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 
 const MAX_LINKS = 20
+const deriveReferralCode = (primaryCode, index) => createHash('sha256')
+  .update(`${primaryCode}:${index}`)
+  .digest('base64url')
+  .slice(0, 4)
 
 const referralView = async (user, { referals, posts }) => {
   const record = await referals.get(user.id)
@@ -18,8 +22,9 @@ const referralView = async (user, { referals, posts }) => {
 const createReferralLink = async (user, { users, referals }) => {
   const record = await referals.get(user.id)
   if ((record.links || []).length >= MAX_LINKS - 1) return false
-  for (let attempt = 0; attempt < 20; attempt++) {
-    const code = nanoid(4)
+  for (let index = (record.links || []).length + 1; index < 1000; index++) {
+    const code = deriveReferralCode(user.system_referalHashId, index)
+    if (code === user.system_referalHashId || record.links?.some(link => link.code === code)) continue
     const [primary] = await users.all({ system_referalHashId: code })
     const [secondary] = await referals.all({ 'links.code': code })
     if (primary || secondary) continue
@@ -37,4 +42,4 @@ const referralMessageOptions = {
   reply_markup: BUTTONS.referral_links_inline.reply_markup
 }
 
-export { referralView, createReferralLink, referralMessageOptions }
+export { referralView, createReferralLink, deriveReferralCode, referralMessageOptions }
