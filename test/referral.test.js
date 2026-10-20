@@ -93,6 +93,7 @@ test('admin lookup finds an extra code and returns a useful result for unknown c
 
   assert.deepEqual(await referralStatsByCode(code, { ...db, posts }), { code, visits: 1, published: 1 })
   assert.match(TEXTS.referal_link(code, 1, 1), new RegExp(`start=${code}`))
+  assert.match(TEXTS.referal_link(code, 1, 1), /!\[📎\]\(tg:\/\/emoji\?id=5382138546431764504\) `https:\/\/[^`]+`\n!\[👞\]/)
   assert.equal(await referralStatsByCode('none', { ...db, posts }), null)
   assert.equal(typeof TEXTS.referal_link_error, 'string')
 })
