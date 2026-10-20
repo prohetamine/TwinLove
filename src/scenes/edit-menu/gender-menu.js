@@ -23,7 +23,9 @@ const genderMenu = async (ctx, userStore) => {
 
   ctx.user.gender = GENDER_BY_BUTTON.get(text)
   await userStore.set(ctx.user.id, { gender: ctx.user.gender })
-  await ctx.reply(TEXTS.edit_profile_update, BUTTONS.edit_profile_gender_menu(ctx.user.gender))
+  await ctx.reply(TEXTS.edit_profile_update, { parse_mode: 'MarkdownV2' })
+  await ctx.reply(TEXTS.edit, BUTTONS.edit_menu)
+  await ctx.enterScene('edit-menu')
 }
 
 export default genderMenu
