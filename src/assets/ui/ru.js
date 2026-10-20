@@ -353,7 +353,7 @@ ${textScreening('Изменить настройку можно здесь:')}
   edit_profile_visibility_btn_2: () => 'Скрыть анкету',
 
   edit_profile_autodelete_btn: 'Автоудаление',
-  edit_profile_autodelete: 'Если включить автоудаление, при повторной публикации анкеты бот удалит её предыдущие публикации из канала\\.',
+  edit_profile_autodelete: `${ROBOT_EMOJI} Если включить автоудаление, при повторной публикации анкеты бот удалит её предыдущие публикации из канала\\.`,
   edit_profile_autodelete_btn_1: () => 'Удалять автоматически',
   edit_profile_autodelete_btn_2: () => 'Накапливать посты',
 }
