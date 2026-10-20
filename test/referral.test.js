@@ -83,7 +83,7 @@ test('extra referral codes derive from one primary code in a stable sequence', a
 })
 
 test('the invite link is displayed without Markdown escapes inside its code span', () => {
-  const message = TEXTS.referal_link('aB12', 3, 1)
+  const message = TEXTS.referal_links([{ code: 'aB12', visits: 3, published: 1 }])
 
   assert.match(message, /`https:\/\/[^`\\]+\?start=aB12`/)
   assert.match(message, /Перешли по ссылке: 3/)

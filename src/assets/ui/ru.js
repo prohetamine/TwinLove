@@ -100,7 +100,6 @@ const TEXTS = {
   rules_dating18: `${ALL_PROFILES_EMOJI} TwinLove — место для знакомств людей от 18 лет\\.\n\nЕсли тебе ещё нет 18, пожалуйста, не пользуйся ботом\\. Возвращайся, когда тебе исполнится 18\\.\n\nЕсли заметишь анкету человека младше 18 лет, сообщи в ${WARNING_EMOJI} [поддержку](${textScreening(BOT_LINK)}?start\\=support)\\.`,
   rules_vsj: withAlert('ВСЖ — в какой стране живешь.'),
   chat: `Заходи в чат, чтобы познакомиться и пообщаться ${CHAT_EMOJI}`,
-  referal_link: (id, referals, referalsPost) => `${INVITE_EMOJI} *Пригласи друзей в TwinLove*\nОтправь ссылку человеку, которому тоже интересны знакомства:\n\n\`${escapeMarkdownCode(`${BOT_LINK}?start=${id}`)}\`\n\n${REFERRAL_VISITS_EMOJI} Перешли по ссылке: ${referals}\n${PUBLISH_EMOJI} Опубликовали анкету: ${referalsPost}`,
   referal_links: links => `${INVITE_EMOJI} *Пригласи друзей в TwinLove*\nОтправь ссылку человеку, которому тоже интересны знакомства:\n\n${links.map(({ code, visits, published }) => `${ATTACHMENT_EMOJI} \`${escapeMarkdownCode(`${BOT_LINK}?start=${code}`)}\`\n${REFERRAL_VISITS_EMOJI} Перешли по ссылке: ${visits}\n${PUBLISH_EMOJI} Опубликовали анкету: ${published}`).join('\n\n')}`,
   referal_add_btn: 'Добавить ссылку',
   referal_added: 'Ссылка добавлена',

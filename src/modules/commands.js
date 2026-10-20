@@ -129,7 +129,7 @@ const commands = async ctx => {
 
       const _posts = (await posts.all({ id: { $in: referals } })).map(({ ids }) => ids.length > 0 ? 1 : 0).reduce((ctx, isPost) => ctx + isPost, 0)
       
-      await ctx.reply(TEXTS.referal_link(referalHashId, referalUsers.length, _posts), BUTTONS.main_menu)
+      await ctx.reply(TEXTS.referal_links([{ code: referalHashId, visits: referalUsers.length, published: _posts }]), BUTTONS.main_menu)
     } else {
       await ctx.reply(TEXTS.referal_link_error, BUTTONS.main_menu)
     }
