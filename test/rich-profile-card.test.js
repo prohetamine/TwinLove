@@ -36,6 +36,27 @@ test('plain bio keeps line breaks and escapes user HTML', () => {
   assert.match(card.html, /<p>Первая строка<br>&lt;вторая&gt; &amp; друзья<\/p>/)
 })
 
+test('a card without media uses the same rich text layout and inline buttons', async () => {
+  let call
+  const card = buildRichProfileCard({ ...user, text: 'Первая строка\n<вторая> & друзья' }, [])
+  const buttons = BUTTONS.profile_generate_inline({ isPreview: true, id: 'test' })
+  const sent = await sendRichProfileCard({
+    telegram: { callApi: async (method, payload) => {
+      call = { method, payload }
+      return { message_id: 20 }
+    } },
+    chatId: 42,
+    richMessage: { html: card.html },
+    replyMarkup: buttons.reply_markup
+  })
+
+  assert.equal(call.method, 'sendRichMessage')
+  assert.equal('media' in call.payload.rich_message, false)
+  assert.match(call.payload.rich_message.html, /<h1>Анна &lt;3<\/h1><p>Первая строка<br>&lt;вторая&gt; &amp; друзья<\/p>/)
+  assert.deepEqual(call.payload.reply_markup, buttons.reply_markup)
+  assert.equal(sent.message_id, 20)
+})
+
 test('new privacy image is attached to the first Rich Message and its file ID can be cached', async () => {
   const preview = buildRichProfileCard(user, [{ type: 'photo', fileId: 'attach://preview_0' }])
   let call

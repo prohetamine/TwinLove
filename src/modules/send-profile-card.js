@@ -1,6 +1,5 @@
-import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
+import { BUTTONS } from '../assets/ui/ru.js'
 import { users } from '../helpers/db.js'
-import textScreening from '../lib/text-screening.js'
 import getUserMedia from './get-user-media.js'
 import { prepareMediaVariant, saveMediaVariantFileId } from './media-variants.js'
 import { CHANNEL_ID } from '../../configs/env.js'
@@ -22,14 +21,13 @@ const sendProfileCard = async (user, argId = false, isAdmin = false) => {
       })
 
     if (media.length === 0) {
-      const adminDetails = isAdmin
-        ? `\n\n\\- \\- \\- \\- \\-\nUser data: ${user.system_username ? `_@${textScreening(user.system_username)}_ ` : ''}\\(${user.id}\\)`
-        : ''
-      const sent = await global.bot.telegram.sendMessage(
-        recipient,
-        TEXTS.profile_generate(user, isAdmin) + adminDetails,
-        buttons
-      )
+      const { html } = buildRichProfileCard(user, [], { isAdmin })
+      const sent = await sendRichProfileCard({
+        telegram: global.bot.telegram,
+        chatId: recipient,
+        richMessage: { html },
+        replyMarkup: buttons.reply_markup
+      })
       return sent.message_id
     }
 
