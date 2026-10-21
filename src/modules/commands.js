@@ -10,6 +10,13 @@ import { referralStatsByCode } from './referral-links.js'
 import start from '../scenes/start.js'
 import replyWithHelp from './reply-with-help.js'
 
+const parseCommandId = value => {
+  if (!/^\d+$/.test(value || '')) return null
+
+  const id = Number(value)
+  return Number.isSafeInteger(id) && id > 0 ? id : null
+}
+
 const commands = async ctx => {
   const text = ctx.update?.message?.text || ''
 
@@ -111,8 +118,13 @@ const commands = async ctx => {
 
   if ((ctx.isAdmin || ctx.isSupport) && (command === '/ban' || command === '/unban')) {
     const [command, id_, ...message_] = text.split(' ')
-    const id = parseInt(id_)
+    const id = parseCommandId(id_)
     const message =  (message_ || []).join(' ')
+
+    if (!id) {
+      await ctx.reply(TEXTS.admin_id_required(command))
+      return
+    }
 
     if (command === '/ban') {
       const user = await users.get(id)
@@ -137,7 +149,12 @@ const commands = async ctx => {
 
   if ((ctx.isAdmin || ctx.isSupport) && command === '/delete') {
     const [command, id_] = text.split(' ')
-    const id = parseInt(id_)
+    const id = parseCommandId(id_)
+
+    if (!id) {
+      await ctx.reply(TEXTS.admin_id_required(command))
+      return
+    }
 
     const post = await posts.get(id)
     for (let x = 0; x < post.ids.length; x++) {
@@ -227,7 +244,12 @@ const commands = async ctx => {
   ) {
     if (ctx.isAdmin) {
       const [command, id_] = text.split(' ')
-        , id = parseInt(id_)
+        , id = parseCommandId(id_)
+
+      if (!id) {
+        await ctx.reply(TEXTS.admin_id_required(command))
+        return
+      }
 
       const [isExistsUser = false] = await users.all({ id })
       

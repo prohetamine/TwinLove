@@ -217,6 +217,7 @@ const TEXTS = {
   support_bot: 'Назначен поддержкой бота',
   un_support_bot: 'Разжалован из поддержки бота',
   not_user_set_admin: 'Не удалось изменить роль этого пользователя',
+  admin_id_required: command => `Укажи числовой ID пользователя. Например: ${command} 12345678`,
   reload: 'Перезагружаю систему...',
   status: 'Бот работает',
   mod_info: `
