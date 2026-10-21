@@ -285,7 +285,7 @@ const TEXTS = {
   edit_profile_name_btn: 'Имя',
   edit_profile_name: (firstName, currentName) => {
     if (currentName && currentName === firstName) {
-      return textScreening(`Как тебя называть в анкете?\n\nСейчас указано имя «${currentName}». Можешь оставить его или ввести другое.`)
+      return textScreening(`Как тебя называть в анкете?\n\nСейчас в анкете указано имя «${currentName}». Можешь оставить его или ввести другое.`)
     }
 
     if (currentName && firstName) {
