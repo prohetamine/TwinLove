@@ -2,10 +2,14 @@ import { createHash } from 'node:crypto'
 import { TEXTS, BUTTONS } from '../assets/ui/ru.js'
 
 const MAX_LINKS = 20
+const REFERRAL_CODE_LENGTH = 8
+const isReferralCode = code => typeof code === 'string' &&
+  code.length === REFERRAL_CODE_LENGTH &&
+  /^[A-Za-z0-9_-]+$/.test(code)
 const deriveReferralCode = (primaryCode, index) => createHash('sha256')
   .update(`${primaryCode}:${index}`)
   .digest('base64url')
-  .slice(0, 4)
+  .slice(0, REFERRAL_CODE_LENGTH)
 
 const referralView = async (user, { referals, posts }) => {
   const record = await referals.get(user.id)
@@ -53,4 +57,4 @@ const referralMessageOptions = {
   reply_markup: BUTTONS.referral_links_inline.reply_markup
 }
 
-export { referralView, referralStatsByCode, createReferralLink, deriveReferralCode, referralMessageOptions }
+export { referralView, referralStatsByCode, createReferralLink, deriveReferralCode, isReferralCode, referralMessageOptions }

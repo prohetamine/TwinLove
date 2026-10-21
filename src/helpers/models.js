@@ -74,7 +74,7 @@ const userScheme = new Schema({
     true - >=18
     false - <18
   */
-  system_referalHashId: { type: String, default: () => nanoid(4) }, /* рефералка */
+  system_referalHashId: { type: String, default: () => nanoid(8) }, /* рефералка */
   system_callHashId: { type: String, default: () => nanoid(15).replace(/(_|-)/gi, 'Z') }, /* id поста */
   system_importHashId: { type: String, default: () => createImportId() }, /* id для импорта профиля, обновляется после каждого запроса на импорт */
   system_username: { type: String, default: '@username' }, /* username for send contacts */

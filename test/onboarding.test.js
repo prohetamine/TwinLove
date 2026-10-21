@@ -126,7 +126,7 @@ test('a chat deep link cannot bypass the phone step', async () => {
   })
 
   assert.equal(routed, true)
-  assert.deepEqual(registered, ['chat'])
+  assert.deepEqual(registered, [])
   assert.equal(ctx.user.scene, 'phone-menu')
   assert.equal(replies.at(-1).message, TEXTS.phone_request)
 })
