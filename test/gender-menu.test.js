@@ -74,14 +74,50 @@ test('the edit menu opens gender choices', async () => {
   assert.equal(replies.at(-1).options.reply_markup.keyboard[0][0].icon_custom_emoji_id, '5379730349678965304')
 })
 
-test('profile cards show the chosen gender symbol before the name', () => {
+test('profile cards keep the name free of a gender symbol', () => {
   const user = { name: 'Саша', text: 'Привет! Буду рад знакомству.', location: '999|666', privacyCity: 0 }
-  for (const [gender, prefix] of [['male', '♂ '], ['female', '♀ '], ['', '']]) {
+  for (const gender of ['male', 'female', '']) {
     const profile = { ...user, gender }
-    assert.match(TEXTS.profile_generate(profile), new RegExp(`^\\*${prefix}Саша\\*\\n`))
-    assert.match(buildRichProfileCard(profile, []).html, new RegExp(`^<h1>${prefix}Саша<\\/h1>`))
+    assert.match(TEXTS.profile_generate(profile), /^\*Саша\*\n/)
+    assert.match(buildRichProfileCard(profile, []).html, /^<h1>Саша<\/h1>/)
   }
   assert.doesNotMatch(buildRichProfileCard({ ...user, name: '', gender: 'female' }, []).html, /<h1>/)
   const genderButton = BUTTONS.edit_menu.reply_markup.keyboard.flat().find(button => button.text === TEXTS.edit_profile_gender_btn)
   assert.equal(genderButton.icon_custom_emoji_id, '5379672612433601461')
+})
+
+test('profile cards show the selected gender above the location', () => {
+  const user = { name: 'Саша', text: 'Привет!', location: '999|666', privacyCity: 0 }
+  const cases = [
+    ['male', 'мужчина ♂️', '<p>мужчина ♂️</p>'],
+    ['female', 'женщина ♀️', '<p>женщина ♀️</p>']
+  ]
+
+  for (const [gender, markdownTag, richTag] of cases) {
+    const markdown = TEXTS.profile_generate({ ...user, gender })
+    const rich = buildRichProfileCard({ ...user, gender }, []).html
+    assert.ok(markdown.indexOf(markdownTag) < markdown.indexOf('*Анонимный'))
+    assert.ok(rich.indexOf(richTag) < rich.indexOf('<p><b>Анонимный'))
+  }
+
+  assert.doesNotMatch(TEXTS.profile_generate({ ...user, gender: '' }), /мужчина|женщина/)
+  assert.doesNotMatch(buildRichProfileCard({ ...user, gender: '' }, []).html, /мужчина|женщина/)
+})
+
+test('gender hashtag follows the city hashtag and replaces one promotion hashtag', () => {
+  const anonymous = { name: 'Саша', text: 'Привет!', location: '999|666', privacyCity: 0 }
+  const city = { ...anonymous, location: '5|1' }
+
+  for (const profile of [anonymous, city]) {
+    for (const gender of ['', 'male', 'female']) {
+      const expectedPromotionTags = (profile.location === '999|666' ? 3 : 2) - (gender ? 1 : 0)
+      const rich = buildRichProfileCard({ ...profile, gender }, []).html
+      const promotionTags = rich.match(/<tg-spoiler>Теги: ([^<]*)<\/tg-spoiler>/)?.[1].match(/#[^ ]+/g) ?? []
+      assert.equal(promotionTags.length, expectedPromotionTags)
+      if (gender && profile.location !== '999|666') {
+        const genderTag = gender === 'male' ? '#мужчина' : '#женщина'
+        assert.match(rich, new RegExp(`<p>#[^ <]+  •  ${genderTag}<\\/p><p><a href=`))
+      }
+    }
+  }
 })

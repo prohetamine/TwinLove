@@ -4,7 +4,6 @@ import checkValid from '../../modules/check-valid.js'
 import { CHANNEL_LINK, CHAT_LINK, BOT_LINK, IS_DEV } from '../../../configs/env.js'
 import getCityById from '../../lib/get-city-by-id.js'
 import hashtag from '../hash-tag.js'
-import profileGenderSymbol from '../../modules/profile-gender-symbol.js'
 
 const formatTip = (icon, title, description, action) =>
   `${icon} *${textScreening(title)}*\n${textScreening(description)}\n\n${textScreening(action).replaceAll('Редактировать', `${EDIT_EMOJI} Редактировать`).replaceAll('Открыть канал', `${LINK_EMOJI} Открыть канал`).replaceAll('Опубликовать', `${PUBLISH_EMOJI} Опубликовать`).replaceAll('Автоудаление', `${TRASH_EMOJI} Автоудаление`).replaceAll('👁', VIEW_EMOJI).replaceAll('📸', CAMERA_EMOJI).replaceAll('☎️', PHONE_EMOJI).replaceAll('👻', GHOST_EMOJI).replaceAll('📲', NOTIFY_EMOJI).replaceAll('🔒', LOCK_EMOJI).replaceAll('👋', WAVE_EMOJI).replaceAll('❤️', LIKE_HEART_EMOJI)}`
@@ -164,15 +163,20 @@ const TEXTS = {
     const locationEmoji = ' 📍'
 
     if (user?.name) {
-      const genderSymbol = profileGenderSymbol(user.gender)
-      text += `*${genderSymbol ? `${genderSymbol} ` : ''}${textScreening(user.name)}*\n`
+      text += `*${textScreening(user.name)}*\n`
     }
     text += `${textScreening(user?.text)}\n\n`
     text += user?.location !== '999|666' ?  user?.privacyCity === 0 ? '' : user?.privacyCity === 1 ? `Мой и ближайшие города ${useCustomEmoji ? CITY_EMOJI : '🌆'}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : `Только мой город ${useCustomEmoji ? HOUSE_EMOJI : '🏡'}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : ''
+    if (user?.gender === 'male') text += `мужчина ♂️\n`
+    if (user?.gender === 'female') text += `женщина ♀️\n`
     text += user?.location !== '999|666' ? `*${textScreening(getCityById(user?.location).title)} ${getCityById(user?.location).flag}*${locationEmoji}\n` : `*Анонимный 🏴‍☠️*${locationEmoji}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=anon)\n`
     text += `\n`
-    text += `[бот](${BOT_LINK}?start=from-channel)  •  [все анкеты](${BOT_LINK}?start=channel)  •  [чат](${BOT_LINK}?start=chat)${user?.location !== '999|666' ? `  •  \\#${textScreening(getCityById(user?.location).hash)}` : ''}`
-    text += `\n||Теги: ${[...hashtag].sort(() => Math.random() - Math.random()).slice(0, user?.location === '999|666' ? 3 : 2).map(tag => textScreening(`#${tag}`)).join(' ')}||`
+    const genderTag = user?.gender === 'male' ? 'мужчина' : user?.gender === 'female' ? 'женщина' : ''
+    const profileTags = [user?.location !== '999|666' ? `\\#${textScreening(getCityById(user?.location).hash)}` : '', genderTag ? `\\#${genderTag}` : ''].filter(Boolean)
+    if (profileTags.length) text += `${profileTags.join('  •  ')}\n`
+    text += `[бот](${BOT_LINK}?start=from-channel)  •  [все анкеты](${BOT_LINK}?start=channel)  •  [чат](${BOT_LINK}?start=chat)`
+    const promotionTagCount = (user?.location === '999|666' ? 3 : 2) - (genderTag ? 1 : 0)
+    text += `\n||Теги: ${[...hashtag].sort(() => Math.random() - Math.random()).slice(0, promotionTagCount).map(tag => textScreening(`#${tag}`)).join(' ')}||`
 
     return text
   },
