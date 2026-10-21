@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url'
 import qrcode from 'qrcode'
 import telegram from 'telegram'
 import sessions from 'telegram/sessions/index.js'
+import { CHANNEL_ID } from '../configs/dev.env.js'
 
 const { TelegramClient, Api } = telegram
 const { StringSession } = sessions
@@ -165,6 +166,19 @@ async function clickInline(client, bot, label, step) {
   return updated
 }
 
+async function clickCallback(client, bot, data, step) {
+  const message = (await messages(client, bot, 20)).find(item => item.media)
+  if (!message) {
+    log('SKIP', step, 'нет сообщения с Rich Message')
+    return null
+  }
+  await message.click({ data: Buffer.from(data) })
+  await delay(1200)
+  const [updated] = await client.getMessages(bot, { ids: [message.id] })
+  log('PASS', step, updated ? 'callback обработан' : 'исходное сообщение удалено')
+  return updated
+}
+
 async function inspect(client, bot) {
   const recent = await messages(client, bot, 6)
   if (!recent.length) log('INFO', 'Чат', 'сообщений от бота пока нет')
@@ -173,6 +187,18 @@ async function inspect(client, bot) {
     const labels = await buttonLabels(message)
     if (labels.length) log('INFO', 'Кнопки', labels.join(', '))
   }
+}
+
+async function inspectChannel(client) {
+  const channel = await client.getEntity(CHANNEL_ID)
+  const [message] = await client.getMessages(channel, { limit: 1 })
+  if (!message) {
+    log('SKIP', 'Канал', 'публикаций нет')
+    return
+  }
+  log('PASS', 'Канал', `последняя публикация #${message.id}: ${redact(message.message || '[Rich Message]')}`)
+  const labels = await buttonLabels(message)
+  if (labels.length) log('INFO', 'Кнопки', labels.join(', '))
 }
 
 async function smoke(client, bot) {
@@ -266,8 +292,8 @@ async function genderCheck(client, bot) {
 
 async function main() {
   const [command, value] = process.argv.slice(2)
-  if (!['auth', 'inspect', 'smoke', 'media', 'referral', 'name', 'name-manual', 'gender', 'send', 'click', 'inline', 'upload'].includes(command)) {
-    throw new Error('Использование: npm run telegram:test -- auth|inspect|smoke|media|referral|name|name-manual|gender|send|click|inline|upload [значение]')
+  if (!['auth', 'inspect', 'channel', 'smoke', 'media', 'referral', 'name', 'name-manual', 'gender', 'send', 'click', 'inline', 'callback', 'upload'].includes(command)) {
+    throw new Error('Использование: npm run telegram:test -- auth|inspect|channel|smoke|media|referral|name|name-manual|gender|send|click|inline|callback|upload [значение]')
   }
   const keys = credentials()
   const saved = fs.existsSync(sessionPath) ? fs.readFileSync(sessionPath, 'utf8') : ''
@@ -279,6 +305,7 @@ async function main() {
     const bot = await client.getEntity(botName)
     if (!bot.bot || bot.username?.toLowerCase() !== botName) throw new Error('Неверный тестовый бот')
     if (command === 'inspect') await inspect(client, bot)
+    if (command === 'channel') await inspectChannel(client)
     if (command === 'smoke') await smoke(client, bot)
     if (command === 'media') await mediaCheck(client, bot)
     if (command === 'referral') await referralCheck(client, bot)
@@ -288,6 +315,7 @@ async function main() {
     if (command === 'send' && value) await send(client, bot, value, `Отправка «${value}»`)
     if (command === 'click' && value) await click(client, bot, value, `Нажатие «${value}»`)
     if (command === 'inline' && value) await clickInline(client, bot, value, `Inline кнопка «${value}»`)
+    if (command === 'callback' && value) await clickCallback(client, bot, value, `Callback «${value}»`)
     if (command === 'upload' && value) {
       const source = path.resolve(value)
       if (!fs.statSync(source).isFile()) throw new Error('Укажи путь к локальному файлу')
