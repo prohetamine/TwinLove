@@ -26,8 +26,12 @@ const supportMenu = async ctx => {
   } = ctx.update?.message || {}
 
   if (text === TEXTS.back_to_main_menu_btn) {
-    await ctx.reply(TEXTS.home, BUTTONS.main_menu)
     await ctx.enterScene('main-menu')
+    if (ctx.user.system_block_status) {
+      await ctx.reply(TEXTS.blocked(ctx.user), { ...BUTTONS.remove_menu, parse_mode: 'MarkdownV2' })
+    } else {
+      await ctx.reply(TEXTS.home, BUTTONS.main_menu)
+    }
     return
   }
 

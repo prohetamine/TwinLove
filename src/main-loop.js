@@ -106,18 +106,18 @@ const mainLoop = async (ctx, next) => {
     return
   }
 
+  if (ctx.user.system_block_status && ctx.user.scene !== 'support-menu') {
+    await ban(ctx)
+    return
+  }
+
   if (data) {
     await callback_querys(ctx)
     return
   }
 
-  if (!text.match(/^\/start from-channel/) && !text.match(/^\/start$/) && text.match(/^\//)) {
+  if (!ctx.user.system_block_status && !text.match(/^\/start from-channel/) && !text.match(/^\/start$/) && text.match(/^\//)) {
     await commands(ctx)
-    return
-  }
-
-  if (ctx.user.system_block_status && ctx.user.scene !== 'support-menu') {
-    await ban(ctx)
     return
   }
 
