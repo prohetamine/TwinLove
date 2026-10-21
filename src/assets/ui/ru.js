@@ -212,7 +212,7 @@ const TEXTS = {
     media ? `Этот человек показывает фото и видео только людям, у которых в анкете есть фото или видео ${CAMERA_EMOJI}` : null
   ].filter(Boolean).join('\n'),
   fulled_not_publish: withAlertAndSparkles('Твоя анкета ещё не опубликована\n\nАнкета заполнена, осталось только опубликовать ✨\n\nНажми /start, чтобы начать'),
-  not_fulled_not_publish: withAlertAndSparkles('Твоя анкета ещё не опубликована\n\nПора заполнить анкету и останется только опубликовать ✨\n\nНажми /start, чтобы начать'),
+  not_fulled_not_publish: withAlertAndSparkles('Твоя анкета ещё не опубликована\n\nЗаполни анкету, а затем опубликуй её ✨\n\nНажми /start, чтобы начать'),
   admin_bot: 'Назначен администратором бота', 
   un_admin_bot: 'Разжалован из администраторов бота', 
   support_bot: 'Назначен поддержкой бота',
