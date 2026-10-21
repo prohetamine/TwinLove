@@ -5,7 +5,7 @@ const age18confirmMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
   if (text === TEXTS.back_to_main_menu_btn) {
-    await ctx.reply(TEXTS.age18Confirm, BUTTONS.age18Confirm_menu)
+    await ctx.reply(TEXTS.onboarding_required, BUTTONS.age18Confirm_menu)
     return
   }
 

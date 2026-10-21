@@ -13,11 +13,9 @@ const phoneMenu = async (ctx, userStore) => {
   const contact = ctx.update?.message?.contact
 
   if (text === TEXTS.phone_back_btn) {
-    ctx.user.system_rulesConfirm = false
-    await ctx.enterScene('rules-menu')
-    await ctx.reply(TEXTS.rules, {
-      ...BUTTONS.rules_menu,
-      disable_web_page_preview: true
+    await ctx.reply(TEXTS.onboarding_required, {
+      ...BUTTONS.phone_menu,
+      parse_mode: 'MarkdownV2'
     })
     return
   }

@@ -5,7 +5,7 @@ const rulesMenu = async ctx => {
   const text = ctx.update?.message?.text || ''
 
   if (text === TEXTS.back_to_main_menu_btn) {
-    await ctx.reply(TEXTS.rules, { ...BUTTONS.rules_menu, disable_web_page_preview: true })
+    await ctx.reply(TEXTS.onboarding_required, BUTTONS.rules_menu)
     return
   }
 

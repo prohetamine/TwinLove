@@ -53,14 +53,21 @@ test('an existing user who already accepted rules must still share a phone numbe
   assert.equal(replies.at(-1).message, TEXTS.phone_request)
 })
 
-test('return button uses the custom icon but cannot bypass onboarding', async () => {
+test('return buttons explain that age and rules are required without bypassing onboarding', async () => {
   const returnButton = BUTTONS.rules_menu.reply_markup.keyboard.flat().find(button => button.text === TEXTS.back_to_main_menu_btn)
   assert.equal(returnButton.icon_custom_emoji_id, '5379787743326941514')
 
-  const { ctx, replies } = makeContext(TEXTS.back_to_main_menu_btn)
-  await rulesMenu(ctx)
-  assert.notEqual(ctx.user.scene, 'main-menu')
-  assert.equal(replies.at(-1).message, TEXTS.rules)
+  const age = makeContext(TEXTS.back_to_main_menu_btn)
+  await age18confirmMenu(age.ctx)
+  assert.notEqual(age.ctx.user.scene, 'main-menu')
+  assert.equal(age.replies.at(-1).message, TEXTS.onboarding_required)
+  assert.deepEqual(age.replies.at(-1).options.reply_markup, BUTTONS.age18Confirm_menu.reply_markup)
+
+  const rules = makeContext(TEXTS.back_to_main_menu_btn)
+  await rulesMenu(rules.ctx)
+  assert.notEqual(rules.ctx.user.scene, 'main-menu')
+  assert.equal(rules.replies.at(-1).message, TEXTS.onboarding_required)
+  assert.deepEqual(rules.replies.at(-1).options.reply_markup, BUTTONS.rules_menu.reply_markup)
 })
 
 test('the phone step rejects typed numbers and contacts from other users', async () => {
@@ -81,15 +88,15 @@ test('the phone step rejects typed numbers and contacts from other users', async
   assert.deepEqual(saved, [])
 })
 
-test('the phone step can return to the rules without opening the main menu', async () => {
+test('the phone return button explains that the step is required', async () => {
   const { ctx, replies } = makeContext(TEXTS.phone_back_btn, true)
 
   await phoneMenu(ctx)
 
-  assert.equal(ctx.user.system_rulesConfirm, false)
-  assert.equal(ctx.user.scene, 'rules-menu')
-  assert.equal(replies.at(-1).message, TEXTS.rules)
-  assert.deepEqual(replies.at(-1).options.reply_markup, BUTTONS.rules_menu.reply_markup)
+  assert.equal(ctx.user.system_rulesConfirm, true)
+  assert.notEqual(ctx.user.scene, 'main-menu')
+  assert.equal(replies.at(-1).message, TEXTS.onboarding_required)
+  assert.deepEqual(replies.at(-1).options.reply_markup, BUTTONS.phone_menu.reply_markup)
   const returnButton = BUTTONS.phone_menu.reply_markup.keyboard.flat().find(button => button.text === TEXTS.phone_back_btn)
   assert.equal(returnButton.icon_custom_emoji_id, '5379787743326941514')
 })
