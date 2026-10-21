@@ -112,7 +112,7 @@ test('gender hashtag follows the city hashtag and replaces one promotion hashtag
     for (const gender of ['', 'male', 'female']) {
       const expectedPromotionTags = (profile.location === '999|666' ? 3 : 2) - (gender ? 1 : 0)
       const rich = buildRichProfileCard({ ...profile, gender }, []).html
-      const promotionTags = rich.match(/<tg-spoiler>Теги для продвижения: ([^<]*)<\/tg-spoiler>/)?.[1].match(/#[^ ]+/g) ?? []
+      const promotionTags = rich.match(/<tg-spoiler>Теги: ([^<]*)<\/tg-spoiler>/)?.[1].match(/#[^ ]+/g) ?? []
       assert.equal(promotionTags.length, expectedPromotionTags)
       if (gender && profile.location !== '999|666') {
         const genderTag = gender === 'male' ? '#мужчина' : '#женщина'

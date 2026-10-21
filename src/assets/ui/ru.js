@@ -176,7 +176,7 @@ const TEXTS = {
     if (profileTags.length) text += `${profileTags.join('  •  ')}\n`
     text += `[бот](${BOT_LINK}?start=from-channel) / [все анкеты](${BOT_LINK}?start=channel) / [чат](${BOT_LINK}?start=chat)`
     const promotionTagCount = (user?.location === '999|666' ? 3 : 2) - (genderTag ? 1 : 0)
-    text += `\n||Теги для продвижения: ${[...hashtag].sort(() => Math.random() - Math.random()).slice(0, promotionTagCount).map(tag => textScreening(`#${tag}`)).join(' ')}||`
+    text += `\n||Теги: ${[...hashtag].sort(() => Math.random() - Math.random()).slice(0, promotionTagCount).map(tag => textScreening(`#${tag}`)).join(' ')}||`
 
     return text
   },
