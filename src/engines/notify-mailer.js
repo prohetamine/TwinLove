@@ -50,7 +50,7 @@ const notifyMailer = async () => {
                   await sleep(60000)
                 }
 
-                if (err.toString().match('403')) {
+                if (err.toString().match('403') || err.toString().match('chat not found')) {
                   try {
                     await global.bot.telegram.sendMessage(CHANNEL_LOG_ID, `notify-mailer [${x+1}/${u+1}/${ids.length}] [bad] >>> ${notify.id} => ${id}`)
                   } catch (e) {} 
