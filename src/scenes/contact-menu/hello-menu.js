@@ -26,6 +26,11 @@ const helloMenu = async ctx => {
     if (_posts.ids.length > 0) {
       if (user) {
         const invite = await invites.get(ctx.user.id)
+
+        if (user.id === ctx.user.id) {
+          await ctx.reply(TEXTS.hello_self, BUTTONS.contact_hello_menu)
+          return
+        }
   
         if (user.system_block_status) {
           await ctx.reply(TEXTS.hello_error, BUTTONS.contact_hello_menu)        
@@ -80,6 +85,11 @@ const helloMenu = async ctx => {
     if (_posts.ids.length > 0) {
       if (user) {
         const invite = await invitesLike.get(ctx.user.id)
+
+        if (user.id === ctx.user.id) {
+          await ctx.reply(TEXTS.hello_self, BUTTONS.contact_hello_menu)
+          return
+        }
   
         if (user.system_block_status) {
           await ctx.reply(TEXTS.hello_like_error, BUTTONS.contact_hello_menu)        
