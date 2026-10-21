@@ -26,7 +26,7 @@ const profileText = user => {
   const genderTag = user.gender === 'male' ? 'мужчина' : user.gender === 'female' ? 'женщина' : ''
   const profileTags = [city ? `#${escapeHtml(city.hash)}` : '', genderTag ? `#${genderTag}` : ''].filter(Boolean)
   if (profileTags.length) lines.push(`<p>${profileTags.join('  •  ')}</p>`)
-  lines.push(`<p><a href="${BOT_LINK}?start=from-channel">бот</a>  •  <a href="${BOT_LINK}?start=channel">все анкеты</a>  •  <a href="${BOT_LINK}?start=chat">чат</a></p>`)
+  lines.push(`<p><a href="${BOT_LINK}?start=from-channel">бот</a> / <a href="${BOT_LINK}?start=channel">все анкеты</a> / <a href="${BOT_LINK}?start=chat">чат</a></p>`)
   const promotionTagCount = (anonymous ? 3 : 2) - (genderTag ? 1 : 0)
   lines.push(`<p><tg-spoiler>Теги: ${[...hashtag].sort(() => Math.random() - Math.random()).slice(0, promotionTagCount).map(tag => `#${escapeHtml(tag)}`).join(' ')}</tg-spoiler></p>`)
   return lines.join('')
