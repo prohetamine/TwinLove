@@ -153,7 +153,7 @@ const TEXTS = {
     system_block_message ? `Причина: «${system_block_message}».` : null,
     system_block_auto ? 'Блокировка установлена автоматически.' : null,
     'Если считаешь, что произошла ошибка, напиши в поддержку: /support'
-  ].filter(Boolean).join('\\n')),
+  ].filter(Boolean).join('\n')),
   ban: 'Заблокирован(а)',
   unban: 'Разблокирован(а)',
   delete: 'Все посты этого пользователя удалены',

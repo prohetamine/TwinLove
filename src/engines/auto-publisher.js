@@ -13,7 +13,8 @@ const autoPublisher = async () => {
     try {
       const _users = await users.all({ 
         system_publishModerationRequest: true,
-        system_block_status: false
+        system_block_status: false,
+        hidden: false
       })
 
       for (let x = 0; x < _users.length; x++) {

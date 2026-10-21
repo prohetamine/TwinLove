@@ -211,7 +211,7 @@ const commands = async ctx => {
 
   if ((ctx.isAdmin || ctx.isSupport) && command === '/status') {
     await ctx.reply(TEXTS.status)
-    process.exit()
+    return
   }
 
   if ((ctx.isAdmin || ctx.isSupport) && command === '/commands') {

@@ -84,6 +84,11 @@ const profileMenu = async ctx => {
         return
       }
 
+      if (ctx.user.hidden) {
+        await ctx.reply(TEXTS.edit_profile_visibility_stop, { parse_mode: 'MarkdownV2' })
+        return
+      }
+
       if (ctx.user.location === '999|666') {
         ctx.user.system_publishModerationRequest = true
         await users.set(ctx.user.id, ctx.user)
@@ -98,11 +103,6 @@ const profileMenu = async ctx => {
           await sleep(5000)
         }
 
-        return
-      }
-
-      if (ctx.user.hidden) {
-        await ctx.reply(TEXTS.edit_profile_visibility_stop, { parse_mode: 'MarkdownV2' })
         return
       }
 
