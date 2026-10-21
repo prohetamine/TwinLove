@@ -89,8 +89,8 @@ test('profile cards keep the name free of a gender symbol', () => {
 test('profile cards show the selected gender above the location', () => {
   const user = { name: 'Саша', text: 'Привет!', location: '999|666', privacyCity: 0 }
   const cases = [
-    ['male', 'мужчина ♂️', '<p>мужчина ♂️</p>'],
-    ['female', 'женщина ♀️', '<p>женщина ♀️</p>']
+    ['male', 'Мужчина ♂️', '<p>Мужчина ♂️</p>'],
+    ['female', 'Женщина ♀️', '<p>Женщина ♀️</p>']
   ]
 
   for (const [gender, markdownTag, richTag] of cases) {
@@ -100,8 +100,8 @@ test('profile cards show the selected gender above the location', () => {
     assert.ok(rich.indexOf(richTag) < rich.indexOf('<p><b>Анонимный'))
   }
 
-  assert.doesNotMatch(TEXTS.profile_generate({ ...user, gender: '' }), /мужчина|женщина/)
-  assert.doesNotMatch(buildRichProfileCard({ ...user, gender: '' }, []).html, /мужчина|женщина/)
+  assert.doesNotMatch(TEXTS.profile_generate({ ...user, gender: '' }), /Мужчина|Женщина/)
+  assert.doesNotMatch(buildRichProfileCard({ ...user, gender: '' }, []).html, /Мужчина|Женщина/)
 })
 
 test('gender hashtag follows the city hashtag and replaces one promotion hashtag', () => {

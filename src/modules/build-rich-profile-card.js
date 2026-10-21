@@ -17,8 +17,8 @@ const profileText = user => {
 
   if (!anonymous && user.privacyCity === 1) lines.push(`<p>Мой и ближайшие города 🌆 <a href="${BOT_LINK}?start=privacycity">(?)</a></p>`)
   if (!anonymous && user.privacyCity === 2) lines.push(`<p>Только мой город 🏡 <a href="${BOT_LINK}?start=privacycity">(?)</a></p>`)
-  if (user.gender === 'male') lines.push('<p>мужчина ♂️</p>')
-  if (user.gender === 'female') lines.push('<p>женщина ♀️</p>')
+  if (user.gender === 'male') lines.push('<p>Мужчина ♂️</p>')
+  if (user.gender === 'female') lines.push('<p>Женщина ♀️</p>')
   lines.push(anonymous
     ? `<p><b>Анонимный 🏴‍☠️ 📍</b> <a href="${BOT_LINK}?start=anon">(?)</a></p>`
     : `<p><b>${escapeHtml(city.title)} ${escapeHtml(city.flag)} 📍</b></p>`)

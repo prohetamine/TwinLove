@@ -167,8 +167,8 @@ const TEXTS = {
     }
     text += `${textScreening(user?.text)}\n\n`
     text += user?.location !== '999|666' ?  user?.privacyCity === 0 ? '' : user?.privacyCity === 1 ? `Мой и ближайшие города ${useCustomEmoji ? CITY_EMOJI : '🌆'}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : `Только мой город ${useCustomEmoji ? HOUSE_EMOJI : '🏡'}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=privacycity)\n` : ''
-    if (user?.gender === 'male') text += `мужчина ♂️\n`
-    if (user?.gender === 'female') text += `женщина ♀️\n`
+    if (user?.gender === 'male') text += `Мужчина ♂️\n`
+    if (user?.gender === 'female') text += `Женщина ♀️\n`
     text += user?.location !== '999|666' ? `*${textScreening(getCityById(user?.location).title)} ${getCityById(user?.location).flag}*${locationEmoji}\n` : `*Анонимный 🏴‍☠️*${locationEmoji}  [\\(*?*\\)](${textScreening(BOT_LINK)}?start\\=anon)\n`
     text += `\n`
     const genderTag = user?.gender === 'male' ? 'мужчина' : user?.gender === 'female' ? 'женщина' : ''
