@@ -714,9 +714,9 @@ const edit_profile_media_admin_approve_inline = (id, mediaId, isPeople) => ({
   disable_web_page_preview: true,
   reply_markup: {
     inline_keyboard: [
+        [{ text: TEXTS.edit_profile_media_resolve_inline_btn, icon_custom_emoji_id: CHECK_CUSTOM_EMOJI_ID, callback_data: `res_${id}_${mediaId}` }],
+        [{ text: TEXTS.edit_profile_media_reject_inline_btn, icon_custom_emoji_id: CROSS_CUSTOM_EMOJI_ID, callback_data: `rej_${id}_${mediaId}` }],
         [
-          { text: TEXTS.edit_profile_media_resolve_inline_btn, icon_custom_emoji_id: CHECK_CUSTOM_EMOJI_ID, callback_data: `res_${id}_${mediaId}` },
-          { text: TEXTS.edit_profile_media_reject_inline_btn, icon_custom_emoji_id: CROSS_CUSTOM_EMOJI_ID, callback_data: `rej_${id}_${mediaId}` },
           { 
             text: isPeople 
                     ? TEXTS.edit_profile_media_people_inline_btn 
@@ -725,7 +725,7 @@ const edit_profile_media_admin_approve_inline = (id, mediaId, isPeople) => ({
             callback_data: isPeople 
                               ? `people_${id}_${mediaId}` 
                               : `nopeople_${id}_${mediaId}` 
-          },
+          }
         ]
       ]
   }
