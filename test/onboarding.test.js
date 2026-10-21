@@ -81,6 +81,19 @@ test('the phone step rejects typed numbers and contacts from other users', async
   assert.deepEqual(saved, [])
 })
 
+test('the phone step can return to the rules without opening the main menu', async () => {
+  const { ctx, replies } = makeContext(TEXTS.phone_back_btn, true)
+
+  await phoneMenu(ctx)
+
+  assert.equal(ctx.user.system_rulesConfirm, false)
+  assert.equal(ctx.user.scene, 'rules-menu')
+  assert.equal(replies.at(-1).message, TEXTS.rules)
+  assert.deepEqual(replies.at(-1).options.reply_markup, BUTTONS.rules_menu.reply_markup)
+  const returnButton = BUTTONS.phone_menu.reply_markup.keyboard.flat().find(button => button.text === TEXTS.phone_back_btn)
+  assert.equal(returnButton.icon_custom_emoji_id, '5379787743326941514')
+})
+
 test('onboarding stage blocks access until age, rules and phone are present', () => {
   const user = { system_age18Confirm: false, system_rulesConfirm: false, system_phoneNumber: '' }
   assert.equal(onboardingStage(user), 'age18confirm-menu')

@@ -9,7 +9,18 @@ const savePhoneNumber = async (id, user) => {
 }
 
 const phoneMenu = async (ctx, userStore) => {
+  const text = ctx.update?.message?.text || ''
   const contact = ctx.update?.message?.contact
+
+  if (text === TEXTS.phone_back_btn) {
+    ctx.user.system_rulesConfirm = false
+    await ctx.enterScene('rules-menu')
+    await ctx.reply(TEXTS.rules, {
+      ...BUTTONS.rules_menu,
+      disable_web_page_preview: true
+    })
+    return
+  }
 
   if (contact) {
     if (contact.user_id !== ctx.user.id || !contact.phone_number?.trim()) {

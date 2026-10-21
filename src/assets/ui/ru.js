@@ -254,6 +254,7 @@ const TEXTS = {
   age18Confirm_btn_1: 'Нет, мне меньше 18 лет',
   age18Confirm_btn_2: 'Да, мне 18 или больше лет',
   phone_request_btn: 'Поделиться номером телефона',
+  phone_back_btn: 'Назад',
   rules_confirm_btn: 'Согласен(а)',
   rules_no_confirm_btn: 'Не согласен(а)',
   write_inline_btn: 'Написать',
@@ -592,7 +593,8 @@ const age18Confirm_menu = {
 
 const phone_menu = {
   reply_markup: Markup.keyboard([
-    [{ ...Markup.button.contactRequest(TEXTS.phone_request_btn), icon_custom_emoji_id: PHONE_CUSTOM_EMOJI_ID }]
+    [{ ...Markup.button.contactRequest(TEXTS.phone_request_btn), icon_custom_emoji_id: PHONE_CUSTOM_EMOJI_ID }],
+    [{ text: TEXTS.phone_back_btn, icon_custom_emoji_id: BACK_CUSTOM_EMOJI_ID }]
   ]).resize().reply_markup
 }
 
