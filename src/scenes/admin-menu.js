@@ -36,7 +36,7 @@ const adminMenu = async ctx => {
     } else {
       const { file_id } = photo ? photo.pop() : video
       await ctx.telegram[photo ? 'sendPhoto' : 'sendVideo'](ctx.user.system_adminSelectId, file_id, {
-        caption: `Поддержка: ${caption || ''}`
+        caption: caption ? `Поддержка: ${caption}` : 'Ответ поддержки'
       })
     }
 
