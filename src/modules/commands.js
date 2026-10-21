@@ -192,6 +192,12 @@ const commands = async ctx => {
     }
 
     if (isUser) {
+      if (type === 'r' && isUser.id === ctx.user.id) {
+        await ctx.reply(TEXTS.hello_self, BUTTONS.main_menu)
+        await ctx.enterScene('main-menu')
+        return
+      }
+
       ctx.user.system_selectCallHashId = callHashId
       ctx.user.system_selectCallAction = type === 'w' 
                                         ? 'write' 
